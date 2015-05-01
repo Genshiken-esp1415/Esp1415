@@ -4,5 +4,9 @@
     <string name="app_name">esp1415</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_lista_sessioni">ListaSessioni</string>
+    <string name="title_activity_dettaglio_sessione">DettaglioSessione</string>
+    <string name="title_activity_dettaglio_sessione_passata">DettaglioSessionePassata</string>
+    <string name="title_activity_dettaglio_caduta">DettaglioCaduta</string>
 
 </resources>

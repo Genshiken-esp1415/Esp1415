@@ -1,17 +1,37 @@
 package it.unipd.dei.esp1415;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
-
+/**
+ * La main Activity contiene un redirect alla lista delle sessioni per il
+ * momento. Una volta deciso quale activity fungerà da main verra incorporata in
+ * questa. In ogni caso non è un problema, visto che verrà gestito tutto con i
+ * fragment. Guardate qua per la descrizione di fragment: 
+ * http://developer.android.com/guide/components/fragments.html
+ * Per il momento frega, sviluppiamo le activity indipendentemente e poi per la visuale su tablet le uniremo in futuro.
+ * Basta inserire il codice del layout nel fragment relativo all'activity, invece che nel layout.
+ *
+ */
 public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (savedInstanceState == null) {
+			getSupportFragmentManager().beginTransaction()
+					.add(R.id.container, new PlaceholderFragment()).commit();
+		}
+        Intent openListaSessioni = new Intent(this, ListaSessioniActivity.class);
+        startActivity(openListaSessioni);
     }
 
 
@@ -33,4 +53,21 @@ public class MainActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    
+    /**
+	 * A placeholder fragment containing a simple view.
+	 */
+	public static class PlaceholderFragment extends Fragment {
+
+		public PlaceholderFragment() {
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_main,
+					container, false);
+			return rootView;
+		}
+	}
 }

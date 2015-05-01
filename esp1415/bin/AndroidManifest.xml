@@ -22,6 +22,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ListaSessioniActivity"
+            android:label="@string/title_activity_lista_sessioni" >
+        </activity>
+        <activity
+            android:name=".DettaglioSessioneCorrenteActivity"
+            android:label="@string/title_activity_dettaglio_sessione" >
+        </activity>
+        <activity
+            android:name=".DettaglioSessionePassataActivity"
+            android:label="@string/title_activity_dettaglio_sessione_passata" >
+        </activity>
+        <activity
+            android:name=".DettaglioCadutaActivity"
+            android:label="@string/title_activity_dettaglio_caduta" >
+        </activity>
     </application>
 
 </manifest>
