@@ -1,5 +1,7 @@
 package it.unipd.dei.esp1415;
 
+import java.util.ArrayList;
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -23,6 +25,11 @@ public class ListaSessioniActivity extends ActionBarActivity {
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
+		}
+		//questo mi restituisce un arraylist di sessioni con dati casuali per testing
+		ArrayList<Session> provaRandomizer = Randomizer.randomSession(30);
+		while(true){
+			
 		}
 	}
 
