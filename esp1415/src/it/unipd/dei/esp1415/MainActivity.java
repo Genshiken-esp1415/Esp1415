@@ -30,7 +30,7 @@ public class MainActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
-        Intent openListaSessioni = new Intent(this, ListaSessioniActivity.class);
+        Intent openListaSessioni = new Intent(this, DettaglioCadutaActivity.class);
         startActivity(openListaSessioni);
     }
 

@@ -11,6 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.drawable.*;
+import android.graphics.drawable.shapes.RectShape;
 /**
  * Questa activity conterrà il dettaglio su una caduta
  */
@@ -61,4 +65,25 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 			return rootView;
 		}
 	}
+	
+	/*public class ThumbnailBox extends View{
+		private ShapeDrawable box;
+		
+		public ThumbnailBox(Context context){
+			super(context);
+			
+			int x=10;
+			int y=10;
+			int width = 200;
+			int height = 200;
+			
+			box = new ShapeDrawable(new RectShape());
+			box.getPaint().setColor(0x0);
+			box.setBounds(x, y, x+width, y+height);
+		}
+		
+		protected void onDraw(Canvas canvas){
+			box.draw(canvas);
+		}
+	}*/
 }
