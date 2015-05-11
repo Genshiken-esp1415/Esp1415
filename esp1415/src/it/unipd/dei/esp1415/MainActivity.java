@@ -30,6 +30,8 @@ public class MainActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+        DBManager db = new DBManager(this);
+        db.open();
         Intent openListaSessioni = new Intent(this, ListaSessioniActivity.class);
         startActivity(openListaSessioni);
     }

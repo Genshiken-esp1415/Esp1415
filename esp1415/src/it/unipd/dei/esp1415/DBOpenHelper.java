@@ -11,7 +11,7 @@ import android.util.Log;
  * @author Andrea
  *
  */
-public class DbOpenHelper extends  SQLiteOpenHelper {
+public class DBOpenHelper extends  SQLiteOpenHelper {
 
 	// variabili per la tabella SESSIONE
 	public static final String TABLE_SESSION = "SESSIONE";
@@ -19,6 +19,7 @@ public class DbOpenHelper extends  SQLiteOpenHelper {
 	public static final String COLUMN_NAME = "nome";
 	public static final String COLUMN_DURATA = "durata";
 	public static final String COLUMN_ATTIVA = "attiva";
+	public static final String COLUMN_ID_S = "ID";
 	//variabili per la tabella CADUTA
 	public static final String TABLE_FALL = "CADUTA";
 	public static final String COLUMN_NUMBER = "numero";
@@ -27,6 +28,7 @@ public class DbOpenHelper extends  SQLiteOpenHelper {
 	public static final String COLUMN_LATITUDE = "latitudine";
 	public static final String COLUMN_LONGITUDE = "longitudine";
 	public static final String COLUMN_SESSION = "timestamp_inizio";
+	public static final String COLUMN_ID_F = "ID";
 	//variabili per la tabella ACCELEROMETRO
 	public static final String TABLE_ACCELEROMETER = "ACCELEROMETRO";
 	public static final String COLUMN_SAMPLENUMBER = "numero_campione";
@@ -34,17 +36,19 @@ public class DbOpenHelper extends  SQLiteOpenHelper {
 	public static final String COLUMN_Y = "y";
 	public static final String COLUMN_Z = "z";
 	public static final String COLUMN_FALL = "timestamp";
+	public static final String COLUMN_ID_A = "ID";
 
-	private static final String DATABASE_NAME = "commments.db";
+	private static final String DATABASE_NAME = "fallDetection.db";
 	private static final int DATABASE_VERSION = 1;
 
-	// Database creation sql statement
+	// Create table necessari, guardare in disegni per lo schema E-R
 	private static final String DATABASE_CREATE_SESSION = ""
 			+ "CREATE TABLE " + TABLE_SESSION 
-			+ " ( " + COLUMN_TIMESTAMP_S + " TEXT PRIMARY KEY, "
-			+ COLUMN_NAME + " TEXT, "
-			+ COLUMN_DURATA + " INTEGER, "
-			+ COLUMN_ATTIVA + " INTEGER)";
+			+ " ( " + COLUMN_TIMESTAMP_S + " TEXT PRIMARY KEY DEFAULT 'now', "
+			+ COLUMN_NAME + " TEXT NOT NULL, "
+			+ COLUMN_DURATA + " INTEGER DEFAULT 0, "
+			+ COLUMN_ATTIVA + " INTEGER DEFAULT 0,"
+			+ COLUMN_ID_S + " INTEGER UNIQUE)";
 	private static final String DATABASE_CREATE_FALL = ""
 			+ "CREATE TABLE " + TABLE_FALL 
 			+ " ( " + COLUMN_TIMESTAMP_F + " TEXT PRIMARY KEY, "
@@ -53,6 +57,7 @@ public class DbOpenHelper extends  SQLiteOpenHelper {
 			+ COLUMN_LATITUDE + " REAL, "
 			+ COLUMN_LONGITUDE + " REAL, "
 			+ COLUMN_SESSION + " TEXT, "
+			+ COLUMN_ID_F + " INTEGER UNIQUE,"
 			+ "FOREIGN KEY(" + COLUMN_SESSION + ") REFERENCES " + TABLE_SESSION + "(" + COLUMN_TIMESTAMP_S +"))";
 	private static final String DATABASE_CREATE_ACCELEROMETER = ""
 			+ "CREATE TABLE " + TABLE_ACCELEROMETER 
@@ -60,16 +65,19 @@ public class DbOpenHelper extends  SQLiteOpenHelper {
 			+ COLUMN_X + " REAL, "
 			+ COLUMN_Y + " REAL, "
 			+ COLUMN_Z + " REAL, "
-			+ COLUMN_LONGITUDE + " REAL, "
 			+ COLUMN_FALL + " TEXT, "
+			+ COLUMN_ID_A + " INTEGER UNIQUE,"
 			+ "PRIMARY KEY (" + COLUMN_SAMPLENUMBER + "," + COLUMN_FALL + "),"
 			+ "FOREIGN KEY(" + COLUMN_FALL + ") REFERENCES " + TABLE_FALL + "(" + COLUMN_TIMESTAMP_F +"))";
 			
 
-	public DbOpenHelper(Context context) {
+	public DBOpenHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
+	/**
+	 * Chiamato da android quando si fa per la prima volta l'accesso al db e questi non esiste
+	 */
 	@Override
 	public void onCreate(SQLiteDatabase database) {
 		database.execSQL(DATABASE_CREATE_SESSION);
@@ -77,9 +85,12 @@ public class DbOpenHelper extends  SQLiteOpenHelper {
 		database.execSQL(DATABASE_CREATE_ACCELEROMETER);
 	}
 
+	/**
+	 * Chiamato da android quando il db viene aggiornato, cioè quando installiamo l'app aggiornata e sono successe modifiche alla struttura del db.
+	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.w(DbOpenHelper.class.getName(),
+		Log.w(DBOpenHelper.class.getName(),
 				"Upgrading database from version " + oldVersion + " to "
 						+ newVersion + ", which will destroy all old data");
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACCELEROMETER);
