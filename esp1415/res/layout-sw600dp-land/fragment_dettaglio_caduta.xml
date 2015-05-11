@@ -19,7 +19,7 @@
         android:src="@drawable/thumbnail_placeholder" />
 
     <TextView
-        android:id="@+id/datalabel"
+        android:id="@+id/data_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/thumbnail_label"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/latitudine_label"
         android:layout_alignBottom="@+id/latitudine_label"
-        android:layout_alignLeft="@+id/datalabel"
+        android:layout_alignLeft="@+id/data_label"
         android:text="@string/longitudine"
         android:textSize="32sp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -55,8 +55,8 @@
         android:id="@+id/ora_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/datalabel"
-        android:layout_alignBottom="@+id/datalabel"
+        android:layout_alignBaseline="@+id/data_label"
+        android:layout_alignBottom="@+id/data_label"
         android:layout_alignLeft="@+id/grafico_label"
         android:layout_marginTop="35dp"
         android:text="@string/ora"
@@ -131,7 +131,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/latitudine_label"
-        android:layout_toRightOf="@+id/datalabel"
+        android:layout_toRightOf="@+id/data_label"
         android:text="10/05/14"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="32sp" />

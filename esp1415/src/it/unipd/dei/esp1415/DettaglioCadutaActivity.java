@@ -79,7 +79,7 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 			Fall fall = falls.get(randNumber.nextInt(falls.size()));
 			int numeroCaduta = fall.getFallNumber();
 			Date dataCaduta = fall.getFallTimestamp();
-			//getActivity().getActionBar().setTitle("Caduta #"+numeroCaduta+" della sessione #qualcosa");   
+			getActivity().setTitle("Caduta #"+numeroCaduta+" della sessione #qualcosa");   
 			TextView data = (TextView) rootView.findViewById(R.id.data);
 			TextView ora = (TextView) rootView.findViewById(R.id.ora);
 			TextView notifica = (TextView) rootView.findViewById(R.id.notifica);
