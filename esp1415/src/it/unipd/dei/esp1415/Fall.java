@@ -3,6 +3,9 @@ package it.unipd.dei.esp1415;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.location.Location;
+import android.location.LocationManager;
+
 /**
  * Classe contenitore per i dati relativi ad una caduta
  */
@@ -15,6 +18,8 @@ public class Fall {
 	//forse non servirà, intanto teniamo un riferimento alla sessione per sicurezza
 	private Session session;
 	private boolean notified;
+	private double latitude;
+	private double longitude;
 	//lista contenente i dati dell'accelerometro relativi a 500 ms prima e dopo la caduta
 	private ArrayList<AccelerometerData> fallData;	
 	
@@ -25,7 +30,7 @@ public class Fall {
 		this.session = builder.session;
 		this.fallData = builder.fallData;
 	}
-
+	
 	public Date getFallTimestamp() {
 		return fallTimestamp;
 	}
@@ -58,6 +63,21 @@ public class Fall {
 		this.notified = notified;
 	}
 
+	public double getLatitude() {
+		return latitude;
+	}
+	
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+	
+	public double getLongitude() {
+		return longitude;
+	}
+	
+	public void setLongitude(double longitude) {
+		this.longitude=longitude;
+	}
 	public ArrayList<AccelerometerData> getFallData() {
 		return fallData;
 	}
@@ -71,6 +91,8 @@ public class Fall {
 		private int fallNumber;
 		private Session session;
 		private boolean notified;
+		private double latitude;
+		private double longitude;
 		private ArrayList<AccelerometerData> fallData;
 
 		public FallBuilder(Date fallTimestamp) {
@@ -94,6 +116,16 @@ public class Fall {
 		
 		public FallBuilder notified(Boolean notified) {
 			this.notified = notified;
+			return this;
+		}
+		
+		public FallBuilder latitude(Double latitude) {
+			this.latitude = latitude;
+			return this;
+		}
+		
+		public FallBuilder longitude(Double longitude) {
+			this.longitude = longitude;
 			return this;
 		}
 		

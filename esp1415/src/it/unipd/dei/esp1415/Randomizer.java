@@ -18,7 +18,7 @@ import java.util.Random;
 public class Randomizer {
 	public static final int MILLISINHOUR = 3600000;
 	/**
-	 * This method returns a list of random session with random falls (0-5 falls).
+	 * This method returns a list of random sessions with random falls (0-5 falls).
 	 * 
 	 * @param size 
 	 * @return
@@ -52,6 +52,9 @@ public class Randomizer {
 					randomFall = new Fall.FallBuilder(cal.getTime())
 											.session(randomSession)
 											.fallNumber(j+1)
+											.notified(randNumber.nextBoolean())
+											.latitude(randNumber.nextDouble())
+											.longitude(randNumber.nextDouble())
 											.build();
 					//Generating accelerometer data
 					for(int h=0; h<1000; h++){

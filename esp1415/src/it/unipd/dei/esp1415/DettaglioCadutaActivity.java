@@ -1,16 +1,23 @@
 package it.unipd.dei.esp1415;
 
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.text.format.DateFormat;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.os.Build;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.*;
@@ -62,6 +69,30 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(
 					R.layout.fragment_dettaglio_caduta, container, false);
+			
+			/* Crea una o più sessioni con una o più cadute casuali ciascuna e stampa i valori generati nei rispettivi campi */
+
+			Random randNumber = new Random();
+			ArrayList<Session> randomSession = Randomizer.randomSession(6);
+			Session session = randomSession.get(randNumber.nextInt(randomSession.size()));
+			ArrayList<Fall> falls = session.getFallList();
+			Fall fall = falls.get(randNumber.nextInt(falls.size()));
+			int numeroCaduta = fall.getFallNumber();
+			Date dataCaduta = fall.getFallTimestamp();
+			//getActivity().getActionBar().setTitle("Caduta #"+numeroCaduta+" della sessione #qualcosa");   
+			TextView data = (TextView) rootView.findViewById(R.id.data);
+			TextView ora = (TextView) rootView.findViewById(R.id.ora);
+			TextView notifica = (TextView) rootView.findViewById(R.id.notifica);
+			TextView latitudine = (TextView) rootView.findViewById(R.id.latitudine);
+			TextView longitudine = (TextView) rootView.findViewById(R.id.longitudine);
+			data.setText(DateFormat.format("dd/MM/yy",dataCaduta));
+			ora.setText(DateFormat.format("kk:mm:ss",dataCaduta));
+			latitudine.setText(Double.toString(fall.getLatitude()));
+			longitudine.setText(Double.toString(fall.getLongitude()));
+			if(fall.isNotified())
+				notifica.setText("inviata");
+			else
+				notifica.setText("non inviata");
 			return rootView;
 		}
 	}
