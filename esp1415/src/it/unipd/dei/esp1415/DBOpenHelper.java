@@ -9,7 +9,7 @@ import android.util.Log;
  * quando l'app viene modificata.
  * 
  * @author Andrea
- *
+ *modifica
  */
 public class DBOpenHelper extends  SQLiteOpenHelper {
 
