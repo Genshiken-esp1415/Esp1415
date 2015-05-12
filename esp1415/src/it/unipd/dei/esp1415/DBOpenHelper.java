@@ -48,8 +48,7 @@ public class DBOpenHelper extends  SQLiteOpenHelper {
 			+ " ( " + COLUMN_TIMESTAMP_S + " TEXT PRIMARY KEY  DEFAULT CURRENT_TIMESTAMP, "
 			+ COLUMN_NAME + " TEXT NOT NULL, "
 			+ COLUMN_DURATA + " INTEGER DEFAULT 0, "
-			+ COLUMN_ATTIVA + " INTEGER DEFAULT 0,"
-			+ COLUMN_ID_S + " INTEGER UNIQUE)";
+			+ COLUMN_ATTIVA + " INTEGER DEFAULT 0)";
 	private static final String DATABASE_CREATE_FALL = ""
 			+ "CREATE TABLE " + TABLE_FALL 
 			+ " ( " + COLUMN_TIMESTAMP_F + " TEXT PRIMARY KEY, "
@@ -58,7 +57,6 @@ public class DBOpenHelper extends  SQLiteOpenHelper {
 			+ COLUMN_LATITUDE + " REAL, "
 			+ COLUMN_LONGITUDE + " REAL, "
 			+ COLUMN_SESSION + " TEXT, "
-			+ COLUMN_ID_F + " INTEGER UNIQUE,"
 			+ "FOREIGN KEY(" + COLUMN_SESSION + ") REFERENCES " + TABLE_SESSION + "(" + COLUMN_TIMESTAMP_S +"))";
 	private static final String DATABASE_CREATE_ACCELEROMETER = ""
 			+ "CREATE TABLE " + TABLE_ACCELEROMETER 
@@ -67,7 +65,6 @@ public class DBOpenHelper extends  SQLiteOpenHelper {
 			+ COLUMN_Y + " REAL, "
 			+ COLUMN_Z + " REAL, "
 			+ COLUMN_FALL + " TEXT, "
-			+ COLUMN_ID_A + " INTEGER UNIQUE,"
 			+ "PRIMARY KEY (" + COLUMN_SAMPLENUMBER + "," + COLUMN_FALL + "),"
 			+ "FOREIGN KEY(" + COLUMN_FALL + ") REFERENCES " + TABLE_FALL + "(" + COLUMN_TIMESTAMP_F +"))";
 			

@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.w3c.dom.Comment;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -73,13 +71,45 @@ public class DBManager {
 	    cursor.close();
 	    return newSession;
 	  }
+	 
 	  
-
+	  /**
+	   * Utilizzato quando si crea una nuova sessione. La sessione viene creata, inserita nel db e restituita al chiamante.
+	   * @param sessionName Il nome della sessione che si vuole creare.
+	   * @return
+	   */
+	  public Fall createFall(int fallNumber, double latitude, double longitude, ArrayList<AccelerometerData> accData) {
+	    ContentValues values = new ContentValues();
+	    values.put(DBOpenHelper.COLUMN_NUMBER, fallNumber);
+	    values.put(DBOpenHelper.COLUMN_LATITUDE, latitude);
+	    values.put(DBOpenHelper.COLUMN_LONGITUDE, longitude);
+	    Long insertIdF = database.insert(DBOpenHelper.TABLE_FALL, null, values);  
+	    Cursor cursor = database.query(DBOpenHelper.TABLE_FALL,
+	        FallColumns, null, null,
+	        null, null, DBOpenHelper.COLUMN_TIMESTAMP_F + " DESC");
+	    cursor.moveToFirst();
+	    Fall newFall = cursorToFall(cursor);
+	    //Inserisco i dati dell'accelerometro relativi alla caduta
+	    values.clear(); 
+	    values.put(DBOpenHelper.COLUMN_FALL, dateToSqlDate(newFall.getFallTimestamp()));
+	    for(int accIndex = 0; accIndex < accData.size(); accIndex++){
+	    	 values.put(DBOpenHelper.COLUMN_SAMPLENUMBER, accIndex);
+	    	 values.put(DBOpenHelper.COLUMN_X, accData.get(accIndex).getX());
+	    	 values.put(DBOpenHelper.COLUMN_Y, accData.get(accIndex).getY());
+	    	 values.put(DBOpenHelper.COLUMN_Z, accData.get(accIndex).getZ());
+	    	 Long insertIdA = database.insert(DBOpenHelper.TABLE_ACCELEROMETER, null, values);  	    	 
+	    }
+	    newFall.setFallData(accData);
+		
+	    cursor.close();
+	    return newFall;
+	  }
+	  
 	  
 	  /**
 	   * chiamare questo metodo per rinominare la sessione.
 	   * @param session la sessione che si vuole rinominare
-	   * @return niente, viene modificata la sessione passata come parametro
+	   * @return 
 	   */
 	  public Session renameSession(Session session) {
 	    ContentValues values = new ContentValues();
@@ -116,7 +146,7 @@ public class DBManager {
 	    List<Session> sessions = new ArrayList<Session>();
 
 	    Cursor cursor = database.query(DBOpenHelper.TABLE_SESSION,
-	        FallColumns, null, null, null, null, null);
+	        SessionColumns, null, null, null, null, null);
 
 	    cursor.moveToFirst();
 	    while (!cursor.isAfterLast()) {
@@ -128,7 +158,111 @@ public class DBManager {
 	    cursor.close();
 	    return sessions;
 	  }
+	  
+	  /**
+	   * restituisce una lista contenente tutte le cadute relative ad una certa sessione
+	   * @return
+	   */
+	  public List<Fall> getAllFalls(Date sessionBegin) {
+		  List<Fall> falls = new ArrayList<Fall>();
 
+		  String[] whereArgs = new String[1];
+		  whereArgs[0] =  dateToSqlDate(sessionBegin);
+		  Cursor cursor = database.query(DBOpenHelper.TABLE_FALL,
+				  FallColumns, DBOpenHelper.COLUMN_SESSION + " = ?", whereArgs, null, null, null);
+		  cursor.moveToFirst();
+		  while (!cursor.isAfterLast()) {
+			  Fall fall = cursorToFall(cursor);
+			  falls.add(fall);
+			  cursor.moveToNext();
+		  }
+		  // make sure to close the cursor
+		  cursor.close();
+		  return falls;
+	  }
+
+	  public List<AccelerometerData> getAccData(Date fallTimestamp){
+		  	List<AccelerometerData> accDataList = new ArrayList<AccelerometerData>();
+
+		    String[] whereArgs = new String[1];
+		    whereArgs[0] =  dateToSqlDate(fallTimestamp);
+		    Cursor cursor = database.query(DBOpenHelper.TABLE_ACCELEROMETER,
+		    		FallColumns, DBOpenHelper.COLUMN_TIMESTAMP_F + " = ?" , whereArgs,
+		    		null, null, DBOpenHelper.COLUMN_SAMPLENUMBER);
+		    cursor.moveToFirst();
+		    while (!cursor.isAfterLast()) {
+		    	AccelerometerData accData = cursorToAccData(cursor);
+		    	accDataList.add(accData);
+		    	cursor.moveToNext();
+		    }
+		    cursor.close();
+		    return accDataList;
+	  }
+	  
+	  /**
+	   * restituisce una sessione dato il timestamp
+	   * @return
+	   */
+	  public Session getSession(Date sessionBegin) {
+
+		  String[] whereArgs = new String[1];
+		  whereArgs[0] =  dateToSqlDate(sessionBegin);
+		  Cursor cursor = database.query(DBOpenHelper.TABLE_SESSION,
+				  FallColumns, DBOpenHelper.COLUMN_TIMESTAMP_S + " = ?", whereArgs, null, null, null);
+
+		  cursor.moveToFirst();
+		  Session session = cursorToSession(cursor);
+
+
+		  // make sure to close the cursor
+		  cursor.close();
+		  return session;
+	  }
+	  
+	  /**
+	   * restituisce una caduta dato il timestamp
+	   * @return
+	   */
+	  public Fall getFall(Date fallTimestamp) {
+
+		  String[] whereArgs = new String[1];
+		  whereArgs[0] =  dateToSqlDate(fallTimestamp);
+		  Cursor cursor = database.query(DBOpenHelper.TABLE_FALL,
+				  FallColumns, DBOpenHelper.COLUMN_TIMESTAMP_F + " = ?", whereArgs, null, null, null);
+
+		  cursor.moveToFirst();
+		  Fall fall = cursorToFall(cursor);
+
+
+		  // make sure to close the cursor
+		  cursor.close();
+		  return fall;
+	  }
+	  
+
+	  /**
+	   * chiamare questo metodo per settare che una caduta è stata notificata con successo
+	   * Da chiamare dopo aver settato notified a true nella caduta!
+	   * @param fall
+	   * @return
+	   */
+	  public Fall setNotified(Fall fall) {
+	    ContentValues values = new ContentValues();
+	    values.put(DBOpenHelper.COLUMN_NOTIFIED, 1);
+	    String whereClause = DBOpenHelper.COLUMN_TIMESTAMP_F +" = ?";
+	    String[] whereArgs = new String[1];
+	    whereArgs[0] =  dateToSqlDate(fall.getFallTimestamp());
+	    int updateId = database.update(DBOpenHelper.TABLE_FALL, values, whereClause, whereArgs);
+	    Cursor cursor = database.query(DBOpenHelper.TABLE_FALL,
+		        SessionColumns, whereClause, whereArgs,
+		        null, null, null);
+	    cursor.moveToFirst();
+	    fall = cursorToFall(cursor);
+	    cursor.close();
+	    return fall;
+	  }
+
+	  
 	  /**
 	   * Restituisce una sessione Session a partire da un cursor contenente dati di una riga di una query sql
 	   * @param cursor
@@ -138,9 +272,32 @@ public class DBManager {
 	    Session session = new Session.SessionBuilder(sqlDateToDate(cursor.getString(0)))
 	    								.name(cursor.getString(1))
 	    								.duration(cursor.getInt(2))
-	    								.active(cursor.getInt(3)==0)
+	    								.active(cursor.getInt(3)!=0)
 	    								.build();	    							
 	    return session;
+	  }
+	  
+	  /**
+	   * Restituisce una sessione Session a partire da un cursor contenente dati di una riga di una query sql
+	   * @param cursor
+	   * @return
+	   */
+	  private Fall cursorToFall(Cursor cursor) {
+	    Fall fall = new Fall.FallBuilder(sqlDateToDate(cursor.getString(0)))
+	    								.fallNumber(cursor.getInt(1))
+	    								.notified(cursor.getInt(2)!=0)
+	    								.latitude(cursor.getDouble(3))
+	    								.longitude(cursor.getDouble(4))
+	    								.session(sqlDateToDate(cursor.getString(5)))
+	    								.build();	    							
+	    return fall;
+	  }
+	  
+	  private AccelerometerData cursorToAccData(Cursor cursor){
+		  AccelerometerData accData = new AccelerometerData(cursor.getFloat(1),
+															  cursor.getFloat(2),
+															  cursor.getFloat(3));
+		  return accData;
 	  }
 	  
 	  /**

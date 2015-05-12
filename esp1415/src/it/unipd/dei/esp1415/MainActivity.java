@@ -1,5 +1,7 @@
 package it.unipd.dei.esp1415;
 
+import java.util.ArrayList;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,6 +32,17 @@ public class MainActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+        
+        ArrayList<Session> randomSessions = Randomizer.randomSession(10);
+        DBManager db = new DBManager(this);
+        db.open();
+        for(int i = 0; i<10; i++){
+        	db.createSession(randomSessions.get(i).getName());
+        	ArrayList<Fall> falls = randomSessions.get(i).getFallList();
+        	for(Fall fall : falls){
+        		db.createFall(fall.getFallNumber(), fall.getLatitude(), fall.getLongitude(), fall.getFallData());
+        	}
+        }
         
         Intent openListaSessioni = new Intent(this, ListaSessioniActivity.class);
         startActivity(openListaSessioni);

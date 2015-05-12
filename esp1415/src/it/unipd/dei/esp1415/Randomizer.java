@@ -50,7 +50,7 @@ public class Randomizer {
 				for(int j=0; j<fallnumber;j++){
 					cal.add(Calendar.HOUR_OF_DAY,1);
 					randomFall = new Fall.FallBuilder(cal.getTime())
-											.session(randomSession)
+											.session(randomSession.getSessionBegin())
 											.fallNumber(j+1)
 											.notified(randNumber.nextBoolean())
 											.latitude(randNumber.nextDouble())

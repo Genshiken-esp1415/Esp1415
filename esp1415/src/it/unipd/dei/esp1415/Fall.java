@@ -16,8 +16,8 @@ public class Fall {
 	// la query mi da già le cadute dalla piu vecchia alla piu nuova...
 	private int fallNumber;
 	//forse non servirà, intanto teniamo un riferimento alla sessione per sicurezza
-	private Session session;
-	private boolean notified;
+	private Date session;
+	private boolean notified; 
 	private double latitude;
 	private double longitude;
 	//lista contenente i dati dell'accelerometro relativi a 500 ms prima e dopo la caduta
@@ -49,11 +49,11 @@ public class Fall {
 		this.fallNumber = fallNumber;
 	}
 
-	public Session getSession() {
+	public Date getSession() {
 		return session;
 	}
 
-	public void setSession(Session session) {
+	public void setSession(Date session) {
 		this.session = session;
 	}
 
@@ -61,8 +61,9 @@ public class Fall {
 		return notified;
 	}
 
-	public void setNotified(boolean notified) {
-		this.notified = notified;
+	public void setNotified() {
+		this.notified = true;
+		
 	}
 
 	public double getLatitude() {
@@ -91,7 +92,7 @@ public class Fall {
 	public static class FallBuilder {
 		private Date fallTimestamp;
 		private int fallNumber;
-		private Session session;
+		private Date session;
 		private boolean notified;
 		private double latitude;
 		private double longitude;
@@ -111,7 +112,7 @@ public class Fall {
 			return this;
 		}
 		
-		public FallBuilder session(Session session) {
+		public FallBuilder session(Date session) {
 			this.session = session;
 			return this;
 		}
