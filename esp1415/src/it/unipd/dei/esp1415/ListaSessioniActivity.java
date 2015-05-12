@@ -2,16 +2,20 @@ package it.unipd.dei.esp1415;
 
 import java.util.ArrayList;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+
+
+
 /**
  * Questa activity conterrà la lista delle sessioni.
  *
@@ -26,11 +30,7 @@ public class ListaSessioniActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
-		//questo mi restituisce un arraylist di sessioni con dati casuali per testing
-		ArrayList<Session> provaRandomizer = Randomizer.randomSession(30);
-		while(true){
-			
-		}
+
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class ListaSessioniActivity extends ActionBarActivity {
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class PlaceholderFragment extends Fragment {
+	public static class PlaceholderFragment extends ListFragment {
 
 		public PlaceholderFragment() {
 		}
@@ -65,7 +65,29 @@ public class ListaSessioniActivity extends ActionBarActivity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_lista_sessioni,
 					container, false);
+			
+			
+			
+			
+
+			final ListView lista = (ListView) rootView.findViewById(R.id.list);
+			
+			//questo mi restituisce un arraylist di sessioni con dati casuali per testing
+			ArrayList<Session> provaRandomizer = Randomizer.randomSession(30);
+			while(true){
+				
+			}
+			
+			/* SimpleCursorAdapter da usare al posto di ArrayAdapter per gestire dati del database */
+			ArrayAdapter<Session> adapter = new ArrayAdapter<Session>(getActivity(),
+					android.R.layout.simple_list_item_1, provaRandomizer);
+			
+			lista.setListAdapter(adapter);
+		
+
+			
 			return rootView;
+			
 		}
 	}
 }
