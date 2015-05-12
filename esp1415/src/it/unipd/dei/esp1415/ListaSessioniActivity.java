@@ -68,7 +68,7 @@ public class ListaSessioniActivity extends ActionBarActivity {
 			
 			
 			
-			
+	
 			final ListView lista = (ListView) rootView.findViewById(R.id.list);
 			
 			//questo mi restituisce un arraylist di sessioni con dati casuali per testing
