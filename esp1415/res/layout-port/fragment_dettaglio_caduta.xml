@@ -18,7 +18,7 @@
         android:background="@drawable/box"
         android:src="@drawable/thumbnail_placeholder" />
 
-    <ImageView
+    <!-- <ImageView
         android:id="@+id/grafico_label"
         android:layout_width="480dp"
         android:layout_height="150dp"
@@ -26,8 +26,18 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="50dp"
         android:background="@drawable/box"
-        android:src="@drawable/graph_placeholder" />
-
+        android:src="@drawable/graph_placeholder" /> -->
+      
+	<it.unipd.dei.esp1415.GraphView
+        android:id="@+id/grafico_label"
+        android:layout_width="480dp"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/box"
+         />
+	
     <TextView
         android:id="@+id/data"
         android:layout_width="wrap_content"
@@ -114,17 +124,6 @@
         android:textSize="40sp" />
 
     <TextView
-        android:id="@+id/notifica"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/notifica_label"
-        android:layout_alignBottom="@+id/notifica_label"
-        android:layout_centerHorizontal="true"
-        android:text="inviata"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="40sp" />
-
-    <TextView
         android:id="@+id/ora"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -132,6 +131,17 @@
         android:layout_alignBottom="@+id/ora_label"
         android:layout_alignLeft="@+id/data"
         android:text="9:51"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/notifica"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/notifica_label"
+        android:layout_alignBottom="@+id/notifica_label"
+        android:layout_toRightOf="@+id/notifica_label"
+        android:text="non inviata"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="40sp" />
 

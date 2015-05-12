@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 
 /**
  * La main Activity contiene un redirect alla lista delle sessioni per il
- * momento. Una volta deciso quale activity fungerà da main verra incorporata in
- * questa. In ogni caso non è un problema, visto che verrà gestito tutto con i
+ * momento. Una volta deciso quale activity fungerï¿½ da main verra incorporata in
+ * questa. In ogni caso non ï¿½ un problema, visto che verrï¿½ gestito tutto con i
  * fragment. Guardate qua per la descrizione di fragment: 
  * http://developer.android.com/guide/components/fragments.html
  * Per il momento frega, sviluppiamo le activity indipendentemente e poi per la visuale su tablet le uniremo in futuro.
@@ -31,7 +31,7 @@ public class MainActivity extends ActionBarActivity {
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
         
-        Intent openListaSessioni = new Intent(this, ListaSessioniActivity.class);
+        Intent openListaSessioni = new Intent(this, DettaglioCadutaActivity.class);
         startActivity(openListaSessioni);
     }
 
