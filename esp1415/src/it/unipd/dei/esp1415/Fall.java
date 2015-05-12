@@ -29,6 +29,8 @@ public class Fall {
 		this.notified = builder.notified;
 		this.session = builder.session;
 		this.fallData = builder.fallData;
+		this.latitude = builder.latitude;
+		this.longitude = builder.longitude;
 	}
 	
 	public Date getFallTimestamp() {
