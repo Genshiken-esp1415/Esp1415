@@ -67,7 +67,7 @@ public class ListaSessioniActivity extends ActionBarActivity {
 					container, false);
 			
 			
-			
+			/*commento a caso perché non mi fa fare il commit*/
 	
 			final ListView lista = (ListView) rootView.findViewById(R.id.list);
 			
