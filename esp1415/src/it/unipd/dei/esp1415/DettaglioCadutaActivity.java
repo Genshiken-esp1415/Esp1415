@@ -74,12 +74,15 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 
 			Random randNumber = new Random();
 			ArrayList<Session> randomSession = Randomizer.randomSession(6);
-			Session session = randomSession.get(randNumber.nextInt(randomSession.size()));
+			int n = randNumber.nextInt(randomSession.size());
+			Session session = randomSession.get(n);
 			ArrayList<Fall> falls = session.getFallList();
-			Fall fall = falls.get(randNumber.nextInt(falls.size()));
+			int fallSize = falls.size();
+			int randFall = randNumber.nextInt(fallSize);
+			Fall fall = falls.get(randFall);
 			int numeroCaduta = fall.getFallNumber();
 			Date dataCaduta = fall.getFallTimestamp();
-			getActivity().setTitle("Caduta #"+numeroCaduta+" della sessione #qualcosa");   
+			getActivity().setTitle("Caduta #"+numeroCaduta+" della sessione "+session.getName());   
 			TextView data = (TextView) rootView.findViewById(R.id.data);
 			TextView ora = (TextView) rootView.findViewById(R.id.ora);
 			TextView notifica = (TextView) rootView.findViewById(R.id.notifica);
