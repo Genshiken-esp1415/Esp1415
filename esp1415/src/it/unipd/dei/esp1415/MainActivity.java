@@ -32,6 +32,9 @@ public class MainActivity extends ActionBarActivity {
 		}
         DBManager db = new DBManager(this);
         db.open();
+        Session prova = db.createSession("prova");
+        Session renamedSession =  db.renameSession(prova);
+        
         Intent openListaSessioni = new Intent(this, ListaSessioniActivity.class);
         startActivity(openListaSessioni);
     }

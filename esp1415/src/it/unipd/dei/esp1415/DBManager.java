@@ -66,12 +66,33 @@ public class DBManager {
 	    values.put(DBOpenHelper.COLUMN_NAME, sessionName);
 	    Long insertId = database.insert(DBOpenHelper.TABLE_SESSION, null, values);
 	    Cursor cursor = database.query(DBOpenHelper.TABLE_SESSION,
-	        SessionColumns, DBOpenHelper.COLUMN_ID_S + " = " + insertId, null,
-	        null, null, null);
+	        SessionColumns, null, null,
+	        null, null, DBOpenHelper.COLUMN_TIMESTAMP_S + " DESC");
 	    cursor.moveToFirst();
 	    Session newSession = cursorToSession(cursor);
 	    cursor.close();
 	    return newSession;
+	  }
+	  
+	  /**
+	   * chiamare questo metodo per rinominare la sessione.
+	   * @param session la sessione che si vuole rinominare
+	   * @return niente, viene modificata la sessione passata come parametro
+	   */
+	  public Session renameSession(Session session) {
+	    ContentValues values = new ContentValues();
+	    values.put(DBOpenHelper.COLUMN_NAME, session.getName());
+	    String whereClause = DBOpenHelper.COLUMN_TIMESTAMP_S +" = ?";
+	    String[] whereArgs = new String[1];
+	    whereArgs[0] =  dateToSqlDate(session.getSessionBegin());
+	    int updateId = database.update(DBOpenHelper.TABLE_SESSION, values, whereClause, whereArgs);
+	    Cursor cursor = database.query(DBOpenHelper.TABLE_SESSION,
+		        SessionColumns, whereClause, whereArgs,
+		        null, null, null);
+	    cursor.moveToFirst();
+	    session = cursorToSession(cursor);
+	    cursor.close();
+	    return session;
 	  }
 
 	  /** 

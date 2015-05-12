@@ -44,7 +44,7 @@ public class DBOpenHelper extends  SQLiteOpenHelper {
 	// Create table necessari, guardare in disegni per lo schema E-R
 	private static final String DATABASE_CREATE_SESSION = ""
 			+ "CREATE TABLE " + TABLE_SESSION 
-			+ " ( " + COLUMN_TIMESTAMP_S + " TEXT PRIMARY KEY DEFAULT 'now', "
+			+ " ( " + COLUMN_TIMESTAMP_S + " TEXT PRIMARY KEY  DEFAULT CURRENT_TIMESTAMP, "
 			+ COLUMN_NAME + " TEXT NOT NULL, "
 			+ COLUMN_DURATA + " INTEGER DEFAULT 0, "
 			+ COLUMN_ATTIVA + " INTEGER DEFAULT 0,"
