@@ -12,6 +12,9 @@ import android.view.View;
 @SuppressLint("WrongCall")
 public class GraphView extends View {
 
+	private Paint paint;
+	
+	
 	/*public GraphView(Context context) {
 		super(context);
 		onMeasure(100,100);
@@ -19,10 +22,16 @@ public class GraphView extends View {
 	}*/
 	
 	public GraphView(Context context, AttributeSet attrs) {
+		
 		super(context,attrs);
-		this.onMeasure(1,1);
+		
+		paint = new Paint();
+		paint.setStyle(Style.STROKE);
+	    paint.setStrokeWidth(4);
+	    paint.setColor(Color.RED);
+		
+		this.onMeasure(480,150);
 		setBackgroundResource(R.drawable.box);
-		this.onDraw(new Canvas());
 	}
 	
 	/*public GraphView(Context context, AttributeSet attrs, int defStyle){
@@ -37,11 +46,8 @@ public class GraphView extends View {
 	
 	public void onDraw(Canvas c){
 		super.onDraw(c);
-		Paint paint = new Paint();
-	    paint.setStyle(Style.STROKE);
-	    paint.setStrokeWidth(4);
-	    paint.setColor(Color.RED);
+		
 	    for(int i=0;i<10;i++)
-	    	c.drawPoint(400+i, 400, paint);
+	    	c.drawPoint(400+i, 50, paint);
 	}
 }

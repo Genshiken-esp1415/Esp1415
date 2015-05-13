@@ -101,8 +101,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="50dp"
-        android:background="@drawable/box"
-        android:src="@drawable/blank"/>
+        android:background="@drawable/box"/>
 
     <TextView
         android:id="@+id/latitudine"
