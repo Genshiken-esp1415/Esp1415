@@ -8,7 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="it.unipd.dei.esp1415.DettaglioCaduta$PlaceholderFragment" >
 
-    <ImageView
+    <!-- <ImageView
         android:id="@+id/thumbnail_label"
         android:layout_width="140dp"
         android:layout_height="140dp"
@@ -18,7 +18,7 @@
         android:background="@drawable/box"
         android:src="@drawable/thumbnail_placeholder" />
 
-    <!-- <ImageView
+    <ImageView
         android:id="@+id/grafico_label"
         android:layout_width="480dp"
         android:layout_height="150dp"
@@ -26,18 +26,8 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="50dp"
         android:background="@drawable/box"
-        android:src="@drawable/graph_placeholder" /> -->
+        android:src="@drawable/graph_placeholder" />
       
-	<it.unipd.dei.esp1415.GraphView
-        android:id="@+id/grafico_label"
-        android:layout_width="480dp"
-        android:layout_height="150dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/box"
-         />
-	
     <TextView
         android:id="@+id/data"
         android:layout_width="wrap_content"
@@ -143,6 +133,14 @@
         android:layout_toRightOf="@+id/notifica_label"
         android:text="non inviata"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="40sp" />
+        android:textSize="40sp" /> -->
 
+	<it.unipd.dei.esp1415.GraphView
+	    android:id="@+id/grafico_label"
+	    android:layout_width="480dp"
+	    android:layout_height="150dp"
+	    android:layout_alignParentBottom="true"
+	    android:layout_centerHorizontal="true"
+	    android:background="@drawable/box" />
+	
 </RelativeLayout>

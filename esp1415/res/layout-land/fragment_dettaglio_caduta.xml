@@ -8,7 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="it.unipd.dei.esp1415.DettaglioCaduta$PlaceholderFragment" >
 
-    <ImageView
+    <!-- <ImageView
         android:id="@+id/thumbnail_label"
         android:layout_width="180dp"
         android:layout_height="180dp"
@@ -84,7 +84,7 @@
         android:textSize="32sp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <!-- <ImageView
+     <ImageView
         android:id="@+id/grafico_label"
         android:layout_width="800dp"
         android:layout_height="150dp"
@@ -92,16 +92,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="46dp"
         android:background="@drawable/box"
-        android:src="@drawable/graph_placeholder" /> -->
-
-	<it.unipd.dei.esp1415.GraphView
-        android:id="@+id/grafico_label"
-        android:layout_width="480dp"
-        android:layout_height="150dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/box"/>
+        android:src="@drawable/graph_placeholder" />
+        
+	
 
     <TextView
         android:id="@+id/latitudine"
@@ -143,6 +136,14 @@
         android:layout_toRightOf="@+id/data_label"
         android:text="10/05/14"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="32sp" />
+        android:textSize="32sp" /> -->
+
+    <it.unipd.dei.esp1415.GraphView
+        android:id="@+id/grafico_label"
+        android:layout_width="800dp"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/box" />
 
 </RelativeLayout>
