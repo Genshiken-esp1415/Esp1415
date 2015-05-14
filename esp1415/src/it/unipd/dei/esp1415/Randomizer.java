@@ -63,6 +63,7 @@ public class Randomizer {
 															randNumber.nextInt(100)));
 					}
 					randomFall.setFallData((ArrayList<AccelerometerData>)accData.clone());
+					accData.clear();
 					falls.add(randomFall);
 				}
 				randomSession.setFallList((ArrayList<Fall>)falls.clone());
