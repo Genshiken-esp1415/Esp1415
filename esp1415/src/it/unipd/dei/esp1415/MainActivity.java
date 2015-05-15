@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 
 /**
  * La main Activity contiene un redirect alla lista delle sessioni per il
- * momento. Una volta deciso quale activity fungerà da main verra incorporata in
- * questa. In ogni caso non è un problema, visto che verrà gestito tutto con i
+ * momento. Una volta deciso quale activity fungerï¿½ da main verra incorporata in
+ * questa. In ogni caso non ï¿½ un problema, visto che verrï¿½ gestito tutto con i
  * fragment. Guardate qua per la descrizione di fragment: 
  * http://developer.android.com/guide/components/fragments.html
  * Per il momento frega, sviluppiamo le activity indipendentemente e poi per la visuale su tablet le uniremo in futuro.
@@ -32,7 +32,7 @@ public class MainActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
-        //creo il db per il primo avvio e faccio inserimenti dummy per testing, se non è già stato popolato il db.
+        //creo il db per il primo avvio e faccio inserimenti dummy per testing, se non ï¿½ giï¿½ stato popolato il db.
         DBManager db = new DBManager(this);
         db.open();
         if(db.getAllSessions().size()==0){

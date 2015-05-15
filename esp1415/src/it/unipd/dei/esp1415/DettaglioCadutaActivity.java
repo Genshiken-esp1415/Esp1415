@@ -17,13 +17,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.os.Build;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.*;
 import android.graphics.drawable.shapes.RectShape;
 /**
- * Questa activity conterrà il dettaglio su una caduta
+ * Questa activity conterrï¿½ il dettaglio su una caduta
  */
 public class DettaglioCadutaActivity extends ActionBarActivity {
 
@@ -64,13 +68,14 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 		public PlaceholderFragment() {
 		}
 
+		@SuppressLint("WrongCall")
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(
 					R.layout.fragment_dettaglio_caduta, container, false);
 			
-			/* Crea una o più sessioni con una o più cadute casuali ciascuna e stampa i valori generati nei rispettivi campi */
+			/* Crea una o piï¿½ sessioni con una o piï¿½ cadute casuali ciascuna e stampa i valori generati nei rispettivi campi */
 
 			Random randNumber = new Random();
 			ArrayList<Session> randomSession = Randomizer.randomSession(6);
@@ -82,6 +87,7 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 			Fall fall = falls.get(randFall);
 			int numeroCaduta = fall.getFallNumber();
 			Date dataCaduta = fall.getFallTimestamp();
+			ArrayList<AccelerometerData> accData = fall.getFallData();
 			getActivity().setTitle("Caduta #"+numeroCaduta+" della sessione "+session.getName());   
 			TextView data = (TextView) rootView.findViewById(R.id.data);
 			TextView ora = (TextView) rootView.findViewById(R.id.ora);
@@ -96,6 +102,15 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 				notifica.setText("inviata");
 			else
 				notifica.setText("non inviata");
+			GraphView graphX = (GraphView) rootView.findViewById(R.id.grafico_x);
+			GraphView graphY = (GraphView) rootView.findViewById(R.id.grafico_y);
+			GraphView graphZ = (GraphView) rootView.findViewById(R.id.grafico_z);
+			graphX.setAccelerometerData(accData);
+			graphY.setAccelerometerData(accData);
+			graphZ.setAccelerometerData(accData);
+			graphX.setAxis(0);
+			graphY.setAxis(1);
+			graphZ.setAxis(2);
 			return rootView;
 		}
 	}

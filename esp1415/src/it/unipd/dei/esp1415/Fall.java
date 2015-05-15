@@ -13,11 +13,12 @@ public class Fall {
 	
 	private Date fallTimestamp;
 	// campo ridondante, mi basta sapere la data e a quale sessione appartiene,
-	// la query mi da già le cadute dalla piu vecchia alla piu nuova...
+	// la query mi da giï¿½ le cadute dalla piu vecchia alla piu nuova...
 	private int fallNumber;
-	//forse non servirà, intanto teniamo un riferimento alla sessione per sicurezza
+	//forse non servirï¿½, intanto teniamo un riferimento alla sessione per sicurezza
 	private Date session;
 	private boolean notified; 
+
 	private double latitude;
 	private double longitude;
 	//lista contenente i dati dell'accelerometro relativi a 500 ms prima e dopo la caduta

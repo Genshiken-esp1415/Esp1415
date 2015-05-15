@@ -13,13 +13,13 @@
         android:layout_width="180dp"
         android:layout_height="180dp"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/grafico_label"
+        android:layout_alignRight="@+id/grafico_z"
         android:layout_marginTop="35dp"
         android:background="@drawable/box"
         android:src="@drawable/thumbnail_placeholder" />
 
     <ImageView
-        android:id="@+id/grafico_label"
+        android:id="@+id/grafico_z"
         android:layout_width="800dp"
         android:layout_height="150dp"
         android:layout_alignParentBottom="true"
@@ -118,7 +118,7 @@
         android:id="@+id/notifica"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/grafico_label"
+        android:layout_above="@+id/grafico_z"
         android:layout_marginBottom="90dp"
         android:layout_toRightOf="@+id/notifica_label"
         android:text="inviata"
