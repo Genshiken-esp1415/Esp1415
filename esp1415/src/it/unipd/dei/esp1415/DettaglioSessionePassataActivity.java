@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -27,10 +28,10 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dettaglio_sessione_passata);
 		if (savedInstanceState == null) {
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.dettaglio_sessione_passata_fragment, new PlaceholderFragment())
-					.add(R.id.lista_cadute_fragment, new MyListFragment())
-					.commit();
+			FragmentTransaction  fm = getSupportFragmentManager().beginTransaction();
+			fm.add(R.id.dettaglio_sessione_passata_fragment, new PlaceholderFragment());
+			fm.add(R.id.lista_cadute_fragment, new MyListFragment());
+			fm.commit();
 		}
 	}
 
@@ -76,7 +77,7 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity {
 			TextView timeStampSessioneTextView = (TextView) rootView.findViewById(R.id.timestampsessione);
 			TextView durataSessioneTextView = (TextView) rootView.findViewById(R.id.durataSessione);
 			timeStampSessioneTextView.setText(currentSession.getSessionBegin().toString());
-			durataSessioneTextView.setText(currentSession.getDuration());
+			durataSessioneTextView.setText(String.valueOf(currentSession.getDuration()));
 			return rootView;
 		}
 	}
@@ -85,7 +86,6 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity {
 	 * A placeholder fragment containing a simple view.
 	 */
 	public static class MyListFragment extends ListFragment {
-
 		public MyListFragment() {
 		}
 
@@ -113,7 +113,7 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity {
 
 	
 	
-	public class FallAdapter extends ArrayAdapter<Fall> {
+	public static class FallAdapter extends ArrayAdapter<Fall> {
 		  private final Context context;
 		  private final ArrayList<Fall> falls;
 
@@ -130,8 +130,8 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity {
 		    View rowFallView = inflater.inflate(R.layout.row_fall, parent, false);
 		    TextView fallNumberTextView = (TextView) rowFallView.findViewById(R.id.numeroCaduta);
 		    TextView timestampFallTextView = (TextView) rowFallView.findViewById(R.id.timestampCaduta);
-		    ImageView notifiedImageView = (ImageView) rowFallView.findViewById(R.id.icon);
-		    fallNumberTextView.setText(falls.get(position).getFallNumber());
+		    ImageView notifiedImageView = (ImageView) rowFallView.findViewById(R.id.notificato);
+		    fallNumberTextView.setText(String.valueOf(falls.get(position).getFallNumber()));
 		    timestampFallTextView.setText(falls.get(position).getFallTimestamp().toString());
 		    
 		    if (falls.get(position).isNotified()) {
