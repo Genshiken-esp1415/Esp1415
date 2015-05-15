@@ -152,6 +152,7 @@ public class DBManager {
 	    cursor.moveToFirst();
 	    while (!cursor.isAfterLast()) {
 	      Session session = cursorToSession(cursor);
+	      session.setFallList((ArrayList<Fall>)getAllFalls(session.getSessionBegin()));
 	      sessions.add(session);
 	      cursor.moveToNext();
 	    }
