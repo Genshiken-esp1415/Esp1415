@@ -5,11 +5,14 @@ import it.unipd.dei.esp1415.R.drawable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+
 import android.support.v4.app.Fragment;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -56,10 +60,11 @@ public class ListaSessioniActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends ListFragment {
+/**
+ * A placeholder fragment containing a simple view.
+ */
+public static class PlaceholderFragment extends ListFragment 
+	{
 
 		public PlaceholderFragment() {
 		}
@@ -67,58 +72,32 @@ public class ListaSessioniActivity extends ActionBarActivity {
 		 @Override
 		  public void onActivityCreated(Bundle savedInstanceState) {
 		    super.onActivityCreated(savedInstanceState);
-//		    String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-//		        "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-//		        "Linux", "OS/2" };
-//		    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-//		        android.R.layout.simple_list_item_1, values);
+		    // questo mi restituisce un arraylist di sessioni con dati casuali
+		    // per testing
 			ArrayList<Session> provaRandomizer = Randomizer.randomSession(30);
+			
+			/* SimpleCursorAdapter da usare al posto di ArrayAdapter per gestire
+			 * dati del database
+			 */
 		    MyAdapter adapter = new MyAdapter(getActivity().getBaseContext(), R.layout.adapter_lista_sessioni, 
 					provaRandomizer);
 		    setListAdapter(adapter);
-		  }
-
-		
-//		@Override
-//		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//				Bundle savedInstanceState) {
-//			View rootView = inflater.inflate(R.layout.fragment_lista_sessioni,
-//					container, false);
-//			
-//			//ListView lista = (ListView) rootView.findViewById(R.id.listMode);
-//			//ListView lista = getListView();
-//			// questo mi restituisce un arraylist di sessioni con dati casuali
-//			// per testing
-////			ArrayList<Session> provaRandomizer = Randomizer.randomSession(30);
-//
-//
-//			/* SimpleCursorAdapter da usare al posto di ArrayAdapter per gestire
-//			 * dati del database
-//			 */
-////			MyAdapter adapter = new MyAdapter(getActivity().getBaseContext(), R.layout.adapter_lista_sessioni, 
-////												provaRandomizer);
-////			setListAdapter(adapter);
-//
-//			return rootView;
-//
-//		}
-		
+		  }		
 	}
 
-	// classe per l'adapter
-	public static class MyAdapter extends ArrayAdapter<Session> {
-		//inizializzo a null altrimenti dice che le variabili potrebbe non essere inizializzate per via del 
-		//ciclo for
+// classe per l'adapter
+public static class MyAdapter extends ArrayAdapter<Session> 
+		{
 		private final String[] session_name;
 		private final Date[] session_begin;
 		private final int[] duration;
 		private final int[] number_of_falls;
 		private final ImageView[] thumbnail;
+		private final boolean[] active;
 		Context context;
 		
-
 		public MyAdapter(Context context, int textVewResourceId, ArrayList<Session> provaRandomizer)
-		{
+			{ 
 			super(context, textVewResourceId, provaRandomizer);
 			this.context = context;
 			int size = provaRandomizer.size();
@@ -127,44 +106,75 @@ public class ListaSessioniActivity extends ActionBarActivity {
 			duration = new int[size];
 			number_of_falls = new int [size];
 			thumbnail = new ImageView[size];
-			
+			active = new boolean[size];
+			//solo per test, per avere una sessione attiva			
+			provaRandomizer.get(0).setActive(true);
 			for(int i=0; i<provaRandomizer.size(); i++)
 				{
 				this.session_name[i] = provaRandomizer.get(i).getName();
 				this.session_begin[i] = provaRandomizer.get(i).getSessionBegin();
 				this.duration[i] = provaRandomizer.get(i).getDuration();
 				this.number_of_falls[i] = provaRandomizer.get(i).getNumberOfFalls();
-				//this.thumbnail[i] = sessioni[i].getQualcosa(); manca thumbail sessione
-				//this.thumbnail[i].setImageResource(R.drawable.thumbnail_placeholder);
+				//this.thumbnail[i] = sessioni[i].getQualcosa(); manca thumbnail sessione
+				//this.thumbnail[i].setImageResource(R.drawable.thumbnail_sessione_placeholder);
+				//this.thumbnail[i].setImageResource(R.drawable.ic_launcher);
+				this.active[i] = provaRandomizer.get(i).isActive();
+
 				}
-		}
+			}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			
+		public View getView(int position, View convertView, ViewGroup parent) 
+			{
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		    View rowView = convertView;
 		    if(rowView == null)
-		    {
+		    	{
 		    	Holder holder = new Holder();
 		    	rowView = inflater.inflate(R.layout.adapter_lista_sessioni, parent,false );
-		    	holder.textView = (TextView) rowView.findViewById(R.id.secondLine);
+		    	holder.secondaLinea = (TextView) rowView.findViewById(R.id.secondLine);
 		    	holder.imageView = (ImageView) rowView.findViewById(R.id.thumbnail);
-		    	holder.textView2 = (TextView) rowView.findViewById(R.id.firstLine);
+		    	holder.primaLinea = (TextView) rowView.findViewById(R.id.firstLine);
 		    	rowView.setTag(holder);
-		    }
+		    	}
 		    Holder holder = (Holder) rowView.getTag();
 		    //imposta i campi della prima e della seconda riga
-		    holder.textView.setText(session_name[position]);
-		    holder.textView2.setText(session_begin[position] + " - " + duration[position] + " - " + 
-		    					number_of_falls[position] + " cadute");
+		    holder.primaLinea.setText(session_name[position]);
+		    String data = (String) DateFormat.format("dd/MM/yy", session_begin[position]);
+		    String ora = (String) DateFormat.format("kk:mm", session_begin[position]);
+		    String seconda_riga = "Data e ora inizio: " + data + " " + ora + " - Durata: " + conver_ore_minuti(duration[position]) + " - " + 
+					number_of_falls[position];
+		   
+		    if (number_of_falls[position]==1)
+		    	holder.secondaLinea.setText(seconda_riga + " caduta");
+		    else holder.secondaLinea.setText(seconda_riga + " cadute");
+		    //per sessione attiva cambio colore di sfondo
+		    boolean attiva = active[position];
+		    if(attiva)
+		    	rowView.setBackgroundColor(Color.parseColor("#C6C6FF"));
+		    else
+		    	rowView.setBackgroundColor(Color.parseColor("#FFFFFF"));
 		    return rowView;
 		  	}
 		
-		static class Holder {//holder serve a migliorare le prestazioni nello scrolling,
-			// vedi: http://developer.android.com/training/improving-layouts/smooth-scrolling.html#ViewHolder
-				public TextView textView, textView2;
-				public ImageView imageView;
+		public String conver_ore_minuti (int millisecondi)
+			{String ore_minuti = "";
+			 int secondi = millisecondi/1000;
+			 int minuti = secondi/60;
+			 int ore = minuti/60;
+			 minuti = minuti%60;
+			 ore_minuti = ore + "h " + minuti + "m";
+			 return ore_minuti;			
 			}
-}
-}
+		
+		static class Holder 
+			{//holder serve a migliorare le prestazioni nello scrolling,
+			// vedi: http://developer.android.com/training/improving-layouts/smooth-scrolling.html#ViewHolder
+			public TextView secondaLinea, primaLinea;
+			public ImageView imageView;
+			public RelativeLayout sfondo;
+			}
+		}//chiusura classe Adapter
+
+
+}//chiusura lista sessioni activity
