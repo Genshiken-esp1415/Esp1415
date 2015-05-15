@@ -46,7 +46,7 @@ public class Randomizer {
 											.duration(MILLISINHOUR*randNumber.nextInt(7)+1)
 											.build();
 				//Generating falls
-				fallnumber = randNumber.nextInt(5);
+				fallnumber = randNumber.nextInt(2);
 				for(int j=0; j<fallnumber;j++){
 					cal.add(Calendar.HOUR_OF_DAY,1);
 					randomFall = new Fall.FallBuilder(cal.getTime())
@@ -63,6 +63,7 @@ public class Randomizer {
 															randNumber.nextInt(100)));
 					}
 					randomFall.setFallData((ArrayList<AccelerometerData>)accData.clone());
+					accData.clear();
 					falls.add(randomFall);
 				}
 				randomSession.setFallList((ArrayList<Fall>)falls.clone());

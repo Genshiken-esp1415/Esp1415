@@ -78,11 +78,12 @@ public class DBManager {
 	   * @param sessionName Il nome della sessione che si vuole creare.
 	   * @return
 	   */
-	  public Fall createFall(int fallNumber, double latitude, double longitude, ArrayList<AccelerometerData> accData) {
+	  public Fall createFall(int fallNumber, double latitude, double longitude, ArrayList<AccelerometerData> accData, Date session) {
 	    ContentValues values = new ContentValues();
 	    values.put(DBOpenHelper.COLUMN_NUMBER, fallNumber);
 	    values.put(DBOpenHelper.COLUMN_LATITUDE, latitude);
 	    values.put(DBOpenHelper.COLUMN_LONGITUDE, longitude);
+	    values.put(DBOpenHelper.COLUMN_SESSION, dateToSqlDate(session));
 	    Long insertIdF = database.insert(DBOpenHelper.TABLE_FALL, null, values);  
 	    Cursor cursor = database.query(DBOpenHelper.TABLE_FALL,
 	        FallColumns, null, null,
@@ -306,14 +307,14 @@ public class DBManager {
 	   * @return
 	   */
 	  private Date sqlDateToDate(String sqlDate){
+		  Date date = null;
 		  SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 		  try {
-			  Date date = dateFormat.parse(sqlDate);
-			  return date;
+			  date = dateFormat.parse(sqlDate);
 		  }
 		  catch (ParseException e) {		  
 		  }
-		  return null;
+		  return date;
 	  }
 	  
 	  /**
@@ -326,4 +327,42 @@ public class DBManager {
 		  String sqlDate = sqlDateFormat.format(date);
 		  return sqlDate;
 	  }
+	  
+	  /**
+	   * metodo usato per popolare il db con dati casuali, only for testing
+	   */
+	  public void dummyInsert(){
+		  ArrayList<Session> sessions = new ArrayList<Session>();
+		  sessions = Randomizer.randomSession(10);
+		  ContentValues values = new ContentValues();
+		  for(int i = 0; i<sessions.size();i++){
+			  values.clear();
+			  values.put(DBOpenHelper.COLUMN_TIMESTAMP_S, dateToSqlDate(sessions.get(i).getSessionBegin()));
+			  values.put(DBOpenHelper.COLUMN_NAME, sessions.get(i).getName());
+			  values.put(DBOpenHelper.COLUMN_DURATA, sessions.get(i).getDuration());
+			  values.put(DBOpenHelper.COLUMN_ATTIVA, sessions.get(i).isActive());
+			  Long insertId = database.insert(DBOpenHelper.TABLE_SESSION, null, values);
+			  for(int j = 0; j<sessions.get(i).getFallList().size();j++){
+				  values.clear();
+				  values.put(DBOpenHelper.COLUMN_TIMESTAMP_F, dateToSqlDate(sessions.get(i).getFallList().get(j).getFallTimestamp()));
+				  values.put(DBOpenHelper.COLUMN_NUMBER, sessions.get(i).getFallList().get(j).getFallNumber());
+				  values.put(DBOpenHelper.COLUMN_LATITUDE, sessions.get(i).getFallList().get(j).getLatitude());
+				  values.put(DBOpenHelper.COLUMN_LONGITUDE, sessions.get(i).getFallList().get(j).getLongitude());
+				  values.put(DBOpenHelper.COLUMN_SESSION, dateToSqlDate(sessions.get(i).getFallList().get(j).getSession()));
+				  values.put(DBOpenHelper.COLUMN_NOTIFIED, sessions.get(i).getFallList().get(j).isNotified());
+				  Long insertIdF = database.insert(DBOpenHelper.TABLE_FALL, null, values);  
+				  for(int z = 0; z<sessions.get(i).getFallList().get(j).getFallData().size();z++){
+					  values.clear();
+					  values.put(DBOpenHelper.COLUMN_FALL, dateToSqlDate(sessions.get(i).getFallList().get(j).getFallTimestamp()));
+					  values.put(DBOpenHelper.COLUMN_SAMPLENUMBER, z);
+					  values.put(DBOpenHelper.COLUMN_X, sessions.get(i).getFallList().get(j).getFallData().get(z).getX());
+					  values.put(DBOpenHelper.COLUMN_Y, sessions.get(i).getFallList().get(j).getFallData().get(z).getY());
+					  values.put(DBOpenHelper.COLUMN_Z, sessions.get(i).getFallList().get(j).getFallData().get(z).getZ());
+					  Long insertIdA = database.insert(DBOpenHelper.TABLE_ACCELEROMETER, null, values); 
+				  }
+			  }
+		  }
+	  }
+	  
+
 }

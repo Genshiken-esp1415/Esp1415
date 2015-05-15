@@ -32,18 +32,12 @@ public class MainActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
-        
-        ArrayList<Session> randomSessions = Randomizer.randomSession(10);
+        //creo il db per il primo avvio e faccio inserimenti dummy per testing, se non è già stato popolato il db.
         DBManager db = new DBManager(this);
         db.open();
-        for(int i = 0; i<10; i++){
-        	db.createSession(randomSessions.get(i).getName());
-        	ArrayList<Fall> falls = randomSessions.get(i).getFallList();
-        	for(Fall fall : falls){
-        		db.createFall(fall.getFallNumber(), fall.getLatitude(), fall.getLongitude(), fall.getFallData());
-        	}
+        if(db.getAllSessions().size()==0){
+        	db.dummyInsert();
         }
-        
         Intent openListaSessioni = new Intent(this, ListaSessioniActivity.class);
         startActivity(openListaSessioni);
     }
