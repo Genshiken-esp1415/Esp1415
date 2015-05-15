@@ -13,5 +13,9 @@
     <string name="latitudine">"Latitudine: "</string>
     <string name="longitudine">"Longitudine: "</string>
     <string name="notifica">"Notifica: "</string>
+    <string name="cadute">"CADUTE"</string>
+    <string name="durata">durata</string>
+    <string name="timestamp">timestamp</string>
+    <string name="numeroCaduta">n</string>
 
 </resources>
