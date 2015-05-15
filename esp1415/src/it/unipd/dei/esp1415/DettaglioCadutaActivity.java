@@ -88,22 +88,29 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 			int numeroCaduta = fall.getFallNumber();
 			Date dataCaduta = fall.getFallTimestamp();
 			ArrayList<AccelerometerData> accData = fall.getFallData();
-//			getActivity().setTitle("Caduta #"+numeroCaduta+" della sessione "+session.getName());   
-//			TextView data = (TextView) rootView.findViewById(R.id.data);
-//			TextView ora = (TextView) rootView.findViewById(R.id.ora);
-//			TextView notifica = (TextView) rootView.findViewById(R.id.notifica);
-//			TextView latitudine = (TextView) rootView.findViewById(R.id.latitudine);
-//			TextView longitudine = (TextView) rootView.findViewById(R.id.longitudine);
-//			data.setText(DateFormat.format("dd/MM/yy",dataCaduta));
-//			ora.setText(DateFormat.format("kk:mm:ss",dataCaduta));
-//			latitudine.setText(Double.toString(fall.getLatitude()));
-//			longitudine.setText(Double.toString(fall.getLongitude()));
-//			if(fall.isNotified())
-//				notifica.setText("inviata");
-//			else
-//				notifica.setText("non inviata");
-			GraphView g = (GraphView) rootView.findViewById(R.id.grafico_label);
-			g.setAccelerometerData(accData);
+			getActivity().setTitle("Caduta #"+numeroCaduta+" della sessione "+session.getName());   
+			TextView data = (TextView) rootView.findViewById(R.id.data);
+			TextView ora = (TextView) rootView.findViewById(R.id.ora);
+			TextView notifica = (TextView) rootView.findViewById(R.id.notifica);
+			TextView latitudine = (TextView) rootView.findViewById(R.id.latitudine);
+			TextView longitudine = (TextView) rootView.findViewById(R.id.longitudine);
+			data.setText(DateFormat.format("dd/MM/yy",dataCaduta));
+			ora.setText(DateFormat.format("kk:mm:ss",dataCaduta));
+			latitudine.setText(Double.toString(fall.getLatitude()));
+			longitudine.setText(Double.toString(fall.getLongitude()));
+			if(fall.isNotified())
+				notifica.setText("inviata");
+			else
+				notifica.setText("non inviata");
+			GraphView graphX = (GraphView) rootView.findViewById(R.id.grafico_x);
+			GraphView graphY = (GraphView) rootView.findViewById(R.id.grafico_y);
+			GraphView graphZ = (GraphView) rootView.findViewById(R.id.grafico_z);
+			graphX.setAccelerometerData(accData);
+			graphY.setAccelerometerData(accData);
+			graphZ.setAccelerometerData(accData);
+			graphX.setAxis(0);
+			graphY.setAxis(1);
+			graphZ.setAxis(2);
 			return rootView;
 		}
 	}

@@ -7,7 +7,7 @@
         android:right="2dp"
         android:bottom="2dp" />
     <size
-        android:width="480dp"
+        android:width="300dp"
         android:height="150dp" />
     <!--
     <solid
