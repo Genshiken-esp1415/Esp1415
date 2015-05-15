@@ -8,9 +8,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="it.unipd.dei.esp1415.ListaSessioni$PlaceholderFragment" >
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ListView
+        android:id="@id/android:list"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp" />
 
 </RelativeLayout>

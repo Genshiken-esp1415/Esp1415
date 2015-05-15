@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/firstLine"
+        android:layout_width="fill_parent"
+        android:layout_height="30dip"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:gravity="center_vertical"
+        android:text="Example application"
+        android:textColor="#000000"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/secondLine"
+        android:layout_width="fill_parent"
+        android:layout_height="30dip"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/firstLine"
+        android:layout_marginLeft="5dp"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:text="Description"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="70dip"
+        android:layout_height="30dip"
+        android:layout_above="@+id/secondLine"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="2dp"
+        android:layout_marginTop="2dp"
+        android:contentDescription="TODO"
+        android:src="@drawable/thumbnail_sessione_placeholder" />
+
+</RelativeLayout>

@@ -68,6 +68,10 @@ public class Session {
 		this.fallList = fallList;
 	}
 	
+	public int getNumberOfFalls() {
+		return fallList.size();
+	}
+	
 	public static class SessionBuilder {
 		private Date sessionBegin;
 		private String name;
