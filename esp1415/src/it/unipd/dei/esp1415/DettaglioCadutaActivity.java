@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
+import org.apache.http.protocol.HTTP;
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -14,12 +16,16 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.os.Build;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -77,7 +83,7 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 			
 			/* Crea una o pi� sessioni con una o pi� cadute casuali ciascuna e stampa i valori generati nei rispettivi campi */
 
-			Random randNumber = new Random();
+			/*Random randNumber = new Random();
 			ArrayList<Session> randomSession = Randomizer.randomSession(6);
 			int n = randNumber.nextInt(randomSession.size());
 			Session session = randomSession.get(n);
@@ -88,6 +94,7 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 			int numeroCaduta = fall.getFallNumber();
 			Date dataCaduta = fall.getFallTimestamp();
 			ArrayList<AccelerometerData> accData = fall.getFallData();
+			
 			getActivity().setTitle("Caduta #"+numeroCaduta+" della sessione "+session.getName());   
 			TextView data = (TextView) rootView.findViewById(R.id.data);
 			TextView ora = (TextView) rootView.findViewById(R.id.ora);
@@ -102,6 +109,7 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 				notifica.setText("inviata");
 			else
 				notifica.setText("non inviata");
+			
 			GraphView graphX = (GraphView) rootView.findViewById(R.id.grafico_x);
 			GraphView graphY = (GraphView) rootView.findViewById(R.id.grafico_y);
 			GraphView graphZ = (GraphView) rootView.findViewById(R.id.grafico_z);
@@ -110,7 +118,27 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 			graphZ.setAccelerometerData(accData);
 			graphX.setAxis(0);
 			graphY.setAxis(1);
-			graphZ.setAxis(2);
+			graphZ.setAxis(2);*/
+			
+			final TextView data = (TextView) rootView.findViewById(R.id.data);
+			Button emailButton = (Button) getActivity().findViewById(R.id.email_button);
+			emailButton.setOnClickListener(new View.OnClickListener() {
+				
+				public void onClick(View v) {
+					Intent emailIntent = new Intent();
+					emailIntent.setAction(Intent.ACTION_SEND);
+					emailIntent.putExtra(Intent.EXTRA_EMAIL, "marco@speronello.com");
+					emailIntent.putExtra(Intent.EXTRA_SUBJECT,"caduta");
+					emailIntent.putExtra(Intent.EXTRA_TEXT, "Ciao, mail di prova");
+					emailIntent.setType("message/rfc822"); // "text/plain" MIME type
+					data.setText("premuto");
+					//ContextWrapper context = new ContextWrapper(getActivity());
+					//if (emailIntent.resolveActivity(context.getPackageManager()) != null) 
+					//    startActivity(emailIntent);
+			
+				}
+			});
+						
 			return rootView;
 		}
 	}
@@ -135,4 +163,5 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 			box.draw(canvas);
 		}
 	}*/
+
 }
