@@ -2,6 +2,7 @@ package it.unipd.dei.esp1415;
 
 import java.util.ArrayList;
 
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * La main Activity contiene un redirect alla lista delle sessioni per il
@@ -38,8 +41,27 @@ public class MainActivity extends ActionBarActivity {
         if(db.getAllSessions().size()==0){
         	db.dummyInsert();
         }
-        Intent openListaSessioni = new Intent(this, DettaglioSessionePassataActivity.class);
-        startActivity(openListaSessioni);
+        /*final TextView data = (TextView) findViewById(R.id.data);
+		Button emailButton = (Button) findViewById(R.id.email_button);
+		emailButton.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				Intent emailIntent = new Intent();
+				emailIntent.setAction(Intent.ACTION_SEND);
+				emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"marco@speronello.com","andrea.deagnoi@studenti.unipd.it","laura.quartesan1@studenti.unipd.it"});
+				emailIntent.putExtra(Intent.EXTRA_SUBJECT,"caduta");
+				emailIntent.putExtra(Intent.EXTRA_TEXT, "Ciao, mail di prova");
+				emailIntent.setType("message/rfc822"); // "text/plain" MIME type
+				data.setText("premuto");
+				//ContextWrapper context = new ContextWrapper(getActivity());
+				if (emailIntent.resolveActivity(getPackageManager()) != null) 
+				    startActivity(emailIntent);
+		
+			}
+		});*/
+		Intent openListaSessioni = new Intent(this, DettaglioCadutaActivity.class);
+		startActivity(openListaSessioni);
+        
     }
 
 
@@ -65,6 +87,7 @@ public class MainActivity extends ActionBarActivity {
     /**
 	 * A placeholder fragment containing a simple view.
 	 */
+    
 	public static class PlaceholderFragment extends Fragment {
 
 		public PlaceholderFragment() {

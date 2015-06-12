@@ -83,7 +83,7 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 			
 			/* Crea una o pi� sessioni con una o pi� cadute casuali ciascuna e stampa i valori generati nei rispettivi campi */
 
-			/*Random randNumber = new Random();
+			Random randNumber = new Random();
 			ArrayList<Session> randomSession = Randomizer.randomSession(6);
 			int n = randNumber.nextInt(randomSession.size());
 			Session session = randomSession.get(n);
@@ -118,27 +118,18 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 			graphZ.setAccelerometerData(accData);
 			graphX.setAxis(0);
 			graphY.setAxis(1);
-			graphZ.setAxis(2);*/
-			
-			final TextView data = (TextView) rootView.findViewById(R.id.data);
-			Button emailButton = (Button) getActivity().findViewById(R.id.email_button);
-			emailButton.setOnClickListener(new View.OnClickListener() {
-				
-				public void onClick(View v) {
-					Intent emailIntent = new Intent();
-					emailIntent.setAction(Intent.ACTION_SEND);
-					emailIntent.putExtra(Intent.EXTRA_EMAIL, "marco@speronello.com");
-					emailIntent.putExtra(Intent.EXTRA_SUBJECT,"caduta");
-					emailIntent.putExtra(Intent.EXTRA_TEXT, "Ciao, mail di prova");
-					emailIntent.setType("message/rfc822"); // "text/plain" MIME type
-					data.setText("premuto");
-					//ContextWrapper context = new ContextWrapper(getActivity());
-					//if (emailIntent.resolveActivity(context.getPackageManager()) != null) 
-					//    startActivity(emailIntent);
-			
-				}
-			});
-						
+			graphZ.setAxis(2);
+					
+			Intent emailIntent = new Intent();
+			emailIntent.setAction(Intent.ACTION_SEND);
+			emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"marco@speronello.com","andrea.deagnoi@studenti.unipd.it","laura.quartesan1@studenti.unipd.it"});
+			emailIntent.putExtra(Intent.EXTRA_SUBJECT,"caduta");
+			emailIntent.putExtra(Intent.EXTRA_TEXT, "Ciao, mail di prova");
+			emailIntent.setType("message/rfc822"); // "text/plain" MIME type
+			ContextWrapper context = new ContextWrapper(getActivity());
+			if (emailIntent.resolveActivity(context.getPackageManager()) != null) 
+				startActivity(emailIntent);
+		
 			return rootView;
 		}
 	}
