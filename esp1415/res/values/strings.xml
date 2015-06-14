@@ -22,5 +22,9 @@
     <string name="menu_delete">Elimina</string>
     
     <string name="description">thumbnail</string>
+    <string name="action_rename">Rinomina</string>
+    <string name="rename_description">Digita il nuovo nome per la sessione</string>
+    <string name="rename">Rinomina</string>
+    <string name="cancel">Annulla</string>
 
 </resources>

@@ -210,7 +210,7 @@ public class DBManager {
 		  String[] whereArgs = new String[1];
 		  whereArgs[0] =  dateToSqlDate(sessionBegin);
 		  Cursor cursor = database.query(DBOpenHelper.TABLE_SESSION,
-				  FallColumns, DBOpenHelper.COLUMN_TIMESTAMP_S + " = ?", whereArgs, null, null, null);
+				  SessionColumns, DBOpenHelper.COLUMN_TIMESTAMP_S + " = ?", whereArgs, null, null, null);
 
 		  cursor.moveToFirst();
 		  Session session = cursorToSession(cursor);

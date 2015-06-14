@@ -5,10 +5,12 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,8 +23,12 @@ import android.widget.TextView;
 /**
  * Questa activity conterrà il dettaglio su una sessione passata
  */
-public class DettaglioSessionePassataActivity extends ActionBarActivity {
+public class DettaglioSessionePassataActivity extends ActionBarActivity
+												implements renameDialog.renameDialogListener{
 
+	private static Session currentSession;
+	private static DBManager db;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,12 +39,14 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity {
 			fm.add(R.id.lista_cadute_fragment, new MyListFragment());
 			fm.commit();
 		}
+		
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.dettaglio_sessione_passata, menu);
+		
 		return true;
 	}
 
@@ -48,11 +56,33 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		if (id == R.id.action_rename) {
+			showRenameDialog();
+		    
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	 public void showRenameDialog() {
+	        // Create an instance of the dialog fragment and show it
+		 	renameDialog newFragment = new renameDialog();
+			Bundle args = new Bundle();
+			args.putLong("id", currentSession.getSessionBegin().getTime());
+			newFragment.setArguments(args);
+		    newFragment.show(getSupportFragmentManager(), "rename");
+	    }
+	
+	@Override
+	public void onDialogPositiveClick(renameDialog dialog) {
+		currentSession = db.getSession(currentSession.getSessionBegin());
+		setTitle(currentSession.getName());
+	}
+
+	@Override
+	public void onDialogNegativeClick(renameDialog dialog) {
+		
+	}
+
 
 	/**
 	 * A placeholder fragment containing a simple view.
@@ -69,15 +99,17 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity {
 					R.layout.fragment_dettaglio_sessione_passata, container,
 					false);
 			//solo per testing prendo tutte le sessioni dal db
-			DBManager db = new DBManager(getActivity().getBaseContext());
+			db = new DBManager(getActivity().getBaseContext());
 			db.open();
 			ArrayList<Session> sessions = (ArrayList<Session>)db.getAllSessions();
-			Session currentSession = sessions.get(2);
-			currentSession.setFallList((ArrayList<Fall>)db.getAllFalls(currentSession.getSessionBegin()));
+			currentSession = sessions.get(2);
+			currentSession.setFallList((ArrayList<Fall>)db.getAllFalls(currentSession.getSessionBegin()));			
 			TextView timeStampSessioneTextView = (TextView) rootView.findViewById(R.id.timestampsessione);
 			TextView durataSessioneTextView = (TextView) rootView.findViewById(R.id.durataSessione);
-			timeStampSessioneTextView.setText(currentSession.getSessionBegin().toString());
-			durataSessioneTextView.setText(String.valueOf(currentSession.getDuration()));
+			String timestamp = (String) DateFormat.format("dd/MM/yy - kk:mm", currentSession.getSessionBegin());
+			timeStampSessioneTextView.setText(timestamp);
+			durataSessioneTextView.setText(conver_ore_minuti(currentSession.getDuration()));
+			this.getActivity().setTitle(currentSession.getName());
 			return rootView;
 		}
 	}
@@ -132,7 +164,8 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity {
 		    TextView timestampFallTextView = (TextView) rowFallView.findViewById(R.id.timestampCaduta);
 		    ImageView notifiedImageView = (ImageView) rowFallView.findViewById(R.id.notificato);
 		    fallNumberTextView.setText(String.valueOf(falls.get(position).getFallNumber()));
-		    timestampFallTextView.setText(falls.get(position).getFallTimestamp().toString());
+		    String timestamp = (String) DateFormat.format("dd/MM/yy - kk:mm", falls.get(position).getFallTimestamp());
+		    timestampFallTextView.setText(timestamp);
 		    
 		    if (falls.get(position).isNotified()) {
 		    	notifiedImageView.setImageResource(R.drawable.cross);
@@ -141,7 +174,19 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity {
 		    }
 
 		    return rowFallView;
-		  }
+		  
 		} 
+	}
+	
+	
+	public static String conver_ore_minuti (int millisecondi)
+		{String ore_minuti = "";
+		 int secondi = millisecondi/1000;
+		 int minuti = secondi/60;
+		 int ore = minuti/60;
+		 minuti = minuti%60;
+		 ore_minuti = ore + "h " + minuti + "m";
+		 return ore_minuti;			
+		}
 
 }

@@ -11,6 +11,6 @@
         android:id="@+id/lista_cadute_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+        android:layout_below="@+id/dettaglio_sessione_passata_fragment" />
 
 </RelativeLayout>
