@@ -17,5 +17,9 @@
     <string name="durata">durata</string>
     <string name="timestamp">timestamp</string>
     <string name="numeroCaduta">n</string>
+    <string name="action_rename">Rinomina</string>
+    <string name="rename_description">Digita il nuovo nome per la sessione</string>
+    <string name="rename">Rinomina</string>
+    <string name="cancel">Annulla</string>
 
 </resources>
