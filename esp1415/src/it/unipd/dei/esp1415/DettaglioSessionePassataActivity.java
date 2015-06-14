@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,11 +74,12 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity {
 			db.open();
 			ArrayList<Session> sessions = (ArrayList<Session>)db.getAllSessions();
 			Session currentSession = sessions.get(2);
-			currentSession.setFallList((ArrayList<Fall>)db.getAllFalls(currentSession.getSessionBegin()));
+			currentSession.setFallList((ArrayList<Fall>)db.getAllFalls(currentSession.getSessionBegin()));			
 			TextView timeStampSessioneTextView = (TextView) rootView.findViewById(R.id.timestampsessione);
 			TextView durataSessioneTextView = (TextView) rootView.findViewById(R.id.durataSessione);
-			timeStampSessioneTextView.setText(currentSession.getSessionBegin().toString());
-			durataSessioneTextView.setText(String.valueOf(currentSession.getDuration()));
+			String timestamp = (String) DateFormat.format("dd/MM/yy - kk:mm", currentSession.getSessionBegin());
+			timeStampSessioneTextView.setText(timestamp);
+			durataSessioneTextView.setText(conver_ore_minuti(currentSession.getDuration()));
 			return rootView;
 		}
 	}
@@ -132,7 +134,8 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity {
 		    TextView timestampFallTextView = (TextView) rowFallView.findViewById(R.id.timestampCaduta);
 		    ImageView notifiedImageView = (ImageView) rowFallView.findViewById(R.id.notificato);
 		    fallNumberTextView.setText(String.valueOf(falls.get(position).getFallNumber()));
-		    timestampFallTextView.setText(falls.get(position).getFallTimestamp().toString());
+		    String timestamp = (String) DateFormat.format("dd/MM/yy - kk:mm", falls.get(position).getFallTimestamp());
+		    timestampFallTextView.setText(timestamp);
 		    
 		    if (falls.get(position).isNotified()) {
 		    	notifiedImageView.setImageResource(R.drawable.cross);
@@ -143,5 +146,16 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity {
 		    return rowFallView;
 		  }
 		} 
+	
+	
+	public static String conver_ore_minuti (int millisecondi)
+		{String ore_minuti = "";
+		 int secondi = millisecondi/1000;
+		 int minuti = secondi/60;
+		 int ore = minuti/60;
+		 minuti = minuti%60;
+		 ore_minuti = ore + "h " + minuti + "m";
+		 return ore_minuti;			
+		}
 
 }

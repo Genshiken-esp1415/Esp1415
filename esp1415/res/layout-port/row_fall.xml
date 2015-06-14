@@ -4,32 +4,32 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/notificato"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/numeroCaduta"
-        android:src="@drawable/cross" />
-
+    
     <TextView
         android:id="@+id/numeroCaduta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="0dp"
         android:text="@string/numeroCaduta"
-        android:textSize="40sp" />
+        android:textSize="30sp" />
+    
+     <ImageView
+        android:id="@+id/notificato"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/numeroCaduta"
+        android:src="@drawable/cross" />
 
-    <TextView
-        android:id="@+id/timestampCaduta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/notificato"
-        android:layout_marginLeft="34dp"
-        android:layout_toRightOf="@+id/numeroCaduta"
-        android:text="@string/timestamp"
-        android:textSize="40sp" />
+     <TextView
+         android:id="@+id/timestampCaduta"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentTop="true"
+         android:layout_centerHorizontal="true"
+         android:text="@string/timestamp"
+         android:textSize="30sp" />
 
 </RelativeLayout>
