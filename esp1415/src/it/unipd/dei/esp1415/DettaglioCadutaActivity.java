@@ -120,16 +120,16 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 			graphY.setAxis(1);
 			graphZ.setAxis(2);
 					
-			Intent emailIntent = new Intent();
-			emailIntent.setAction(Intent.ACTION_SEND);
-			emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"marco@speronello.com","andrea.deagnoi@studenti.unipd.it","laura.quartesan1@studenti.unipd.it"});
-			emailIntent.putExtra(Intent.EXTRA_SUBJECT,"caduta");
-			emailIntent.putExtra(Intent.EXTRA_TEXT, "Ciao, mail di prova");
-			emailIntent.setType("message/rfc822"); // "text/plain" MIME type
-			ContextWrapper context = new ContextWrapper(getActivity());
-			if (emailIntent.resolveActivity(context.getPackageManager()) != null) 
-				startActivity(emailIntent);
-		
+//			Intent emailIntent = new Intent();
+//			emailIntent.setAction(Intent.ACTION_SEND);
+//			emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"marco@speronello.com","andrea.deagnoi@studenti.unipd.it","laura.quartesan1@studenti.unipd.it"});
+//			emailIntent.putExtra(Intent.EXTRA_SUBJECT,"caduta");
+//			emailIntent.putExtra(Intent.EXTRA_TEXT, "Ciao, mail di prova");
+//			emailIntent.setType("message/rfc822"); // "text/plain" MIME type
+//			ContextWrapper context = new ContextWrapper(getActivity());
+//			if (emailIntent.resolveActivity(context.getPackageManager()) != null) 
+//				startActivity(emailIntent);
+			
 			return rootView;
 		}
 	}
