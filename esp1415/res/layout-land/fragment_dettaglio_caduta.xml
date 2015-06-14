@@ -121,17 +121,6 @@
 	    android:layout_below="@+id/grafico_x" />
 
 	<TextView
-	    android:id="@+id/latitudine_label"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/longitudine_label"
-	    android:layout_alignTop="@+id/grafico_y"
-	    android:layout_marginTop="28dp"
-	    android:text="@string/latitudine"
-	    android:textAppearance="?android:attr/textAppearanceLarge"
-	    android:textSize="32sp" />
-
-	<TextView
 	    android:id="@+id/data"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
@@ -160,5 +149,25 @@
 	    android:layout_alignParentRight="true"
 	    android:layout_below="@+id/grafico_y"
 	    android:background="@drawable/box" />
+
+	<TextView
+	    android:id="@+id/latitudine_label"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBottom="@+id/grafico_y"
+	    android:layout_alignLeft="@+id/longitudine_label"
+	    android:text="@string/latitudine"
+	    android:textAppearance="?android:attr/textAppearanceLarge"
+	    android:textSize="32sp" />
+
+	<Button
+	    android:id="@+id/email_button"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/grafico_x"
+	    android:layout_alignTop="@+id/thumbnail_label"
+	    android:layout_marginLeft="177dp"
+	    android:layout_marginTop="44dp"
+	    android:text="Invia e-mail" />
 
 </RelativeLayout>

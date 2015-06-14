@@ -162,5 +162,14 @@
 	    android:text="@string/notifica"
 	    android:textAppearance="?android:attr/textAppearanceLarge"
 	    android:textSize="40sp" />
+
+	<Button
+	    android:id="@+id/email_button"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/data_label"
+	    android:layout_below="@+id/data"
+	    android:layout_marginTop="28dp"
+	    android:text="Invia e-mail" />
 	
 </RelativeLayout>
