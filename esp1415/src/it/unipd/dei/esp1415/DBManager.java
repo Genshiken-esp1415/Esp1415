@@ -11,6 +11,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.EditText;
 
 /**
  * Questo metodo incapsula l'interazione col database in modo da non dover
@@ -18,7 +19,7 @@ import android.database.sqlite.SQLiteDatabase;
  * per l'inserimento di dati e il reperimento di dati in forma di array,
  * tabelle, eccetera.
  * 
- * @author Andrea
+ * @author Andrea, Laura
  *
  */
 public class DBManager {
@@ -264,6 +265,16 @@ public class DBManager {
 	    return fall;
 	  }
 
+	  /**Usato per sapere se c'è una sessione attiva nel database
+	   * @return
+	   */
+	  public boolean hasActiveSession(){
+		  Cursor cursor = database.query(DBOpenHelper.TABLE_SESSION,
+				  SessionColumns, DBOpenHelper.COLUMN_ATTIVA + " = " + "'" + true + "'", null, null, null, null);
+		  if (cursor.getCount () == 0) return false;
+		  return true;
+		  
+	  }
 	  
 	  /**
 	   * Restituisce una sessione Session a partire da un cursor contenente dati di una riga di una query sql
@@ -317,6 +328,7 @@ public class DBManager {
 		  }
 		  return date;
 	  }
+	  
 	  
 	  /**
 	   * Usato per convertire una data Date in una stringa contenente una data riconoscibile da sql

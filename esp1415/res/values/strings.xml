@@ -26,5 +26,7 @@
     <string name="rename_description">Digita il nuovo nome per la sessione</string>
     <string name="rename">Rinomina</string>
     <string name="cancel">Annulla</string>
+    <string name="errore_sessione_attiva">C\'è già una sessione attiva.</string>
+    <string name="session_removed">\u0020eliminata</string>
 
 </resources>

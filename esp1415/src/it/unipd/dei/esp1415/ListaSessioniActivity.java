@@ -3,7 +3,6 @@ package it.unipd.dei.esp1415;
 import it.unipd.dei.esp1415.R;
 
 import java.util.ArrayList;
-import java.util.Date;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -36,6 +35,7 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 	
 	private static DBManager db;
 	private static Session sessione_scelta;
+	private static int pos;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +70,18 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 		} else if (id == R.id.newsession) // se viene premuto il pulsante nuova
 											// sessione
 		{
+			if(!(db.hasActiveSession())) //se non ci sono sessioni attive
+			{
 			Intent nuovaSessione = new Intent(ListaSessioniActivity.this,
 					DettaglioSessioneCorrenteActivity.class);
 			// attivazione dell'activity DettaglioSessioneCorrenteActivity.java
 			startActivity(nuovaSessione);
+			}
+			else //notifico che c'è già una sessione attiva
+			{
+			Toast.makeText(this, R.string.errore_sessione_attiva, Toast.LENGTH_SHORT).show();	
+			}
+			
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -82,14 +90,14 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 	
 	@Override
 	public void onDialogPositiveClick(renameDialog dialog) {
-		//rinomino
-		
-		Toast.makeText(this, "prova", Toast.LENGTH_SHORT).show();
+		String name = db.getSession(sessione_scelta.getSessionBegin()).getName();
+		PlaceholderFragment.adapter.sessioni.get(pos).setName(name); //rinomino nell'adapter
+		PlaceholderFragment.adapter.notifyDataSetChanged(); //aggiorno la lista
 	}
 
 	@Override
 	public void onDialogNegativeClick(renameDialog dialog) {
-		
+
 	}
 
 	/**
@@ -99,7 +107,6 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 	
 		//public static ArrayList<Session> sessions;
 		static MyAdapter adapter;
-		static Session sessione_scelta;
 		
 		public PlaceholderFragment() {
 		}
@@ -122,7 +129,8 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 			super.onCreateContextMenu(menu, v, menuInfo);
 			if (v.getId() == android.R.id.list) {
 				AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-				sessione_scelta = (Session) getListAdapter().getItem(info.position);
+				pos = info.position;
+				sessione_scelta = (Session) getListAdapter().getItem(pos);
 				menu.setHeaderTitle(sessione_scelta.getName()); // imposto titolo menù
 				MenuInflater inflater = getActivity().getMenuInflater();
 				inflater.inflate(R.menu.click_lungo_lista_sessioni, menu); // aggiungo opzioni al menù
@@ -133,9 +141,7 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 		public boolean onContextItemSelected(MenuItem item) {// gestisce menù tocco prolungato
 			{
 				int menuItemIndex = item.getItemId();
-				//AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-				//sessione_scelta = (Session) getListAdapter().getItem(info.position);
-				
+
 				if (menuItemIndex == R.id.rename) // se viene premuto il tasto rinomina
 				{
 					renameDialog newFragment = new renameDialog();
@@ -150,17 +156,14 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 				{
  					db.deleteSession(sessione_scelta);	//rimuovo dal database
 					adapter.remove(sessione_scelta); //rimuovo dalla lista
-					//adapter.notifyDataSetChanged(); //aggiorno la lista
-				    //adapter.notifyDataSetInvalidated();
-					adapter = new MyAdapter(getActivity().getBaseContext(), R.layout.adapter_lista_sessioni, (ArrayList<Session>)db.getAllSessions());
-					setListAdapter(adapter);
-					Toast.makeText(getActivity(), sessione_scelta.getName() + " eliminata", Toast.LENGTH_SHORT).show(); // notifica di avvenuta cancellazione
+					adapter.notifyDataSetChanged(); //aggiorno la lista
+					Toast.makeText(getActivity(), sessione_scelta.getName() + getActivity().getString(R.string.session_removed), Toast.LENGTH_SHORT).show(); // notifica di avvenuta cancellazione
 					return true;
 				}
 				return super.onContextItemSelected(item);
 			}
 		}
-		            
+		     
 		@Override
 		public void onListItemClick(ListView l, View v, int position, long id) {//gestisce click su elementi della lista
 			super.onListItemClick(l, v, position, id);
@@ -180,38 +183,15 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 
 	// classe per l'adapter
 	public static class MyAdapter extends ArrayAdapter<Session> {
-		private final String[] session_name;
-		private final Date[] session_begin;
-		private final int[] duration;
-		private final int[] number_of_falls;
-		private final ImageView[] thumbnail;
-		private final boolean[] active;
+		ArrayList<Session> sessioni;
 		Context context;
 
 		public MyAdapter(Context context, int textVewResourceId, ArrayList<Session> sessioni) {
 			super(context, textVewResourceId, sessioni);
 			this.context = context;
-			int size = sessioni.size();
-			session_name = new String[size];
-			session_begin = new Date[size];
-			duration = new int[size];
-			number_of_falls = new int[size];
-			thumbnail = new ImageView[size];
-			active = new boolean[size];
-			// solo per test, per avere una sessione attiva
-			sessioni.get(0).setActive(true);
-			for (int i = 0; i < sessioni.size(); i++) 
-				{
-				this.session_name[i] = sessioni.get(i).getName();
-				this.session_begin[i] = sessioni.get(i).getSessionBegin();
-				this.duration[i] = sessioni.get(i).getDuration();
-				this.number_of_falls[i] = sessioni.get(i).getNumberOfFalls();
-				// this.thumbnail[i] = sessioni[i].getQualcosa(); manca
-				// thumbnail sessione
-				// this.thumbnail[i].setImageResource(R.drawable.thumbnail_sessione_placeholder);
-				// this.thumbnail[i].setImageResource(R.drawable.ic_launcher);
-				this.active[i] = sessioni.get(i).isActive();
-				}
+			this.sessioni = sessioni;
+			//metto una sessione attiva per test
+			sessioni.get(1).setActive(true);
 		}
 
 		
@@ -229,18 +209,19 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 			}
 			Holder holder = (Holder) rowView.getTag();
 			// imposta i campi della prima e della seconda riga
-			holder.primaLinea.setText(session_name[position]);
-			String data = (String) DateFormat.format("dd/MM/yy", session_begin[position]);
-			String ora = (String) DateFormat.format("kk:mm", session_begin[position]);
-			String seconda_riga = "Data e ora inizio: " + data + " " + ora + " - Durata: " + conver_ore_minuti(duration[position])
-					+ " - " + number_of_falls[position];
+			Session sessione = sessioni.get(position);
+			holder.primaLinea.setText(sessione.getName());
+			String data = (String) DateFormat.format("dd/MM/yy", sessione.getSessionBegin());
+			String ora = (String) DateFormat.format("kk:mm", sessione.getSessionBegin());
+			String seconda_riga = "Data e ora inizio: " + data + " " + ora + " - Durata: " + conver_ore_minuti(sessione.getDuration())
+					+ " - " + sessione.getNumberOfFalls();
 
-			if (number_of_falls[position] == 1)
+			if (sessione.getNumberOfFalls() == 1)
 				holder.secondaLinea.setText(seconda_riga + " caduta");
 			else
 				holder.secondaLinea.setText(seconda_riga + " cadute");
 			// per sessione attiva cambio colore di sfondo
-			boolean attiva = active[position];
+			boolean attiva = sessione.isActive();
 			if (attiva)
 				rowView.setBackgroundColor(Color.parseColor("#C6C6FF"));
 			else
