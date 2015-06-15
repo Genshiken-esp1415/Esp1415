@@ -136,7 +136,7 @@ public class DBManager {
 	    Date timestamp = session.getSessionBegin();
 	    System.out.println("Comment deleted with timestamp: " + timestamp);
 	    database.delete(DBOpenHelper.TABLE_SESSION, DBOpenHelper.COLUMN_TIMESTAMP_S
-	        + " = " + dateToSqlDate(timestamp), null);
+	        + " = " + "'" + dateToSqlDate(timestamp) +"'", null);
 	  }
 
 	  /**
