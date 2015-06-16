@@ -4,7 +4,7 @@
     <string name="app_name">esp1415</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Impostazioni</string>
-    <string name="title_activity_lista_sessioni">ListaSessioni</string>
+    <string name="title_activity_lista_sessioni">Lista sessioni</string>
     <string name="title_activity_dettaglio_sessione">DettaglioSessione</string>
     <string name="title_activity_dettaglio_sessione_passata">DettaglioSessionePassata</string>
     <string name="title_activity_dettaglio_caduta">DettaglioCaduta</string>
@@ -28,5 +28,10 @@
     <string name="cancel">Annulla</string>
     <string name="errore_sessione_attiva">C\'è già una sessione attiva.</string>
     <string name="session_removed">\u0020eliminata</string>
+    <string name="data_e_ora">Data e ora inizio:</string>
+    <string name="durata_2">Durata:</string>
+    <string name="caduta">caduta</string>
+    <string name="cadute_min">cadute</string>
+    <string name="dot">sessione attiva</string>
 
 </resources>

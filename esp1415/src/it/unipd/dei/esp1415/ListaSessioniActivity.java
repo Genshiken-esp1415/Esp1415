@@ -3,8 +3,10 @@ package it.unipd.dei.esp1415;
 import it.unipd.dei.esp1415.R;
 
 import java.util.ArrayList;
+
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
@@ -190,8 +192,6 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 			super(context, textVewResourceId, sessioni);
 			this.context = context;
 			this.sessioni = sessioni;
-			//metto una sessione attiva per test
-			sessioni.get(1).setActive(true);
 		}
 
 		
@@ -213,19 +213,29 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 			holder.primaLinea.setText(sessione.getName());
 			String data = (String) DateFormat.format("dd/MM/yy", sessione.getSessionBegin());
 			String ora = (String) DateFormat.format("kk:mm", sessione.getSessionBegin());
-			String seconda_riga = "Data e ora inizio: " + data + " " + ora + " - Durata: " + conver_ore_minuti(sessione.getDuration())
-					+ " - " + sessione.getNumberOfFalls();
+			String seconda_riga = getContext().getString(R.string.data_e_ora) + " " + data + " " + ora + " - " + 
+									getContext().getString(R.string.durata_2) + " " + 
+									conver_ore_minuti(sessione.getDuration()) + " - " + sessione.getNumberOfFalls();
 
 			if (sessione.getNumberOfFalls() == 1)
-				holder.secondaLinea.setText(seconda_riga + " caduta");
+				holder.secondaLinea.setText(seconda_riga + " " + getContext().getString(R.string.caduta));
 			else
-				holder.secondaLinea.setText(seconda_riga + " cadute");
-			// per sessione attiva cambio colore di sfondo
+				holder.secondaLinea.setText(seconda_riga + " " + getContext().getString(R.string.cadute_min));
+			// per sessione attiva cambio determinati parametri
 			boolean attiva = sessione.isActive();
 			if (attiva)
-				rowView.setBackgroundColor(Color.parseColor("#C6C6FF"));
+				{rowView.setBackgroundColor(Color.parseColor("#60FFFFFF")); //il 60 davanti al numero esadecimale decide la trasparenza
+				 holder.primaLinea.setTypeface(null, Typeface.BOLD);
+				 holder.secondaLinea.setTypeface(null,Typeface.BOLD); //imposto carattere grassetto
+				 holder.primaLinea.setTextColor(Color.RED); //imposto colore rosso prima linea
+				} 
 			else
-				rowView.setBackgroundColor(Color.parseColor("#EFEFEF"));
+				{rowView.setBackgroundColor(Color.parseColor("#00000000")); //sfondo trasparente
+				 holder.primaLinea.setTypeface(null, Typeface.NORMAL);
+				 holder.secondaLinea.setTypeface(null,Typeface.NORMAL);
+				 holder.primaLinea.setTextColor(Color.BLACK);
+				 
+				}
 			return rowView;
 		}
 
@@ -239,8 +249,7 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 			return ore_minuti;
 		}
 
-		static class Holder {// holder serve a migliorare le prestazioni nello scrolling,
-							// vedi: http://developer.android.com/training/improving-layouts/smooth-scrolling.html#ViewHolder
+		static class Holder {// holder serve a migliorare le prestazioni nello scrolling
 			public TextView secondaLinea, primaLinea;
 			public ImageView imageView;
 			public RelativeLayout sfondo;

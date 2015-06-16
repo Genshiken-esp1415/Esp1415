@@ -347,6 +347,8 @@ public class DBManager {
 	  public void dummyInsert(){
 		  ArrayList<Session> sessions = new ArrayList<Session>();
 		  sessions = Randomizer.randomSession(10);
+		  //metto una sessione attiva per test
+		  sessions.get(0).setActive(true);
 		  ContentValues values = new ContentValues();
 		  for(int i = 0; i<sessions.size();i++){
 			  values.clear();
