@@ -1,16 +1,110 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_height="wrap_content"
+    android:gravity="top"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="it.unipd.dei.esp1415.DettaglioSessione$PlaceholderFragment" >
+    tools:context="it.unipd.dei.esp1415.DettaglioSessionePassata$PlaceholderFragment" >
 
-    <TextView
+    <EditText
+        android:id="@+id/nomeSessione"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_alignParentTop="true"
+        android:ems="10"
+        android:hint="nome sessione"
+        android:textSize="30sp" 
+        android:imeOptions="actionDone" 
+        android:singleLine="true"  />
+
+    <TextView
+        android:id="@+id/xLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/titoloLista"
+        android:layout_below="@+id/nomeSessione"
+        android:text="@string/x_label"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/yLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/xLabel"
+        android:text="@string/y_label"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/zLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/yLabel"
+        android:text="@string/z_label"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/xValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/nomeSessione"
+        android:layout_toRightOf="@+id/xLabel"
+        android:text="xValue"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/yValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/xValue"
+        android:layout_toRightOf="@+id/yLabel"
+        android:text="yValue"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/zValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView3"
+        android:layout_below="@+id/yValue"
+        android:layout_toRightOf="@+id/zLabel"
+        android:text="zValue"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/titoloLista"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/durataSessione"
+        android:gravity="center_horizontal"
+        android:text="@string/cadute"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/durataSessione"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/zLabel"
+        android:text="@string/durata"
+        android:textSize="40sp" />
+
+    <ImageButton
+        android:id="@+id/playPauseButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_above="@+id/zValue"
+        android:layout_toRightOf="@+id/titoloLista"
+        android:baselineAlignBottom="false"
+        android:src="@drawable/ic_play_button_256" />
+
+    <ImageButton
+        android:id="@+id/stopButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignTop="@+id/playPauseButton"
+        android:layout_toRightOf="@+id/playPauseButton"
+        android:src="@drawable/ic_stop_circular_button_256" />
 
 </RelativeLayout>

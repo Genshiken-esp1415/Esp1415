@@ -10,16 +10,20 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+
 /**
- * This class manages the popup dialog for the creation of a task. 
- * @author Francesco Bragagnolo, Andrea De Agnoi
+ * Questa classe definisce una Dialog che permette di rinominare una sessione.
+ * Nella classe chiamante sono da implementare i metodi dell'interfaccia
+ * renameDialogListener.
  * 
+ * @author Andrea
+ *
  */
 public class renameDialog extends DialogFragment {
 
 	private EditText sessionName;
 	private DBManager myDbmanager;
-	private  String mode, oldName;
+	private  String oldName;
 	private Date sessionId;
 	private Session currentSession;
 	

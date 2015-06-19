@@ -109,12 +109,39 @@ public class DBManager {
 	  
 	  /**
 	   * chiamare questo metodo per rinominare la sessione.
+	   * Passare come parametro la sessione con già il campo name aggiornato!
 	   * @param session la sessione che si vuole rinominare
 	   * @return 
 	   */
 	  public Session renameSession(Session session) {
 	    ContentValues values = new ContentValues();
 	    values.put(DBOpenHelper.COLUMN_NAME, session.getName());
+	    String whereClause = DBOpenHelper.COLUMN_TIMESTAMP_S +" = ?";
+	    String[] whereArgs = new String[1];
+	    whereArgs[0] =  dateToSqlDate(session.getSessionBegin());
+	    int updateId = database.update(DBOpenHelper.TABLE_SESSION, values, whereClause, whereArgs);
+	    Cursor cursor = database.query(DBOpenHelper.TABLE_SESSION,
+		        SessionColumns, whereClause, whereArgs,
+		        null, null, null);
+	    cursor.moveToFirst();
+	    session = cursorToSession(cursor);
+	    cursor.close();
+	    return session;
+	  }
+	  /**
+	   * chiamare questo metodo per settare la sessione come attiva o non attiva.
+	   * Passare come parametro la sessione con già il campo active aggiornato!
+	   * @param session la sessione che si vuole rinominare
+	   * @return 
+	   */
+	  public Session setActiveSession(Session session) {
+	    ContentValues values = new ContentValues();
+	    if(session.isActive()){
+	    	values.put(DBOpenHelper.COLUMN_NAME, 1);
+	    }
+	    else {
+	    	values.put(DBOpenHelper.COLUMN_NAME, 0);
+	    }
 	    String whereClause = DBOpenHelper.COLUMN_TIMESTAMP_S +" = ?";
 	    String[] whereArgs = new String[1];
 	    whereArgs[0] =  dateToSqlDate(session.getSessionBegin());
@@ -222,6 +249,21 @@ public class DBManager {
 	  }
 	  
 	  /**
+	   * restituisce la sessione attiva
+	   * @return
+	   */
+	  public Session getActiveSession() {
+
+		  Cursor cursor = database.query(DBOpenHelper.TABLE_SESSION,
+				  SessionColumns, DBOpenHelper.COLUMN_ATTIVA + " = 1", null, null, null, null);
+		  cursor.moveToFirst();
+		  Session session = cursorToSession(cursor);
+		  // make sure to close the cursor
+		  cursor.close();
+		  return session;
+	  }
+	  
+	  /**
 	   * restituisce una caduta dato il timestamp
 	   * @return
 	   */
@@ -263,7 +305,17 @@ public class DBManager {
 	    cursor.close();
 	    return fall;
 	  }
-
+	  
+	  /**Usato per sapere se c'è una sessione attiva nel database
+	   * @return
+	   */
+	  public boolean hasActiveSession(){
+		  Cursor cursor = database.query(DBOpenHelper.TABLE_SESSION,
+				  SessionColumns, DBOpenHelper.COLUMN_ATTIVA + " = " + 1, null, null, null, null);
+		  if (cursor.getCount () == 0) return false;
+		  return true;
+		  
+	  }
 	  
 	  /**
 	   * Restituisce una sessione Session a partire da un cursor contenente dati di una riga di una query sql

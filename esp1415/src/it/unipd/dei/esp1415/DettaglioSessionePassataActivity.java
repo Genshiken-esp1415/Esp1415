@@ -2,10 +2,11 @@ package it.unipd.dei.esp1415;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
@@ -32,10 +33,15 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Intent intent = getIntent();
+		db = new DBManager(this);
+		db.open();
+		
+		currentSession = db.getSession((Date)intent.getSerializableExtra("IDSessione"));
 		setContentView(R.layout.activity_dettaglio_sessione_passata);
 		if (savedInstanceState == null) {
 			FragmentTransaction  fm = getSupportFragmentManager().beginTransaction();
-			fm.add(R.id.dettaglio_sessione_passata_fragment, new PlaceholderFragment());
+			fm.add(R.id.dettaglio_sessione_passata_fragment, new DettagliSessioneFragment());
 			fm.add(R.id.lista_cadute_fragment, new MyListFragment());
 			fm.commit();
 		}
@@ -87,9 +93,9 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class PlaceholderFragment extends Fragment {
+	public static class DettagliSessioneFragment extends Fragment {
 
-		public PlaceholderFragment() {
+		public DettagliSessioneFragment() {
 		}
 
 		@Override
@@ -99,10 +105,9 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity
 					R.layout.fragment_dettaglio_sessione_passata, container,
 					false);
 			//solo per testing prendo tutte le sessioni dal db
-			db = new DBManager(getActivity().getBaseContext());
-			db.open();
-			ArrayList<Session> sessions = (ArrayList<Session>)db.getAllSessions();
-			currentSession = sessions.get(2);
+			
+//			ArrayList<Session> sessions = (ArrayList<Session>)db.getAllSessions();
+//			currentSession = sessions.get(2);
 			currentSession.setFallList((ArrayList<Fall>)db.getAllFalls(currentSession.getSessionBegin()));			
 			TextView timeStampSessioneTextView = (TextView) rootView.findViewById(R.id.timestampsessione);
 			TextView durataSessioneTextView = (TextView) rootView.findViewById(R.id.durataSessione);

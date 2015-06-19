@@ -21,5 +21,8 @@
     <string name="rename_description">Digita il nuovo nome per la sessione</string>
     <string name="rename">Rinomina</string>
     <string name="cancel">Annulla</string>
+    <string name="x_label">X: </string>
+    <string name="y_label">Y: </string>
+    <string name="z_label">Z: </string>
 
 </resources>
