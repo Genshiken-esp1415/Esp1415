@@ -270,7 +270,7 @@ public class DBManager {
 	   */
 	  public boolean hasActiveSession(){
 		  Cursor cursor = database.query(DBOpenHelper.TABLE_SESSION,
-				  SessionColumns, DBOpenHelper.COLUMN_ATTIVA + " = " + "'" + true + "'", null, null, null, null);
+				  SessionColumns, DBOpenHelper.COLUMN_ATTIVA + " = " + 1, null, null, null, null);
 		  if (cursor.getCount () == 0) return false;
 		  return true;
 		  
