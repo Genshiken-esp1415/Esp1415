@@ -27,11 +27,15 @@
     <string name="rename">Rinomina</string>
     <string name="cancel">Annulla</string>
     <string name="errore_sessione_attiva">C\'è già una sessione attiva.</string>
-    <string name="session_removed">\u0020eliminata</string>
+    <string name="sessione_rimossa">\u0020eliminata</string>
     <string name="data_e_ora">Data e ora inizio:</string>
     <string name="durata_2">Durata:</string>
     <string name="caduta">caduta</string>
     <string name="cadute_min">cadute</string>
     <string name="dot">sessione attiva</string>
+    <string name="frequenza_di_campionamento">Frequenza di campionamento</string>
+    <string name="durata_massima">Durata massima</string>
+    <string name="contatti">Contatti</string>
+    <string name="sveglia">Sveglia</string>
 
 </resources>

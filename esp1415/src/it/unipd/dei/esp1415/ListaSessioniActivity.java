@@ -44,7 +44,7 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_lista_sessioni);
 		if (savedInstanceState == null) {
-			getSupportFragmentManager().beginTransaction().add(R.id.container, new PlaceholderFragment()).commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.container, new ListaSessioniFragment()).commit();
 		}
 
 	}
@@ -93,8 +93,8 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 	@Override
 	public void onDialogPositiveClick(renameDialog dialog) {
 		String name = db.getSession(sessione_scelta.getSessionBegin()).getName();
-		PlaceholderFragment.adapter.sessioni.get(pos).setName(name); //rinomino nell'adapter
-		PlaceholderFragment.adapter.notifyDataSetChanged(); //aggiorno la lista
+		ListaSessioniFragment.adapter.sessioni.get(pos).setName(name); //rinomino nell'adapter
+		ListaSessioniFragment.adapter.notifyDataSetChanged(); //aggiorno la lista
 	}
 
 	@Override
@@ -105,12 +105,11 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class PlaceholderFragment extends ListFragment {
+	public static class ListaSessioniFragment extends ListFragment {
 	
-		//public static ArrayList<Session> sessions;
 		static MyAdapter adapter;
 		
-		public PlaceholderFragment() {
+		public ListaSessioniFragment() {
 		}
 
 		@Override
@@ -159,7 +158,7 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
  					db.deleteSession(sessione_scelta);	//rimuovo dal database
 					adapter.remove(sessione_scelta); //rimuovo dalla lista
 					adapter.notifyDataSetChanged(); //aggiorno la lista
-					Toast.makeText(getActivity(), sessione_scelta.getName() + getActivity().getString(R.string.session_removed), Toast.LENGTH_SHORT).show(); // notifica di avvenuta cancellazione
+					Toast.makeText(getActivity(), sessione_scelta.getName() + getActivity().getString(R.string.sessione_rimossa), Toast.LENGTH_SHORT).show(); // notifica di avvenuta cancellazione
 					return true;
 				}
 				return super.onContextItemSelected(item);
