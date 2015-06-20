@@ -50,6 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/nomeSessione"
         android:layout_toRightOf="@+id/xLabel"
+        android:maxLength="4"
         android:text="xValue"
         android:textSize="30sp" />
 
@@ -59,6 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/xValue"
         android:layout_toRightOf="@+id/yLabel"
+        android:maxLength="4"
         android:text="yValue"
         android:textSize="30sp" />
 
@@ -67,6 +69,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textView3"
+        android:maxLength="4"
         android:layout_below="@+id/yValue"
         android:layout_toRightOf="@+id/zLabel"
         android:text="zValue"

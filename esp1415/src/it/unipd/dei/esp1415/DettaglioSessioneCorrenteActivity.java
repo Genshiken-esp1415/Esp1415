@@ -2,16 +2,20 @@ package it.unipd.dei.esp1415;
 
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
 import android.view.KeyEvent;
@@ -83,6 +87,10 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 	 */
 	public static class DettagliSessioneFragment extends Fragment {
 
+		private TextView xValue;
+		private TextView yValue;
+		private TextView zValue;
+
 		public DettagliSessioneFragment() {
 		}
 
@@ -107,9 +115,9 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 			this.getActivity().setTitle("Sessione attiva");
 			//TextView timeStampSessioneTextView = (TextView) rootView.findViewById(R.id.timestampsessione);
 			EditText nomeSessione = (EditText) rootView.findViewById(R.id.nomeSessione);			
-			TextView xValue = (TextView) rootView.findViewById(R.id.xValue);
-			TextView yValue = (TextView) rootView.findViewById(R.id.yValue);
-			TextView zValue = (TextView) rootView.findViewById(R.id.zValue);
+			xValue = (TextView) rootView.findViewById(R.id.xValue);
+			yValue = (TextView) rootView.findViewById(R.id.yValue);
+			zValue = (TextView) rootView.findViewById(R.id.zValue);
 			TextView durataSessioneTextView = (TextView) rootView.findViewById(R.id.durataSessione);
 			ImageButton playPauseButton = (ImageButton) rootView.findViewById(R.id.playPauseButton);
 			ImageButton stopButton = (ImageButton) rootView.findViewById(R.id.stopButton);
@@ -158,6 +166,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 						Intent i= new Intent(getActivity(), WatcherService.class);
 						// Passo al service le informazioni sulla sessione attiva
 						i.putExtra("IDSessione", currentSession.getSessionBegin());
+						PendingIntent.getBroadcast(getActivity(), PendingIntent.FLAG_UPDATE_CURRENT, i, PendingIntent.FLAG_UPDATE_CURRENT);
 						getActivity().startService(i); 
 						((ImageButton)arg0).setImageResource(R.drawable.ic_pause_button_256);
 						serviceRunning = true;
@@ -184,12 +193,46 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 
 			return rootView;
 		}
+		
+		// handler for received Intents for the "my-event" event 
+		private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+		  @Override
+		  public void onReceive(Context context, Intent intent) {
+		    // Extract data included in the Intent
+			  Float x = intent.getFloatExtra("xValue",0f);
+			  Float y = intent.getFloatExtra("yValue",0f);
+			  Float z = intent.getFloatExtra("zValue",0f);
+		    xValue.setText(x.toString());
+		    yValue.setText(y.toString());
+		    zValue.setText(z.toString());
+		  }
+		};
+		
+		@Override
+		public void onResume() {
+		  super.onResume();
+
+		  // Register mMessageReceiver to receive messages.
+		  LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(mMessageReceiver,
+		      new IntentFilter("AccData"));
+		}
+
+		
+
+		@Override
+		public void onPause() {
+		  // Unregister since the activity is not visible
+		  LocalBroadcastManager.getInstance(this.getActivity()).unregisterReceiver(mMessageReceiver);
+		  super.onPause();
+		} 
+
 	}
 	
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
 	public static class MyListFragment extends ListFragment {
+		FallAdapter adapter;
 		public MyListFragment() {
 		}
 
@@ -206,13 +249,50 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 			//solo per testing prendo tutte le sessioni dal db
 			DBManager db = new DBManager(getActivity().getBaseContext());
 			db.open();
-			ArrayList<Session> sessions = (ArrayList<Session>)db.getAllSessions();
-			Session currentSession = sessions.get(2);
-			currentSession.setFallList((ArrayList<Fall>)db.getAllFalls(currentSession.getSessionBegin()));
-			FallAdapter adapter = new FallAdapter(getActivity().getBaseContext(), currentSession.getFallList());
+//			ArrayList<Session> sessions = (ArrayList<Session>)db.getAllSessions();
+//			Session currentSession = sessions.get(2);
+			currentSession.setFallList(new ArrayList<Fall>());
+			adapter = new FallAdapter(getActivity().getBaseContext(), currentSession.getFallList());
 			setListAdapter(adapter);
 
 		}
+
+		// handler for received Intents for the "my-event" event 
+		private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				// Extract data included in the Intent
+				Float x = intent.getFloatExtra("xValue",0f);
+				Float y = intent.getFloatExtra("yValue",0f);
+				Float z = intent.getFloatExtra("zValue",0f);
+				currentSession.getFallList().add(new Fall.FallBuilder(new Date())
+				.session(currentSession.getSessionBegin())
+				.fallNumber(currentSession.getFallList().size())
+				.notified(false)
+				.latitude(0.0)
+				.longitude(0.0)
+				.build());
+				adapter.notifyDataSetChanged();
+			}
+		};
+
+		@Override
+		public void onResume() {
+			super.onResume();
+
+			// Register mMessageReceiver to receive messages.
+			LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(mMessageReceiver,
+					new IntentFilter("Fall"));
+		}
+
+
+
+		@Override
+		public void onPause() {
+			// Unregister since the activity is not visible
+			LocalBroadcastManager.getInstance(this.getActivity()).unregisterReceiver(mMessageReceiver);
+			super.onPause();
+		} 
 	}
 
 	
@@ -248,6 +328,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 		    return rowFallView;
 		  
 		} 
+		  
 	}
 	
 	
@@ -276,4 +357,5 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 	    return false;
 	}
 
+	
 }
