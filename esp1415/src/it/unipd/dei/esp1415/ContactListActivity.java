@@ -69,7 +69,7 @@ public class ContactListActivity extends Activity {
 		}
 		cursor.close();
 
-		ContactListArrayAdapter arrayAdapter = 
+		final ContactListArrayAdapter arrayAdapter = 
 				new ContactListArrayAdapter(this, R.layout.contactlistview_row, contacts);
 		lv.setAdapter(arrayAdapter);
 		lv.setOnItemClickListener(new OnItemClickListener()
@@ -80,13 +80,13 @@ public class ContactListActivity extends Activity {
 				if(!contacts.get(position).getAdded()){
 					dest.put(position, selectedAddr);
 					Toast.makeText(getApplicationContext(), "Mail aggiunta: "+ selectedAddr, Toast.LENGTH_SHORT).show();
-					contacts.get(position).setAdded(true);
+					arrayAdapter.items.get(position).setAdded(true);
 				}else{
 					dest.remove(position);
 					Toast.makeText(getApplicationContext(), "Mail rimossa: "+ selectedAddr, Toast.LENGTH_SHORT).show();
-					contacts.get(position).setAdded(false);
-					v.setSelected(false);
+					arrayAdapter.items.get(position).setAdded(false);
 			    }
+				arrayAdapter.notifyDataSetChanged();
 			}
 		});
 		bn.setOnClickListener(new View.OnClickListener(){
