@@ -76,8 +76,8 @@ public class ContactListActivity extends Activity {
 		{
 			public void onItemClick(AdapterView<?> arg0, View v,int position, long arg3)
 			{
-				String selectedAddr=contacts.get(position).getAddress();
-				if(!contacts.get(position).getAdded()){
+				String selectedAddr=arrayAdapter.items.get(position).getAddress();
+				if(!arrayAdapter.items.get(position).getAdded()){
 					dest.put(position, selectedAddr);
 					Toast.makeText(getApplicationContext(), "Mail aggiunta: "+ selectedAddr, Toast.LENGTH_SHORT).show();
 					arrayAdapter.items.get(position).setAdded(true);

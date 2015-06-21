@@ -50,6 +50,10 @@
             android:name=".DettaglioCadutaActivity"
             android:label="@string/title_activity_dettaglio_caduta" >
         </activity>
+        <activity
+            android:name=".ContactListActivity"
+            android:label="@string/title_activity_contactlist" >
+        </activity>
     </application>
 
 </manifest>

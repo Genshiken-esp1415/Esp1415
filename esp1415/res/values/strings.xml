@@ -8,6 +8,7 @@
     <string name="title_activity_dettaglio_sessione">DettaglioSessione</string>
     <string name="title_activity_dettaglio_sessione_passata">DettaglioSessionePassata</string>
     <string name="title_activity_dettaglio_caduta">DettaglioCaduta</string>
+    <string name="title_activity_contactlist">ContactList</string>
     <string name="ora">"Ora: "</string>
     <string name="data">"Data: "</string>
     <string name="latitudine">"Latitudine: "</string>
