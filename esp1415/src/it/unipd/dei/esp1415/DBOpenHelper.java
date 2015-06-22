@@ -51,7 +51,7 @@ public class DBOpenHelper extends  SQLiteOpenHelper {
 			+ COLUMN_ATTIVA + " INTEGER DEFAULT 0)";
 	private static final String DATABASE_CREATE_FALL = ""
 			+ "CREATE TABLE " + TABLE_FALL 
-			+ " ( " + COLUMN_TIMESTAMP_F + " TEXT PRIMARY KEY, "
+			+ " ( " + COLUMN_TIMESTAMP_F + " TEXT PRIMARY KEY DEFAULT CURRENT_TIMESTAMP, "
 			+ COLUMN_NUMBER + " INTEGER, "
 			+ COLUMN_NOTIFIED + " INTEGER, "
 			+ COLUMN_LATITUDE + " REAL, "

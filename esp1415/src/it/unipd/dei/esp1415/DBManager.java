@@ -131,16 +131,38 @@ public class DBManager {
 	  /**
 	   * chiamare questo metodo per settare la sessione come attiva o non attiva.
 	   * Passare come parametro la sessione con già il campo active aggiornato!
-	   * @param session la sessione che si vuole rinominare
+	   * @param session la sessione che si vuole aggiornare
+	   * @return 
+	   */
+	  public Session updateDuration(Session session) {
+	    ContentValues values = new ContentValues();
+	    	values.put(DBOpenHelper.COLUMN_DURATA, session.getDuration());
+	    String whereClause = DBOpenHelper.COLUMN_TIMESTAMP_S +" = ?";
+	    String[] whereArgs = new String[1];
+	    whereArgs[0] =  dateToSqlDate(session.getSessionBegin());
+	    int updateId = database.update(DBOpenHelper.TABLE_SESSION, values, whereClause, whereArgs);
+	    Cursor cursor = database.query(DBOpenHelper.TABLE_SESSION,
+		        SessionColumns, whereClause, whereArgs,
+		        null, null, null);
+	    cursor.moveToFirst();
+	    session = cursorToSession(cursor);
+	    cursor.close();
+	    return session;
+	  }
+	  
+	  /**
+	   * chiamare questo metodo per aggiornare la durata della sessione.
+	   * Passare come parametro la sessione con già il campo durata aggiornato!
+	   * @param session la sessione che si vuole aggiornare
 	   * @return 
 	   */
 	  public Session setActiveSession(Session session) {
 	    ContentValues values = new ContentValues();
 	    if(session.isActive()){
-	    	values.put(DBOpenHelper.COLUMN_NAME, 1);
+	    	values.put(DBOpenHelper.COLUMN_ATTIVA, 1);
 	    }
 	    else {
-	    	values.put(DBOpenHelper.COLUMN_NAME, 0);
+	    	values.put(DBOpenHelper.COLUMN_ATTIVA, 0);
 	    }
 	    String whereClause = DBOpenHelper.COLUMN_TIMESTAMP_S +" = ?";
 	    String[] whereArgs = new String[1];
@@ -175,7 +197,10 @@ public class DBManager {
 
 	    Cursor cursor = database.query(DBOpenHelper.TABLE_SESSION,
 	        SessionColumns, null, null, null, null, null);
-
+	    if(cursor.getCount()==0){
+			  cursor.close();
+			  return sessions;
+		  }
 	    cursor.moveToFirst();
 	    while (!cursor.isAfterLast()) {
 	      Session session = cursorToSession(cursor);
@@ -200,6 +225,10 @@ public class DBManager {
 		  Cursor cursor = database.query(DBOpenHelper.TABLE_FALL,
 				  FallColumns, DBOpenHelper.COLUMN_SESSION + " = ?", whereArgs, null, null, null);
 		  cursor.moveToFirst();
+//		  if(cursor.getCount()<1){
+//			  cursor.close();
+//			  return falls;
+//		  }
 		  while (!cursor.isAfterLast()) {
 			  Fall fall = cursorToFall(cursor);
 			  falls.add(fall);
