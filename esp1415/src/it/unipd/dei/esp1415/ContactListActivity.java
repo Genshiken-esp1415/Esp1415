@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -31,15 +29,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Activity per la scelta degli indirizzi e-mail, tra quelli memorizzati nella rubrica, a cui inviare le notifiche di caduta.
+ * @author Marco
+ */
 public class ContactListActivity extends Activity {
-
-	private ArrayList<String> presentContacts = new ArrayList<String>();
-	private ArrayList<ContactData> contacts = new ArrayList<ContactData>();
-	private Map<Integer, String> dest = new HashMap<Integer, String>();
 	
-	private String name;
-	private String address;
-
 	@SuppressLint("InlinedApi")
 	private static final String[] PROJECTION = new String[] {
 		Email.CONTACT_ID,
@@ -47,14 +42,21 @@ public class ContactListActivity extends Activity {
 		Email.ADDRESS
 	};
 
+	/**
+	 * Alla creazione dell'activity viene riempito l'array di contatti contacts con tutti gli indirizzi e-mail, e relativo
+	 * nome associato presenti nella rubrica. Si fa uso di un flag per capire se un dato indirizzo è già presente tra
+	 * quelli da inviare.
+	 */
 	@SuppressLint("InlinedApi")
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_contactlist);
 		final ListView lv = (ListView) findViewById(R.id.lv);
-		Button bn = (Button) findViewById(R.id.button);
-		Button bnread = (Button) findViewById(R.id.buttonread);
-		presentContacts = readSelectedContacts();
+		Button bn = (Button) findViewById(R.id.done);
+		String name;
+		String address;
+		ArrayList<ContactData> contacts = new ArrayList<ContactData>();
+		ArrayList<String> presentContacts = readSelectedContacts();
 		Cursor cursor = this.getContentResolver().query(Email.CONTENT_URI, PROJECTION, null,
 				null, null);
 		while(cursor.moveToNext()){
@@ -68,9 +70,13 @@ public class ContactListActivity extends Activity {
 			}
 		}
 		cursor.close();
-
-		final ContactListArrayAdapter arrayAdapter = 
-				new ContactListArrayAdapter(this, R.layout.contactlistview_row, contacts);
+		
+		/**
+		 * Al click di uno degli elementi della lista, lo si aggiunge (o rimuove a seconda) alla lista
+		 * degli indirizzi scelti per l'invio delle notifiche. Viene mostrato un breve toast (indirizzo aggiunto/rimosso)
+		 * e la riga selezionata cambia colore.
+		 */
+		final ContactListArrayAdapter arrayAdapter = new ContactListArrayAdapter(this, R.layout.contactlistview_row, contacts);
 		lv.setAdapter(arrayAdapter);
 		lv.setOnItemClickListener(new OnItemClickListener()
 		{
@@ -78,38 +84,32 @@ public class ContactListActivity extends Activity {
 			{
 				String selectedAddr=arrayAdapter.items.get(position).getAddress();
 				if(!arrayAdapter.items.get(position).getAdded()){
-					dest.put(position, selectedAddr);
 					Toast.makeText(getApplicationContext(), "Mail aggiunta: "+ selectedAddr, Toast.LENGTH_SHORT).show();
 					arrayAdapter.items.get(position).setAdded(true);
 				}else{
-					dest.remove(position);
 					Toast.makeText(getApplicationContext(), "Mail rimossa: "+ selectedAddr, Toast.LENGTH_SHORT).show();
 					arrayAdapter.items.get(position).setAdded(false);
-			    }
+				}
 				arrayAdapter.notifyDataSetChanged();
 			}
 		});
 		bn.setOnClickListener(new View.OnClickListener(){
 			public void onClick(View v){
-				writeSelectedContacts(dest);
+				writeSelectedContacts(arrayAdapter.items);
 			}
 		});
-		bnread.setOnClickListener(new View.OnClickListener(){
-			public void onClick(View v){
-				readSelectedContacts();
-			}
-		});
-
 	}
-
-	private void writeSelectedContacts(Map<Integer, String> dest){
+	
+	/**
+	 * Scrive su file di test gli indirizzi scelti. Viene utilizzato alla pressione del bottone "Fatto"
+	 */
+	private void writeSelectedContacts(ArrayList<ContactData> dest){
 		try {
 			FileOutputStream output = openFileOutput("contactlist.txt", MODE_PRIVATE);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(output));
-			Iterator<Map.Entry<Integer, String>> i = dest.entrySet().iterator();
-			while(i.hasNext()){
-				Map.Entry<Integer, String> entry = i.next();
-				bw.append(entry.getValue()+"\r\n");
+			for(int i=0;i<dest.size();i++){
+				if(dest.get(i).getAdded())
+					bw.append(dest.get(i).getAddress()+"\r\n");
 			}
 			bw.close();
 		} catch (FileNotFoundException e) {
@@ -119,58 +119,60 @@ public class ContactListActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Legge da file gli indirizzi scelti. Viene utilizzato all'avvio dell'activity per rilevare gli indirizzi già
+	 * scelti in precedenza e colorare le righe della lista corrispondenti.  
+	 */
 	private ArrayList<String> readSelectedContacts(){
 		ArrayList<String> selectedContacts = new ArrayList<String>();
-		TextView test = (TextView) findViewById(R.id.test);
-		String str="";
+
 		try {
 			FileInputStream input = openFileInput("contactlist.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(input));
-
-			String line;
-			while((line = br.readLine()) != null){
-				selectedContacts.add(line);
-				str = str + line +"\r\n";
-			}
 			br.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		test.setText(str);
+
 		return selectedContacts;
 	}
-
-
-
+	
+	//ArrayAdapter personalizzato per la gestione delle singole righe della ListView degli indirizzi
 	private class ContactListArrayAdapter extends ArrayAdapter<ContactData>{
 
-		Context context;
-		int resource;
 		ArrayList<ContactData> items;
-		
+
 		public ContactListArrayAdapter(Context context, int resource,
 				ArrayList<ContactData> items) {
 			super(context, resource, items);
-			this.context = context;
-			this.resource = resource;
 			this.items = items;
 		}
 
 		public View getView(int position, View convertView, ViewGroup parent){
 			LayoutInflater inflater = getLayoutInflater();
-			convertView = inflater.inflate(R.layout.contactlistview_row, parent, false);
-			TextView tv = (TextView) convertView.findViewById(R.id.tv);
-			tv.setText(items.get(position).getName() + ": " + items.get(position).getAddress());
+			View rowView = convertView;
+			if(rowView == null){
+				Holder holder = new Holder();
+				rowView = inflater.inflate(R.layout.contactlistview_row, parent, false);
+				holder.row = (TextView) rowView.findViewById(R.id.tv);
+		    	rowView.setTag(holder);
+			}
+			Holder holder = (Holder) rowView.getTag();
+			holder.row.setText(items.get(position).getName() + ": " + items.get(position).getAddress());
 			if(items.get(position).getAdded())
-				tv.setBackgroundColor(Color.GRAY);
+				holder.row.setBackgroundColor(Color.GRAY);
 			else
-				tv.setBackgroundColor(Color.WHITE);
-			return convertView;
+				holder.row.setBackgroundColor(Color.WHITE);
+			return rowView;
 		}
 	}
-
+	
+	/**
+	 * Rappresenta i dati di interesse di ogni contatto: nome; indirizzo; se l'indirizzo è stato aggiunto o meno
+	 * tra quelli a cui spedire le notifiche.
+	 */
 	private class ContactData{
 
 		private String name;
@@ -199,5 +201,10 @@ public class ContactListActivity extends Activity {
 		public void setAdded(boolean added) {
 			this.added = added;
 		}
+	}
+	
+	//Usata per implementare il design pattern view holder
+	private static class Holder {
+		public TextView row;
 	}
 }

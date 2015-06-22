@@ -4,6 +4,7 @@
     <string name="app_name">esp1415</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="thumbnail_description">Contorno della thumbnail</string>
     <string name="title_activity_lista_sessioni">ListaSessioni</string>
     <string name="title_activity_dettaglio_sessione">DettaglioSessione</string>
     <string name="title_activity_dettaglio_sessione_passata">DettaglioSessionePassata</string>
@@ -18,5 +19,6 @@
     <string name="durata">durata</string>
     <string name="timestamp">timestamp</string>
     <string name="numeroCaduta">n</string>
+    <string name="fatto">Fatto</string>
 
 </resources>

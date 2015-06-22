@@ -52,8 +52,8 @@ public class GraphView extends View {
 	protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec){
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		
-		int width = getMeasuredWidth();
-	    int height = getMeasuredHeight();
+		//int width = getMeasuredWidth();
+	    //int height = getMeasuredHeight();
 		setMeasuredDimension(448,75);
 	}
 	

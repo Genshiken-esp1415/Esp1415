@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
-import org.apache.http.protocol.HTTP;
-
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
 import android.os.Bundle;
@@ -16,22 +13,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.os.Build;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.content.ContextWrapper;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.*;
-import android.graphics.drawable.shapes.RectShape;
+
 /**
  * Questa activity conterr� il dettaglio su una caduta
  */
@@ -133,26 +118,4 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 			return rootView;
 		}
 	}
-	
-	/*public class ThumbnailBox extends View{
-		private ShapeDrawable box;
-		
-		public ThumbnailBox(Context context){
-			super(context);
-			
-			int x=10;
-			int y=10;
-			int width = 200;
-			int height = 200;
-			
-			box = new ShapeDrawable(new RectShape());
-			box.getPaint().setColor(0x0);
-			box.setBounds(x, y, x+width, y+height);
-		}
-		
-		protected void onDraw(Canvas canvas){
-			box.draw(canvas);
-		}
-	}*/
-
 }
