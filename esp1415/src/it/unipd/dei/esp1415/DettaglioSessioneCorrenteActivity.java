@@ -1,6 +1,7 @@
 package it.unipd.dei.esp1415;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -83,7 +84,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 	}
 
 	/**
-	 * A placeholder fragment containing a simple view.
+	 * Questo fragment contiene la view dedicata ai dettagli della sessione, eccetto la lista di cadute
 	 */
 	public static class DettagliSessioneFragment extends Fragment {
 
@@ -92,6 +93,8 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 		private TextView zValue;
 		private TextView durataSessioneTextView;
 		private Intent i;
+		private ImageButton playPauseButton;
+		private ImageButton stopButton;
 
 		public DettagliSessioneFragment() {
 		}
@@ -115,15 +118,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 				currentSession = db.createSession("Nuova Sessione");
 				currentSession.setActive(true);
 				db.setActiveSession(currentSession);
-				// Avvio il service
-				i = new Intent(getActivity(), WatcherService.class);
-				// Passo al service le informazioni sulla sessione attiva
-				i.putExtra("IDSessione", currentSession.getSessionBegin());
-				PendingIntent.getBroadcast(getActivity(),
-						PendingIntent.FLAG_UPDATE_CURRENT, i,
-						PendingIntent.FLAG_UPDATE_CURRENT);
-				getActivity().startService(i);
-				serviceRunning = true;
+				
 			}
 			this.getActivity().setTitle("Sessione attiva");
 			// TextView timeStampSessioneTextView = (TextView)
@@ -135,16 +130,11 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 			zValue = (TextView) rootView.findViewById(R.id.zValue);
 			durataSessioneTextView = (TextView) rootView
 					.findViewById(R.id.durataSessione);
-			ImageButton playPauseButton = (ImageButton) rootView
+			playPauseButton = (ImageButton) rootView
 					.findViewById(R.id.playPauseButton);
-			ImageButton stopButton = (ImageButton) rootView
+			stopButton = (ImageButton) rootView
 					.findViewById(R.id.stopButton);
-			// String timestamp = (String) DateFormat.format("dd/MM/yy - kk:mm",
-			// currentSession.getSessionBegin());
-			// timeStampSessioneTextView.setText(timestamp);
-			// durataSessioneTextView.setText(conver_ore_minuti(currentSession.getDuration()));
-			// imposto in modo che una volta modificato il nome della sessione
-			// la tastiera sparisca
+			
 			nomeSessione.setImeOptions(EditorInfo.IME_ACTION_DONE);
 			nomeSessione
 					.setOnEditorActionListener(new OnEditorActionListener() {
@@ -153,12 +143,10 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 								KeyEvent event) {
 							boolean handled = false;
 							if (actionId == EditorInfo.IME_ACTION_DONE) {
-								InputMethodManager imm = (InputMethodManager) v
-										.getContext().getSystemService(
-												Context.INPUT_METHOD_SERVICE);
-								imm.hideSoftInputFromWindow(v.getWindowToken(),
-										0);
-								v.clearFocus();
+								// Questa chiamata mi fa sparire la tastiera una volta finito di modificare il nome della sessione
+								InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+								imm.hideSoftInputFromWindow(v.getWindowToken(),0);
+								//modifico il nome della sessione e registro il cambiamento nel database
 								currentSession.setName(v.getText().toString());
 								db.renameSession(currentSession);
 								handled = true;
@@ -171,7 +159,10 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 			durataSessioneTextView
 					.setText(conver_ore_minuti_secondi(currentSession
 							.getDuration()));
-
+			xValue.setText("");
+			yValue.setText("");
+			zValue.setText("");
+			
 			// l'immagine e il comportamento del tasto play cambiano in base al
 			// servizio se sta andando o no
 			playPauseButton.setImageResource(R.drawable.ic_play_button_256);
@@ -189,9 +180,13 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 								WatcherService.class);
 						i.putExtra("Active", true);
 						getActivity().stopService(i);
-						((ImageButton) arg0)
-								.setImageResource(R.drawable.ic_play_button_256);
+						//modifico l'immagine del bottone in accordo con lo stato di service non attivo
+						((ImageButton) arg0).setImageResource(R.drawable.ic_play_button_256);
+						xValue.setText("");
+						yValue.setText("");
+						zValue.setText("");
 						serviceRunning = false;
+						
 					} else {
 						// Avvio il service
 						i = new Intent(getActivity(), WatcherService.class);
@@ -203,8 +198,8 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 								PendingIntent.FLAG_UPDATE_CURRENT, i,
 								PendingIntent.FLAG_UPDATE_CURRENT);
 						getActivity().startService(i);
-						((ImageButton) arg0)
-								.setImageResource(R.drawable.ic_pause_button_256);
+						//modifico l'immagine del bottone in accordo con lo stato di service attivo
+						((ImageButton) arg0).setImageResource(R.drawable.ic_pause_button_256);
 						serviceRunning = true;
 					}
 				}
@@ -231,10 +226,12 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 			return rootView;
 		}
 
-		// handler for received Intents for the "AccData" event
+		// handler per gli intent ricevuti dall'evento "AccData"
 		private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
+				//controllo per evitare scritture al layout dopo che è stato stoppato il service
+				if(serviceRunning){
 				// Extract data included in the Intent
 				Float x = intent.getFloatExtra("xValue", 0f);
 				Float y = intent.getFloatExtra("yValue", 0f);
@@ -245,6 +242,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 				zValue.setText(z.toString());
 				durataSessioneTextView
 						.setText(conver_ore_minuti_secondi(duration));
+				}
 			}
 		};
 
@@ -293,29 +291,33 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 			// solo per testing prendo tutte le sessioni dal db
 			DBManager db = new DBManager(getActivity().getBaseContext());
 			db.open();
-			// ArrayList<Session> sessions =
-			// (ArrayList<Session>)db.getAllSessions();
-			// Session currentSession = sessions.get(2);
 			falls = (ArrayList<Fall>) db.getAllFalls(currentSession
 					.getSessionBegin());
 			adapter = new FallAdapter(getActivity().getBaseContext(), falls);
 			setListAdapter(adapter);
-			LocalBroadcastManager.getInstance(this.getActivity())
-					.registerReceiver(mMessageReceiver,
-							new IntentFilter("Fall"));
+//			LocalBroadcastManager.getInstance(this.getActivity())
+//					.registerReceiver(mMessageReceiver,
+//							new IntentFilter("Fall"));
 
 		}
 
-		// handler for received Intents for the "my-event" event
+		// handler per gli intent ricevuti dall'evento "Fall"
 		private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				Long millis = intent.getLongExtra("IDSessione", 0);
-				adapter.clear();
-				adapter.addAll((ArrayList<Fall>) db.getAllFalls(currentSession
-						.getSessionBegin()));
-				// falls.add(db.getFall(new Date(millis)));
+				
+				//controllo per evitare scritture al layout dopo che è stato stoppato il service o scritture doppie
+				//TODO: clear perchè senno mi fa inserimenti doppi nell'adapter, i service fa troppi intent?
+				Long millis = intent.getLongExtra("IDFall", 0);
+				//&& falls.get(falls.size()-1).getFallTimestamp()!=(new Date(millis))
+				if(serviceRunning ){
+				adapter.insert(db.getFall(new Date(millis)), 0);
+//				adapter.clear();
+//				adapter.addAll((ArrayList<Fall>) db.getAllFalls(currentSession.getSessionBegin()));
+				ArrayList<AccelerometerData> acc = (ArrayList<AccelerometerData>) db.getAccData(new Date(millis));
 				adapter.notifyDataSetChanged();
+				}
+			
 			}
 		};
 
@@ -342,6 +344,11 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 	public static class FallAdapter extends ArrayAdapter<Fall> {
 		private final Context context;
 		private final ArrayList<Fall> falls;
+		private View rowFallView;
+		private TextView fallNumberTextView;
+		private TextView timestampFallTextView;
+		private ImageView notifiedImageView;
+		private String timestamp;
 
 		public FallAdapter(Context context, ArrayList<Fall> values) {
 			super(context, R.layout.row_fall, values);
@@ -353,21 +360,21 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View rowFallView = inflater.inflate(R.layout.row_fall, parent,
+			rowFallView = inflater.inflate(R.layout.row_fall, parent,
 					false);
-			TextView fallNumberTextView = (TextView) rowFallView
+			fallNumberTextView = (TextView) rowFallView
 					.findViewById(R.id.numeroCaduta);
-			TextView timestampFallTextView = (TextView) rowFallView
+			timestampFallTextView = (TextView) rowFallView
 					.findViewById(R.id.timestampCaduta);
-			ImageView notifiedImageView = (ImageView) rowFallView
+			notifiedImageView = (ImageView) rowFallView
 					.findViewById(R.id.notificato);
 			fallNumberTextView.setText(String.valueOf(falls.get(position)
 					.getFallNumber()));
-			String timestamp = (String) DateFormat.format("dd/MM/yy - kk:mm",
+			timestamp = (String) DateFormat.format("dd/MM/yy - kk:mm",
 					falls.get(position).getFallTimestamp());
 			timestampFallTextView.setText(timestamp);
 
-			if (falls.get(position).isNotified()) {
+			if (!falls.get(position).isNotified()) {
 				notifiedImageView.setImageResource(R.drawable.cross);
 			} else {
 				notifiedImageView.setImageResource(R.drawable.tick);
@@ -385,7 +392,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 		long minuti = secondi / 60;
 		long ore = minuti / 60;
 		minuti = minuti % 60;
-		secondi = secondi % 3600;
+		secondi = secondi - ore*3600 - minuti*60;
 		ore_minuti = ore + "h " + minuti + " m " + secondi + " s ";
 		return ore_minuti;
 	}

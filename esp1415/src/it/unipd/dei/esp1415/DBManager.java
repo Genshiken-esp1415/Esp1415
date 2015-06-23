@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -35,7 +36,7 @@ public class DBManager {
 										DBOpenHelper.COLUMN_LATITUDE,
 										DBOpenHelper.COLUMN_LONGITUDE,
 										DBOpenHelper.COLUMN_SESSION};	 
-	  private String[] AccelerometerColumns = {	DBOpenHelper.COLUMN_SAMPLENUMBER,
+	  private String[] AccelerometerColumns = {	DBOpenHelper.COLUMN_TIMESTAMP_A,
 												DBOpenHelper.COLUMN_X,
 												DBOpenHelper.COLUMN_Y,
 												DBOpenHelper.COLUMN_Z,
@@ -94,13 +95,50 @@ public class DBManager {
 	    values.clear(); 
 	    values.put(DBOpenHelper.COLUMN_FALL, dateToSqlDate(newFall.getFallTimestamp()));
 	    for(int accIndex = 0; accIndex < accData.size(); accIndex++){
-	    	 values.put(DBOpenHelper.COLUMN_SAMPLENUMBER, accIndex);
+	    	 values.put(DBOpenHelper.COLUMN_TIMESTAMP_A, accData.get(accIndex).getTimestamp());
 	    	 values.put(DBOpenHelper.COLUMN_X, accData.get(accIndex).getX());
 	    	 values.put(DBOpenHelper.COLUMN_Y, accData.get(accIndex).getY());
 	    	 values.put(DBOpenHelper.COLUMN_Z, accData.get(accIndex).getZ());
 	    	 Long insertIdA = database.insert(DBOpenHelper.TABLE_ACCELEROMETER, null, values);  	    	 
 	    }
 	    newFall.setFallData(accData);
+		
+	    cursor.close();
+	    return newFall;
+	  }
+	  
+	  /**
+	   * Utilizzato quando si crea una nuova sessione. La sessione viene creata, inserita nel db e restituita al chiamante.
+	   * @param sessionName Il nome della sessione che si vuole creare.
+	   * @return
+	   */
+	  public Fall createFall(Date timestampFall, int fallNumber, double latitude, double longitude, LinkedList<AccelerometerData> accData, Date session) {
+	    ContentValues values = new ContentValues();
+	    values.put(DBOpenHelper.COLUMN_TIMESTAMP_F, dateToSqlDate(timestampFall));
+	    values.put(DBOpenHelper.COLUMN_NUMBER, fallNumber);
+	    values.put(DBOpenHelper.COLUMN_LATITUDE, latitude);
+	    values.put(DBOpenHelper.COLUMN_LONGITUDE, longitude);
+	    values.put(DBOpenHelper.COLUMN_SESSION, dateToSqlDate(session));
+	    Long insertIdF = database.insert(DBOpenHelper.TABLE_FALL, null, values);  
+	    if(insertIdF==-1){
+	    	return null;
+	    }
+	    Cursor cursor = database.query(DBOpenHelper.TABLE_FALL,
+	        FallColumns, null, null,
+	        null, null, DBOpenHelper.COLUMN_TIMESTAMP_F + " DESC");
+	    cursor.moveToFirst();
+	    Fall newFall = cursorToFall(cursor);
+	    //Inserisco i dati dell'accelerometro relativi alla caduta
+	    values.clear(); 
+	    values.put(DBOpenHelper.COLUMN_FALL, dateToSqlDate(newFall.getFallTimestamp()));
+	    for(int accIndex = 0; accIndex < accData.size(); accIndex++){
+	    	 values.put(DBOpenHelper.COLUMN_TIMESTAMP_A, accData.get(accIndex).getTimestamp());
+	    	 values.put(DBOpenHelper.COLUMN_X, accData.get(accIndex).getX());
+	    	 values.put(DBOpenHelper.COLUMN_Y, accData.get(accIndex).getY());
+	    	 values.put(DBOpenHelper.COLUMN_Z, accData.get(accIndex).getZ());
+	    	 Long insertIdA = database.insert(DBOpenHelper.TABLE_ACCELEROMETER, null, values);  	    	 
+	    }
+	    //newFall.setFallData(accData);
 		
 	    cursor.close();
 	    return newFall;
@@ -196,7 +234,7 @@ public class DBManager {
 	    List<Session> sessions = new ArrayList<Session>();
 
 	    Cursor cursor = database.query(DBOpenHelper.TABLE_SESSION,
-	        SessionColumns, null, null, null, null, null);
+	        SessionColumns, null, null, null, null, DBOpenHelper.COLUMN_TIMESTAMP_S+" DESC");
 	    if(cursor.getCount()==0){
 			  cursor.close();
 			  return sessions;
@@ -223,7 +261,7 @@ public class DBManager {
 		  String[] whereArgs = new String[1];
 		  whereArgs[0] =  dateToSqlDate(sessionBegin);
 		  Cursor cursor = database.query(DBOpenHelper.TABLE_FALL,
-				  FallColumns, DBOpenHelper.COLUMN_SESSION + " = ?", whereArgs, null, null, null);
+				  FallColumns, DBOpenHelper.COLUMN_SESSION + " = ?", whereArgs, null, null, DBOpenHelper.COLUMN_TIMESTAMP_F+" DESC");
 		  cursor.moveToFirst();
 //		  if(cursor.getCount()<1){
 //			  cursor.close();
@@ -245,8 +283,8 @@ public class DBManager {
 		    String[] whereArgs = new String[1];
 		    whereArgs[0] =  dateToSqlDate(fallTimestamp);
 		    Cursor cursor = database.query(DBOpenHelper.TABLE_ACCELEROMETER,
-		    		FallColumns, DBOpenHelper.COLUMN_TIMESTAMP_F + " = ?" , whereArgs,
-		    		null, null, DBOpenHelper.COLUMN_SAMPLENUMBER);
+		    		AccelerometerColumns, DBOpenHelper.COLUMN_TIMESTAMP_F + " = ?" , whereArgs,
+		    		null, null, DBOpenHelper.COLUMN_TIMESTAMP_A);
 		    cursor.moveToFirst();
 		    while (!cursor.isAfterLast()) {
 		    	AccelerometerData accData = cursorToAccData(cursor);
@@ -377,7 +415,8 @@ public class DBManager {
 	  }
 	  
 	  private AccelerometerData cursorToAccData(Cursor cursor){
-		  AccelerometerData accData = new AccelerometerData(cursor.getFloat(1),
+		  AccelerometerData accData = new AccelerometerData(cursor.getLong(0),
+				  											  cursor.getFloat(1),
 															  cursor.getFloat(2),
 															  cursor.getFloat(3));
 		  return accData;
@@ -436,7 +475,7 @@ public class DBManager {
 				  for(int z = 0; z<sessions.get(i).getFallList().get(j).getFallData().size();z++){
 					  values.clear();
 					  values.put(DBOpenHelper.COLUMN_FALL, dateToSqlDate(sessions.get(i).getFallList().get(j).getFallTimestamp()));
-					  values.put(DBOpenHelper.COLUMN_SAMPLENUMBER, z);
+					  values.put(DBOpenHelper.COLUMN_TIMESTAMP_A, z);
 					  values.put(DBOpenHelper.COLUMN_X, sessions.get(i).getFallList().get(j).getFallData().get(z).getX());
 					  values.put(DBOpenHelper.COLUMN_Y, sessions.get(i).getFallList().get(j).getFallData().get(z).getY());
 					  values.put(DBOpenHelper.COLUMN_Z, sessions.get(i).getFallList().get(j).getFallData().get(z).getZ());

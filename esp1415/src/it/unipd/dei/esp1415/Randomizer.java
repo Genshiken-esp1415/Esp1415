@@ -58,7 +58,8 @@ public class Randomizer {
 											.build();
 					//Generating accelerometer data
 					for(int h=0; h<1000; h++){
-						accData.add(new AccelerometerData( randNumber.nextInt(100), 
+						accData.add(new AccelerometerData( randNumber.nextInt(100000000),
+															randNumber.nextInt(100), 
 															randNumber.nextInt(100),
 															randNumber.nextInt(100)));
 					}

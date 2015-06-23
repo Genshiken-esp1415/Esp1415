@@ -32,7 +32,7 @@ public class DBOpenHelper extends  SQLiteOpenHelper {
 	public static final String COLUMN_ID_F = "ID";
 	//variabili per la tabella ACCELEROMETRO
 	public static final String TABLE_ACCELEROMETER = "ACCELEROMETRO";
-	public static final String COLUMN_SAMPLENUMBER = "numero_campione";
+	public static final String COLUMN_TIMESTAMP_A = "timestamp_accelerometro";
 	public static final String COLUMN_X = "x";
 	public static final String COLUMN_Y = "y";
 	public static final String COLUMN_Z = "z";
@@ -51,7 +51,7 @@ public class DBOpenHelper extends  SQLiteOpenHelper {
 			+ COLUMN_ATTIVA + " INTEGER DEFAULT 0)";
 	private static final String DATABASE_CREATE_FALL = ""
 			+ "CREATE TABLE " + TABLE_FALL 
-			+ " ( " + COLUMN_TIMESTAMP_F + " TEXT PRIMARY KEY DEFAULT CURRENT_TIMESTAMP, "
+			+ " ( " + COLUMN_TIMESTAMP_F + " TEXT PRIMARY KEY , "
 			+ COLUMN_NUMBER + " INTEGER, "
 			+ COLUMN_NOTIFIED + " INTEGER, "
 			+ COLUMN_LATITUDE + " REAL, "
@@ -60,12 +60,12 @@ public class DBOpenHelper extends  SQLiteOpenHelper {
 			+ "FOREIGN KEY(" + COLUMN_SESSION + ") REFERENCES " + TABLE_SESSION + "(" + COLUMN_TIMESTAMP_S +"))";
 	private static final String DATABASE_CREATE_ACCELEROMETER = ""
 			+ "CREATE TABLE " + TABLE_ACCELEROMETER 
-			+ " ( " + COLUMN_SAMPLENUMBER + " INTEGER, "
+			+ " ( " + COLUMN_TIMESTAMP_A + " INTEGER, "
 			+ COLUMN_X + " REAL, "
 			+ COLUMN_Y + " REAL, "
 			+ COLUMN_Z + " REAL, "
 			+ COLUMN_FALL + " TEXT, "
-			+ "PRIMARY KEY (" + COLUMN_SAMPLENUMBER + "," + COLUMN_FALL + "),"
+			+ "PRIMARY KEY (" + COLUMN_TIMESTAMP_A + "," + COLUMN_FALL + "),"
 			+ "FOREIGN KEY(" + COLUMN_FALL + ") REFERENCES " + TABLE_FALL + "(" + COLUMN_TIMESTAMP_F +"))";
 			
 
