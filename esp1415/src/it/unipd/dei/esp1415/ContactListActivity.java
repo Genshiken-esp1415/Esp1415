@@ -18,6 +18,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,7 @@ public class ContactListActivity extends Activity {
 		Phone.DISPLAY_NAME,
 		Email.ADDRESS
 	};
-
+	static ContactListArrayAdapter arrayAdapter;
 	/**
 	 * Alla creazione dell'activity viene riempito l'array di contatti contacts con tutti gli indirizzi e-mail, e relativo
 	 * nome associato presenti nella rubrica. Si fa uso di un flag per capire se un dato indirizzo è già presente tra
@@ -76,30 +77,36 @@ public class ContactListActivity extends Activity {
 		 * degli indirizzi scelti per l'invio delle notifiche. Viene mostrato un breve toast (indirizzo aggiunto/rimosso)
 		 * e la riga selezionata cambia colore.
 		 */
-		final ContactListArrayAdapter arrayAdapter = new ContactListArrayAdapter(this, R.layout.contactlistview_row, contacts);
+		arrayAdapter = new ContactListArrayAdapter(this, R.layout.contactlistview_row, contacts);
 		lv.setAdapter(arrayAdapter);
 		lv.setOnItemClickListener(new OnItemClickListener()
 		{
 			public void onItemClick(AdapterView<?> arg0, View v,int position, long arg3)
 			{
-				String selectedAddr=arrayAdapter.items.get(position).getAddress();
-				if(!arrayAdapter.items.get(position).getAdded()){
-					Toast.makeText(getApplicationContext(), "Mail aggiunta: "+ selectedAddr, Toast.LENGTH_SHORT).show();
+				if(!arrayAdapter.items.get(position).getAdded())
 					arrayAdapter.items.get(position).setAdded(true);
-				}else{
-					Toast.makeText(getApplicationContext(), "Mail rimossa: "+ selectedAddr, Toast.LENGTH_SHORT).show();
+				else
 					arrayAdapter.items.get(position).setAdded(false);
-				}
 				arrayAdapter.notifyDataSetChanged();
 			}
 		});
 		bn.setOnClickListener(new View.OnClickListener(){
 			public void onClick(View v){
 				writeSelectedContacts(arrayAdapter.items);
+				finish();
 			}
 		});
 	}
 	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+	    	writeSelectedContacts(arrayAdapter.items);
+	    	setResult(1);
+	    	finish();
+	    }
+	    return true;
+	}
 	/**
 	 * Scrive su file di test gli indirizzi scelti. Viene utilizzato alla pressione del bottone "Fatto"
 	 */
@@ -109,7 +116,7 @@ public class ContactListActivity extends Activity {
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(output));
 			for(int i=0;i<dest.size();i++){
 				if(dest.get(i).getAdded())
-					bw.append(dest.get(i).getAddress()+"\r\n");
+					bw.append(dest.get(i).getName() + ": " + dest.get(i).getAddress() + "\r\n");
 			}
 			bw.close();
 		} catch (FileNotFoundException e) {
@@ -129,6 +136,9 @@ public class ContactListActivity extends Activity {
 		try {
 			FileInputStream input = openFileInput("contactlist.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(input));
+			String line;
+			while((line = br.readLine()) != null)
+				selectedContacts.add(line);
 			br.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

@@ -38,7 +38,7 @@ public class MainActivity extends ActionBarActivity {
 			db.dummyInsert();
 		}
 
-		Intent openListaSessioni = new Intent(this, MainActivity.class);
+		Intent openListaSessioni = new Intent(this, OpzioniActivity.class);
 		startActivity(openListaSessioni);
 
 	}
@@ -74,7 +74,7 @@ public class MainActivity extends ActionBarActivity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main,
+			View rootView = inflater.inflate(R.layout.fragment_opzioni,
 					container, false);
 			return rootView;
 		}

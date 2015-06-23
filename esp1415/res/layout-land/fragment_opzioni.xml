@@ -1,0 +1,172 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="it.unipd.dei.esp1415.OpzioniActivity$PlaceholderFragment" >
+
+    <TextView
+        android:id="@+id/campionamento_label"
+        android:layout_width="450dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="Frequenza di campionamento"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/sveglia_label"
+        android:layout_width="450dp"
+        android:layout_height="50dp"
+        android:layout_alignBaseline="@+id/campionamento_label"
+        android:layout_alignBottom="@+id/campionamento_label"
+        android:layout_alignParentRight="true"
+        android:text="Promemoria sessione"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/email_label"
+        android:layout_width="450dp"
+        android:layout_height="50dp"
+        android:layout_alignBaseline="@+id/durata_label"
+        android:layout_alignBottom="@+id/durata_label"
+        android:layout_alignParentRight="true"
+        android:text="E-mail per invio notifiche"
+        android:textSize="30dp" />
+
+    <ListView
+        android:id="@+id/contatti"
+        android:layout_width="700dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/salva_button"
+        android:layout_alignLeft="@+id/contatti_label"
+        android:layout_below="@+id/contatti_label" >
+    </ListView>
+
+    <TextView
+        android:id="@+id/contatti_label"
+        android:layout_width="450dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/durata_label"
+        android:layout_below="@+id/durata_label"
+        android:layout_marginTop="48dp"
+        android:text="Lista contatti per invio notifiche"
+        android:textSize="30dp" />
+
+    <Button
+        android:id="@+id/salva_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Salva modifiche" />
+
+    <Button
+        android:id="@+id/campionamento"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/campionamento_label"
+        android:layout_below="@+id/sveglia_label"
+        android:text="Normale" />
+
+    <CheckBox
+        android:id="@+id/sveglia_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/sveglia"
+        android:layout_alignBottom="@+id/sveglia"
+        android:layout_alignRight="@+id/sveglia_label"
+        android:layout_marginRight="29dp"
+        android:text="Attiva sveglia" />
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/email_label"
+        android:layout_below="@+id/durata_label"
+        android:ems="10"
+        android:inputType="textEmailAddress" />
+
+    <TextView
+        android:id="@+id/durata_label"
+        android:layout_width="450dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/campionamento"
+        android:layout_below="@+id/campionamento"
+        android:layout_marginTop="32dp"
+        android:text="Massima durata sessione"
+        android:textSize="30dp" />
+
+    <Button
+        android:id="@+id/sveglia"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_alignBaseline="@+id/campionamento"
+        android:layout_alignBottom="@+id/campionamento"
+        android:layout_alignLeft="@+id/sveglia_label"
+        android:onClick="showTimePickerDialog"
+        android:text="8:00" />
+
+    <Button
+        android:id="@+id/contatti_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/contatti"
+        android:layout_marginTop="70dp"
+        android:layout_toRightOf="@+id/sveglia"
+        android:text="Scegli contatti" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/email"
+        android:layout_alignBottom="@+id/email"
+        android:layout_toRightOf="@+id/email"
+        android:ems="10"
+        android:inputType="textPassword" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/minus"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@+id/email"
+        android:layout_alignLeft="@+id/durata_label"
+        android:text="-" />
+
+    <TextView
+        android:id="@+id/max_durata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/minus"
+        android:layout_centerInParent="true"
+        android:layout_toRightOf="@+id/minus"
+        android:text="8"
+        android:textSize="40dp" />
+
+    <Button
+        android:id="@+id/plus"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@+id/max_durata"
+        android:layout_toRightOf="@+id/max_durata"
+        android:text="+" />
+
+    <TextView
+        android:id="@+id/ore_label"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/max_durata"
+        android:layout_marginLeft="38dp"
+        android:layout_toRightOf="@+id/plus"
+        android:text="ore"
+        android:textSize="30dp" />
+
+</RelativeLayout>

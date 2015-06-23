@@ -47,6 +47,10 @@
             android:name=".ContactListActivity"
             android:label="@string/title_activity_contactlist" >
         </activity>
+        <activity
+            android:name=".OpzioniActivity"
+            android:label="@string/title_activity_opzioni" >
+        </activity>
     </application>
 
 </manifest>
