@@ -21,9 +21,26 @@
     <string name="timestamp">timestamp</string>
     <string name="numeroCaduta">n</string>
     <string name="fatto">Fatto</string>
-    <string name="fastest">Molto alta</string>
-    <string name="fast">Alta</string>
-    <string name="normal">Normale</string>
-    <string name="slow">Bassa</string>
-
+    <string name="molto_veloce">Molto alta</string>
+    <string name="veloce">Alta</string>
+    <string name="normale">Normale</string>
+    <string name="lenta">Bassa</string>
+	<string name="campionamento">Frequenza di campionamento</string>
+	<string name="salva">Salva modifiche</string>
+	<string name="contatti">Scegli contatti</string>
+	<string name="default_sveglia">8:00</string>
+	<string name="email">Indirizzo e-mail</string>
+	<string name="promemoria">Promemoria sessione</string>
+	<string name="addizione">+</string>
+	<string name="sottrazione">-</string>
+	<string name="default_durata">8</string>
+	<string name="ore">ore</string>
+	<string name="durata_max">Massima durata sessione</string>
+	<string name="email_invio">E-mail per invio notifiche</string>
+	<string name="password">Password</string>
+	<string name="lista_contatti">Lista contatti per invio notifiche</string>
+	<string name="gmail">\@gmail.com</string>
+	<string name="attiva_sveglia">Attiva sveglia</string>
+	<string name="attiva_notifica">Attiva notifica</string>
+	
 </resources>

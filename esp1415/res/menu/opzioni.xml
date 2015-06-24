@@ -7,18 +7,18 @@
         <item
             android:id="@+id/fastest"
             android:orderInCategory="100"
-            android:title="@string/fastest"/>
+            android:title="@string/molto_veloce"/>
         <item
             android:id="@+id/fast"
             android:orderInCategory="100"
-            android:title="@string/fast"/>
+            android:title="@string/veloce"/>
         <item
             android:id="@+id/normal"
             android:orderInCategory="100"
-            android:title="@string/normal"/>
+            android:title="@string/normale"/>
         <item
             android:id="@+id/slow"
             android:orderInCategory="100"
-            android:title="@string/slow"/>
+            android:title="@string/lenta"/>
 
     </menu>

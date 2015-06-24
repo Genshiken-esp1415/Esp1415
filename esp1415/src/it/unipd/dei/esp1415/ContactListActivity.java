@@ -28,7 +28,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Activity per la scelta degli indirizzi e-mail, tra quelli memorizzati nella rubrica, a cui inviare le notifiche di caduta.
