@@ -311,7 +311,8 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 				Long millis = intent.getLongExtra("IDFall", 0);
 				//&& falls.get(falls.size()-1).getFallTimestamp()!=(new Date(millis))
 				if(serviceRunning ){
-				adapter.insert(db.getFall(new Date(millis)), 0);
+				Fall newFall = db.getFall(new Date(millis));
+				adapter.insert(newFall, 0);
 //				adapter.clear();
 //				adapter.addAll((ArrayList<Fall>) db.getAllFalls(currentSession.getSessionBegin()));
 				ArrayList<AccelerometerData> acc = (ArrayList<AccelerometerData>) db.getAccData(new Date(millis));

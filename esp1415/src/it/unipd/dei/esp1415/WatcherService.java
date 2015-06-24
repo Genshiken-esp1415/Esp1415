@@ -2,8 +2,6 @@ package it.unipd.dei.esp1415;
 
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.Service;
 import android.content.Context;
@@ -12,7 +10,15 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -38,14 +44,17 @@ public class WatcherService extends Service implements SensorEventListener{
 	private Intent intent;
 	private boolean stored;
 	private int sampleRate;
-	private Object lock = new Object();
 	private Fall newFall;
 	private Context context;
 	private int fallNumber;
+	private LocationManager locationManager;
+	private LocationListener locationListener;
+	protected double latitude;
+	protected double longitude;
+	protected boolean gotLocation;
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -71,28 +80,39 @@ public class WatcherService extends Service implements SensorEventListener{
 		sensorDelay = SensorManager.SENSOR_DELAY_UI;
 		//imposto il samplerate a seguito del sensor delay scelto
 		switch (sensorDelay){
-			case 0: sampleRate = 0; break;
-			case 1: sampleRate = 20000000; break;
-			case 2: sampleRate = 60000000; break;
-			case 3: sampleRate = 200000000; break;
+		case 0: sampleRate = 0; break;
+		case 1: sampleRate = 20000000; break;
+		case 2: sampleRate = 60000000; break;
+		case 3: sampleRate = 200000000; break;
 		}
 		samples = new LinkedList<AccelerometerData>();
 		sampleMaxSize = 1000000/((sensorDelay+1)*2);
 		// registro la classe come listener dell'accelerometro
 		sm.registerListener((SensorEventListener) this, Accel, sensorDelay);
-		context = this.getApplicationContext();
-//		Timer FallUpdateTimer = new Timer("FallTimer");
-//		FallUpdateTimer.scheduleAtFixedRate(new TimerTask() {
-//			public void run() {
-//				
-//			}
-//		},0,1000);
+		// Acquire a reference to the system Location Manager
+		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+		locationListener = new LocationListener() {
+
+
+	    	public void onLocationChanged(Location location) {
+	    		// Called when a new location is found by the gps.
+	    		latitude = location.getLatitude();
+	    		longitude = location.getLongitude();
+	    		//imposto la variabile di controllo sull'ottenimento della posizione
+	    		gotLocation = true;
+	    	}
+
+	    	public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+	    	public void onProviderEnabled(String provider) {}
+
+	    	public void onProviderDisabled(String provider) {}
+	    };
 		return Service.START_STICKY;
 	}
 
 	@Override
 	public void onCreate() {
-		// TODO Auto-generated method stub
 		super.onCreate();
 	}
 
@@ -100,11 +120,14 @@ public class WatcherService extends Service implements SensorEventListener{
 	public void onDestroy() {
 		Toast.makeText(getApplicationContext(), "service ucciso",
 				Toast.LENGTH_LONG).show();
-		 sm.unregisterListener(this);
-		 timePassed = System.currentTimeMillis()-startDate.getTime();
-		 currentSession.setDuration(((Long)(duration + timePassed)).intValue());
-		 currentSession = db.updateDuration(currentSession);
-		 db.close();
+		// Rimuovo i listener
+		sm.unregisterListener(this);
+		
+		//registro la durata finale nel db
+		timePassed = System.currentTimeMillis()-startDate.getTime();
+		currentSession.setDuration(((Long)(duration + timePassed)).intValue());
+		currentSession = db.updateDuration(currentSession);
+		db.close();
 		super.onDestroy();
 	}
 
@@ -127,37 +150,27 @@ public class WatcherService extends Service implements SensorEventListener{
 						return;
 					}
 				}
-				
+
 				//gestisco la memorizzazione dei dati su coda
 				measuredData = new AccelerometerData(timestamp,event.values[0],event.values[1],event.values[2]);
 				samples.add(measuredData);
-				
-				
+
+
 				//se il dato in testa alla coda è piu vecchio di un secondo lo scarto
 				if(timestamp-samples.getFirst().getTimestamp()>1000000000 && samples.getFirst()!=null){
 					samples.remove();
 				}
 				//se sono passati 500 ms dall'ultima caduta la segnalo e scrivo i dati sul db
-				 
+
 				if (timestamp-lastFallNano>500000000&&!stored){
 					stored=true;
-					//scrivo la caduta nel database
-					Toast.makeText(getApplicationContext(), "scrittura nel db",
-							Toast.LENGTH_LONG).show();
-					//fallNumber =(db.getAllFalls(currentSession.getSessionBegin()).size());
-					fallNumber ++;
-					newFall = db.createFall(new Date(lastFall),fallNumber, 1, 1, samples, currentSession.getSessionBegin());
-
-
-					Intent intent=new Intent("Fall");
-					intent.putExtra("IDFall",newFall.getFallTimestamp().getTime());
-					newFall = null;
-					LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+					//lancio la task per recuperare la posizione, mandare la mail e registrare la caduta nel db
+					new ProcessFallTask().execute("Somestring"); 
 
 
 				}
-				
-				
+
+
 				timePassed = System.currentTimeMillis()-startDate.getTime();
 				intent=new Intent("AccData");
 				intent.putExtra("xValue",measuredData.getX());
@@ -169,15 +182,14 @@ public class WatcherService extends Service implements SensorEventListener{
 				currentAcceleration = Math.abs(a-CALIBRATION);
 				if ((currentAcceleration > 10) && 
 						(stored))
-					{
-					
+				{
 					//memorizzo il timestamp della caduta
 					lastFallNano = timestamp;
 					lastFall = System.currentTimeMillis();
 					stored = false;
 					Toast.makeText(getApplicationContext(), "caduta con accelerazione "+currentAcceleration,
 							Toast.LENGTH_LONG).show();
-					
+
 				}
 
 			}
@@ -189,6 +201,42 @@ public class WatcherService extends Service implements SensorEventListener{
 	{
 		Log.d(tag,"onAccuracyChanged: " + sensor + ", accuracy: " + accuracy);
 	}
+	
+	//uso questo task cosi da risparmiare batteria, utilizzando il gps solo quando viene segnalata una caduta
+	private class ProcessFallTask extends AsyncTask<String, Integer, Long> {
+		 protected void onPreExecute(){
+			 // registro il listener cosi da avere aggiornamenti sulla posizione
+			    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0, locationListener);
+		 }
+		 
+		 protected Long doInBackground(String... params) {
+		    //ciclo finchè non ottengo una posizione dal gps
+		    while(!gotLocation){
+		    	try {
+		    		Thread.sleep(1000);
+		    	} catch (InterruptedException e) {
+		    		Thread.interrupted();
+		    	}
+		    }
+		    Long result = 0L;
+		    return result;
+		 }
 
+		 // the onPostexecute method receives the return type of doInBackGround()
+		 protected void onPostExecute(Long result) {
+			 //tolgo il listener cosi da risparmiare batteria
+			 locationManager.removeUpdates(locationListener);
+			 //ripristino la variabile di controllo sull'ottenimento di una posizione
+			 gotLocation = false;
+			 //registro la nuova caduta nel db
+			 fallNumber ++;
+			 newFall = db.createFall(new Date(lastFall),fallNumber, latitude, longitude, samples, currentSession.getSessionBegin());
+			 //segnalo a DettaglioSessioneCorrente la nuova caduta
+			 Intent intent=new Intent("Fall");
+			 intent.putExtra("IDFall",newFall.getFallTimestamp().getTime());
+			 newFall = null;
+			 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+		 }
+	}
 
 }
