@@ -42,7 +42,7 @@ public class WatcherService extends Service implements SensorEventListener{
 	private LinkedList<AccelerometerData> samples; 
 	int sampleMaxSize;
 	private Intent intent;
-	private boolean stored;
+	private boolean taskRunning;
 	private int sampleRate;
 	private Fall newFall;
 	private Context context;
@@ -52,6 +52,7 @@ public class WatcherService extends Service implements SensorEventListener{
 	protected double latitude;
 	protected double longitude;
 	protected boolean gotLocation;
+	private boolean startTask;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -72,12 +73,13 @@ public class WatcherService extends Service implements SensorEventListener{
 		fallNumber = (db.getAllFalls(currentSession.getSessionBegin()).size());
 		lastFall = 0;
 		lastFallNano = 0;
-		stored = true;
+		taskRunning = false;
+		startTask = false;
 		sm = (SensorManager)getSystemService(SENSOR_SERVICE);
 		measuredData = new AccelerometerData(0,0,0,0);
 		Sensor Accel = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		//Imposto il sensor delay
-		sensorDelay = SensorManager.SENSOR_DELAY_UI;
+		sensorDelay = SensorManager.SENSOR_DELAY_FASTEST;
 		//imposto il samplerate a seguito del sensor delay scelto
 		switch (sensorDelay){
 		case 0: sampleRate = 0; break;
@@ -121,8 +123,7 @@ public class WatcherService extends Service implements SensorEventListener{
 		Toast.makeText(getApplicationContext(), "service ucciso",
 				Toast.LENGTH_LONG).show();
 		// Rimuovo i listener
-		sm.unregisterListener(this);
-		
+		sm.unregisterListener(this);		
 		//registro la durata finale nel db
 		timePassed = System.currentTimeMillis()-startDate.getTime();
 		currentSession.setDuration(((Long)(duration + timePassed)).intValue());
@@ -150,50 +151,43 @@ public class WatcherService extends Service implements SensorEventListener{
 						return;
 					}
 				}
-
 				//gestisco la memorizzazione dei dati su coda
 				measuredData = new AccelerometerData(timestamp,event.values[0],event.values[1],event.values[2]);
 				samples.add(measuredData);
-
-
 				//se il dato in testa alla coda è piu vecchio di un secondo lo scarto
 				if(timestamp-samples.getFirst().getTimestamp()>1000000000 && samples.getFirst()!=null){
 					samples.remove();
 				}
-				//se sono passati 500 ms dall'ultima caduta la segnalo e scrivo i dati sul db
-
-				if (timestamp-lastFallNano>500000000&&!stored){
-					stored=true;
+				//se sono passati almeno 5 secondi dall'ultima caduta la segnalo
+				if (startTask){					
 					//lancio la task per recuperare la posizione, mandare la mail e registrare la caduta nel db
-					new ProcessFallTask().execute("Somestring"); 
-
-
+					new ProcessFallTask().execute("NEW FALL EVENT"); 
+					startTask = false;
+					taskRunning = true;
+					
 				}
-
-
 				timePassed = System.currentTimeMillis()-startDate.getTime();
+				//mando i valori dell'accelerometro aggiornati al dettaglio sessione corrente
 				intent=new Intent("AccData");
 				intent.putExtra("xValue",measuredData.getX());
 				intent.putExtra("yValue",measuredData.getY());
 				intent.putExtra("zValue",measuredData.getZ());
 				intent.putExtra("duration",duration+timePassed);
 				LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+				//calcolo il modulo dell'accelerazione-forza di gravità per stimare una caduta
 				float a = Math.round(Math.sqrt(Math.pow(measuredData.getX(),2)+Math.pow(measuredData.getY(),2)+ Math.pow(measuredData.getZ(),2)));
 				currentAcceleration = Math.abs(a-CALIBRATION);
 				if ((currentAcceleration > 10) && 
-						(stored))
+						(!taskRunning))
 				{
 					//memorizzo il timestamp della caduta
 					lastFallNano = timestamp;
 					lastFall = System.currentTimeMillis();
-					stored = false;
+					startTask = true;
 					Toast.makeText(getApplicationContext(), "caduta con accelerazione "+currentAcceleration,
 							Toast.LENGTH_LONG).show();
-
 				}
-
 			}
-
 		}
 	}
 
@@ -205,6 +199,7 @@ public class WatcherService extends Service implements SensorEventListener{
 	//uso questo task cosi da risparmiare batteria, utilizzando il gps solo quando viene segnalata una caduta
 	private class ProcessFallTask extends AsyncTask<String, Integer, Long> {
 		 protected void onPreExecute(){
+			 
 			 // registro il listener cosi da avere aggiornamenti sulla posizione
 			    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0, locationListener);
 		 }
@@ -231,11 +226,13 @@ public class WatcherService extends Service implements SensorEventListener{
 			 //registro la nuova caduta nel db
 			 fallNumber ++;
 			 newFall = db.createFall(new Date(lastFall),fallNumber, latitude, longitude, samples, currentSession.getSessionBegin());
+			
 			 //segnalo a DettaglioSessioneCorrente la nuova caduta
 			 Intent intent=new Intent("Fall");
 			 intent.putExtra("IDFall",newFall.getFallTimestamp().getTime());
 			 newFall = null;
 			 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+			 taskRunning = false;
 		 }
 	}
 
