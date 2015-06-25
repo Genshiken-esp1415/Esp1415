@@ -7,8 +7,8 @@
         android:right="2dp"
         android:bottom="2dp" />
     <size
-        android:width="300dp"
-        android:height="150dp" />
+        android:width="448dp"
+        android:height="76150dp" />
     <solid
         android:color="#00000000" />
     <stroke

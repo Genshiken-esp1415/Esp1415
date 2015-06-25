@@ -15,13 +15,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.annotation.SuppressLint;
+import android.graphics.Color;
 
 /**
  * Questa activity conterr� il dettaglio su una caduta
  */
 public class DettaglioCadutaActivity extends ActionBarActivity {
 
+	private final static int X = 0;
+	private final static int Y = 1;
+	private final static int Z = 2;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,7 +63,6 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 		public PlaceholderFragment() {
 		}
 
-		@SuppressLint("WrongCall")
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
@@ -98,12 +101,9 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 			GraphView graphX = (GraphView) rootView.findViewById(R.id.grafico_x);
 			GraphView graphY = (GraphView) rootView.findViewById(R.id.grafico_y);
 			GraphView graphZ = (GraphView) rootView.findViewById(R.id.grafico_z);
-			graphX.setAccelerometerData(accData);
-			graphY.setAccelerometerData(accData);
-			graphZ.setAccelerometerData(accData);
-			graphX.setAxis(0);
-			graphY.setAxis(1);
-			graphZ.setAxis(2);
+			graphX.setGraphParameters(accData,100,X,Color.RED);
+			graphY.setGraphParameters(accData,100,Y,Color.BLUE);
+			graphZ.setGraphParameters(accData,100,Z,Color.GREEN);
 					
 //			Intent emailIntent = new Intent();
 //			emailIntent.setAction(Intent.ACTION_SEND);

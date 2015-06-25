@@ -91,37 +91,6 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="40sp" />
 
-	<it.unipd.dei.esp1415.GraphView
-	    android:id="@+id/grafico_z"
-	    android:layout_width="448dp"
-	    android:layout_height="75dp"
-	    android:layout_alignParentBottom="true"
-	    android:layout_alignParentLeft="true"
-	    android:layout_alignParentStart="true"
-	    android:layout_alignParentRight="true"
-	    android:layout_alignParentEnd="true"
-	    android:background="@drawable/box" />
-
-	<it.unipd.dei.esp1415.GraphView
-	    android:id="@+id/grafico_y"
-	    android:layout_width="448dp"
-	    android:layout_height="75dp"
-	    android:layout_above="@+id/grafico_z"
-	    android:layout_alignLeft="@+id/grafico_z"
-	    android:layout_alignStart="@+id/grafico_z"
-	    android:layout_alignRight="@+id/grafico_z"
-	    android:layout_alignEnd="@+id/grafico_z" />
-
-	<it.unipd.dei.esp1415.GraphView
-	    android:id="@+id/grafico_x"
-	    android:layout_width="448dp"
-	    android:layout_height="75dp"
-	    android:layout_above="@+id/grafico_y"
-	    android:layout_alignLeft="@+id/grafico_y"
-	    android:layout_alignStart="@+id/grafico_y"
-	    android:layout_alignRight="@+id/grafico_y"
-	    android:layout_alignEnd="@+id/grafico_y"/>
-
 	<TextView
 	    android:id="@+id/notifica"
 	    android:layout_width="wrap_content"
@@ -180,5 +149,30 @@
 	    android:text="@string/notifica"
 	    android:textAppearance="?android:attr/textAppearanceLarge"
 	    android:textSize="40sp" />
+
+	<it.unipd.dei.esp1415.GraphView
+	    android:id="@+id/grafico_x"
+	    android:layout_width="448dp"
+	    android:layout_height="76dp"
+	    android:layout_above="@+id/grafico_y"
+	    android:layout_alignRight="@+id/grafico_y"
+	    android:layout_alignEnd="@+id/grafico_y"
+	    android:layout_alignLeft="@+id/grafico_y"
+	    android:layout_alignStart="@+id/grafico_y" />
+
+	<it.unipd.dei.esp1415.GraphView
+	    android:id="@+id/grafico_z"
+	    android:layout_width="448dp"
+	    android:layout_height="76dp"
+	    android:layout_alignParentBottom="true"
+	    android:layout_centerHorizontal="true"
+	    android:background="@drawable/box" />
+
+	<it.unipd.dei.esp1415.GraphView
+	    android:id="@+id/grafico_y"
+	    android:layout_width="448dp"
+	    android:layout_height="76dp"
+	    android:layout_above="@+id/grafico_z"
+	    android:layout_alignLeft="@+id/grafico_z" />
 	
 </RelativeLayout>

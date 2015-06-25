@@ -32,13 +32,13 @@ public class MainActivity extends ActionBarActivity {
 			.add(R.id.container, new PlaceholderFragment()).commit();
 		}
 		//creo il db per il primo avvio e faccio inserimenti dummy per testing, se non � gi� stato popolato il db.
-		DBManager db = new DBManager(this);
+		/*DBManager db = new DBManager(this);
 		db.open();
 		if(db.getAllSessions().size()==0){
 			db.dummyInsert();
-		}
+		}*/
 
-		Intent openListaSessioni = new Intent(this, OpzioniActivity.class);
+		Intent openListaSessioni = new Intent(this, DettaglioCadutaActivity.class);
 		startActivity(openListaSessioni);
 
 	}
@@ -74,7 +74,7 @@ public class MainActivity extends ActionBarActivity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_opzioni,
+			View rootView = inflater.inflate(R.layout.fragment_dettaglio_caduta,
 					container, false);
 			return rootView;
 		}
