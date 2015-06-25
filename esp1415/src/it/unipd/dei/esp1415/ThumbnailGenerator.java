@@ -20,10 +20,10 @@ public class ThumbnailGenerator {
 	public static Bitmap createThumbnail(Date inizioSessione)
 	{
 		long timestamp = inizioSessione.getTime();
-		long sinistra = timestamp  & 0xffffffff;
-		int a = (int)(sinistra);
 		Random random = new Random();
-	    int b = (int)((timestamp >> 32)) + random.nextInt();
+	    int a = (int)((timestamp >> 32)) + random.nextInt();
+		long secondaParte = timestamp  & 0xffffffff;
+		int b = (int)(secondaParte);
 		Bitmap.Config conf = Bitmap.Config.ARGB_4444;
 		Bitmap left = Bitmap.createBitmap(35, 70, conf);
 		left.eraseColor(a);

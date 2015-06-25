@@ -4,21 +4,18 @@ import it.unipd.dei.esp1415.R;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-
+import java.util.Date;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuInflater;
@@ -192,11 +189,11 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 	// classe per l'adapter
 	public static class MyAdapter extends ArrayAdapter<Session> {
 		ArrayList<Session> sessioni;
-		Context context;
+		static Context context;
 
 		public MyAdapter(Context context, int textVewResourceId, ArrayList<Session> sessioni) {
 			super(context, textVewResourceId, sessioni);
-			this.context = context;
+			MyAdapter.context = context;
 			this.sessioni = sessioni;
 		}
 
@@ -248,52 +245,53 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 				}
 			
 			//imposto thumbnail
-			Bitmap thumb = loadImageFromStorage(sessione.getThumbnail());
-			holder.imageView.setImageBitmap(thumb);
+			Date newSessionBegin = sessione.getSessionBegin();
+			Bitmap thumb = ThumbnailGenerator.createThumbnail(newSessionBegin); // genero la thumbnail
+			String name = DBManager.dateToSqlDate(newSessionBegin); //converto la data in stringa
+			if(saveToInternalStorage(thumb, name)) //la salvo in memoria
+				  sessione.setThumbnail(name);
+			Bitmap thumbn = loadImageFromStorage(name);
+			holder.imageView.setImageBitmap(thumbn);
 			return rowView;
 		}
 		
 		public Bitmap loadImageFromStorage(String filename) {
 
 			Bitmap thumbnail = null;
-			//look in internal storage
-			if (thumbnail == null) {
+			FileInputStream fis;
 			try {
-			File filePath = DBManager.context.getFileStreamPath(filename);
-			FileInputStream fi = new FileInputStream(filePath);
-			thumbnail = BitmapFactory.decodeStream(fi);
+				String path = "data/data/it.unipd.dei.esp1415/app_Thumbnails";
+				path = path + "/" + filename;
+				File f = new File(path);
+				fis = new FileInputStream(f);
+				thumbnail = BitmapFactory.decodeStream(fis);
+				fis.close();
 			} catch (Exception ex) {
-			Log.e("getThumbnail() on internal storage", ex.getMessage());
-			}
+				Toast.makeText(context, "errore lettura file",
+						Toast.LENGTH_SHORT).show();
 			}
 			return thumbnail;
 			}
 		
-		/*@SuppressWarnings("finally")
-		private Bitmap loadImageFromStorage(String name)
-		{
-			String path = "/data/data/it.unipd.dei.esp1415/app_data/imageDir";
-			Bitmap b = Bitmap.createBitmap(35, 70, Bitmap.Config.ARGB_4444);
-		    try {
-		        File f = new File(path, name);
-		        b = BitmapFactory.decodeStream(new FileInputStream(f));
-		    } 
-		    catch (FileNotFoundException e) 
-		    {
-		        e.printStackTrace();
-		    }
-		    finally
-		    {
-		        return b;
-		    }
+		  public static boolean saveToInternalStorage(Bitmap image, String name) {
 
-
-		}*/
-		
-		
-
-		
-		
+			  
+				try {
+					// Creo la directory nell'archivio interno
+					File mydir = context.getDir("Thumbnails", Context.MODE_PRIVATE); 
+					// Metto il file nella directory
+					File fileWithinMyDir = new File(mydir, name); 
+					// Stream per scrivere nel file
+					FileOutputStream out = new FileOutputStream(fileWithinMyDir); 
+					// Scrivo la bitmap nello stream
+					image.compress(Bitmap.CompressFormat.PNG, 100, out);
+					out.close();
+					return true;
+				} catch (Exception e) {
+					return false;
+				}
+			}
+	
 		public String conver_ore_minuti(int millisecondi) {
 			String ore_minuti = "";
 			int secondi = millisecondi / 1000;

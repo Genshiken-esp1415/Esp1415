@@ -85,55 +85,36 @@ public class DBManager {
 	    Session newSession = cursorToSession(cursor);
 	    cursor.close();
 	    
-	    Date newSessionBegin = newSession.getSessionBegin();
+	    /*Date newSessionBegin = newSession.getSessionBegin();
 		Bitmap thumb = ThumbnailGenerator.createThumbnail(newSessionBegin); // genero la thumbnail
 		Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //salvo la data come nome dell'immagine
 		String name = formatter.format(newSessionBegin);
 		String thumbnail;
 		if(saveToInternalStorage(thumb, name)) //la salvo in memoria
 			 {thumbnail = name;
-			 newSession.setThumbnail(thumbnail);}
+			 newSession.setThumbnail(thumbnail);}*/
 	    return newSession;
 	  }
 	 
-	  public static boolean saveToInternalStorage(Bitmap image, String name) {
+	/*  public static boolean saveToInternalStorage(Bitmap image, String name) {
 
-		  try {
-		  // Use the compress method on the Bitmap object to write image to
-		  // the OutputStream
-		  FileOutputStream fos = context.openFileOutput(name, Context.MODE_PRIVATE);
-		  // Writing the bitmap to the output stream
-		  image.compress(Bitmap.CompressFormat.PNG, 100, fos);
-		  fos.close();
-		  return true;
-		  } catch (Exception e) {
-		  Log.e("saveToInternalStorage()", e.getMessage());
-		  return false;
-		  }
-		  }
-	  
-	/*    private String saveToInternalStorage(Bitmap bitmapImage, String name){
-	        ContextWrapper cw = new ContextWrapper(context);
-	         // path to /data/data/yourapp/app_data/imageDir
-	        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-	        // Create imageDir
-	        File mypath=new File(directory, name);
-
-	        FileOutputStream fos = null;
-	        try {           
-
-	            fos = new FileOutputStream(mypath);
-
-	       // Use the compress method on the BitMap object to write image to the OutputStream
-	            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-	            fos.close();
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-	        return directory.getAbsolutePath();
-	    }*/
-	  
-	  
+		  
+		try {
+			// Creo la directory nell'archivio interno
+			File mydir = context.getDir("Thumbnails", Context.MODE_PRIVATE); 
+			// Metto il file nella directory
+			File fileWithinMyDir = new File(mydir, name); 
+			// Stream per scrivere nel file
+			FileOutputStream out = new FileOutputStream(fileWithinMyDir); 
+			// Scrivo la bitmap nello stream
+			image.compress(Bitmap.CompressFormat.PNG, 100, out);
+			out.close();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}*/
+	    
 	  /**
 	   * Utilizzato quando si crea una nuova sessione. La sessione viene creata, inserita nel db e restituita al chiamante.
 	   * @param sessionName Il nome della sessione che si vuole creare.
@@ -400,7 +381,7 @@ public class DBManager {
 	   * @param date
 	   * @return
 	   */
-	  private String dateToSqlDate(Date date){
+	  public static String dateToSqlDate(Date date){
 		  SimpleDateFormat sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 		  String sqlDate = sqlDateFormat.format(date);
 		  return sqlDate;
@@ -411,7 +392,7 @@ public class DBManager {
 	   */
 	  public void dummyInsert(){
 		  ArrayList<Session> sessions = new ArrayList<Session>();
-		  sessions = Randomizer.randomSession(15);
+		  sessions = Randomizer.randomSession(10);
 		  //metto una sessione attiva per test
 		  sessions.get(0).setActive(true);
 		  ContentValues values = new ContentValues();
