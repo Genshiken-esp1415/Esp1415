@@ -2,15 +2,23 @@ package it.unipd.dei.esp1415;
 
 import it.unipd.dei.esp1415.R;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuInflater;
@@ -46,7 +54,6 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction().add(R.id.container, new ListaSessioniFragment()).commit();
 		}
-
 	}
 
 	@Override
@@ -101,7 +108,7 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 	public void onDialogNegativeClick(renameDialog dialog) {
 
 	}
-
+	
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
@@ -122,7 +129,7 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 			setListAdapter(adapter);
 			ListView list_view = getListView();
 			registerForContextMenu(list_view);
-
+		
 			}	
 
 		@Override
@@ -204,6 +211,7 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 				holder.secondaLinea = (TextView) rowView.findViewById(R.id.secondLine);
 				holder.imageView = (ImageView) rowView.findViewById(R.id.thumbnail);
 				holder.primaLinea = (TextView) rowView.findViewById(R.id.firstLine);
+				holder.terzaLinea = (TextView) rowView.findViewById(R.id.thirdLine);
 				rowView.setTag(holder);
 			}
 			Holder holder = (Holder) rowView.getTag();
@@ -212,32 +220,80 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 			holder.primaLinea.setText(sessione.getName());
 			String data = (String) DateFormat.format("dd/MM/yy", sessione.getSessionBegin());
 			String ora = (String) DateFormat.format("kk:mm", sessione.getSessionBegin());
-			String seconda_riga = getContext().getString(R.string.data_e_ora) + " " + data + " " + ora + " - " + 
-									getContext().getString(R.string.durata_2) + " " + 
-									conver_ore_minuti(sessione.getDuration()) + " - " + sessione.getNumberOfFalls();
+			String seconda_riga = getContext().getString(R.string.data_e_ora) + " " + data + " " + ora;
+			holder.secondaLinea.setText(seconda_riga);
+			String terza_riga = getContext().getString(R.string.durata_2) + " " + 
+					conver_ore_minuti(sessione.getDuration()) + " - " + sessione.getNumberOfFalls();
 
-			if (sessione.getNumberOfFalls() == 1)
-				holder.secondaLinea.setText(seconda_riga + " " + getContext().getString(R.string.caduta));
+			if(sessione.getNumberOfFalls() == 1)
+				holder.terzaLinea.setText(terza_riga + " " + getContext().getString(R.string.caduta));
 			else
-				holder.secondaLinea.setText(seconda_riga + " " + getContext().getString(R.string.cadute_min));
+				holder.terzaLinea.setText(terza_riga + " " + getContext().getString(R.string.cadute_min));
 			// per sessione attiva cambio determinati parametri
 			boolean attiva = sessione.isActive();
 			if (attiva)
 				{rowView.setBackgroundColor(Color.parseColor("#60FFFFFF")); //il 60 davanti al numero esadecimale decide la trasparenza
 				 holder.primaLinea.setTypeface(null, Typeface.BOLD);
-				 holder.secondaLinea.setTypeface(null,Typeface.BOLD); //imposto carattere grassetto
+				 holder.secondaLinea.setTypeface(null,Typeface.BOLD);
+				 holder.terzaLinea.setTypeface(null,Typeface.BOLD); //imposto carattere grassetto
 				 holder.primaLinea.setTextColor(Color.RED); //imposto colore rosso prima linea
 				} 
 			else
 				{rowView.setBackgroundColor(Color.parseColor("#00000000")); //sfondo trasparente
 				 holder.primaLinea.setTypeface(null, Typeface.NORMAL);
 				 holder.secondaLinea.setTypeface(null,Typeface.NORMAL);
+				 holder.terzaLinea.setTypeface(null,Typeface.NORMAL);
 				 holder.primaLinea.setTextColor(Color.BLACK);
 				 
 				}
+			
+			//imposto thumbnail
+			Bitmap thumb = loadImageFromStorage(sessione.getThumbnail());
+			holder.imageView.setImageBitmap(thumb);
 			return rowView;
 		}
+		
+		public Bitmap loadImageFromStorage(String filename) {
 
+			Bitmap thumbnail = null;
+			//look in internal storage
+			if (thumbnail == null) {
+			try {
+			File filePath = DBManager.context.getFileStreamPath(filename);
+			FileInputStream fi = new FileInputStream(filePath);
+			thumbnail = BitmapFactory.decodeStream(fi);
+			} catch (Exception ex) {
+			Log.e("getThumbnail() on internal storage", ex.getMessage());
+			}
+			}
+			return thumbnail;
+			}
+		
+		/*@SuppressWarnings("finally")
+		private Bitmap loadImageFromStorage(String name)
+		{
+			String path = "/data/data/it.unipd.dei.esp1415/app_data/imageDir";
+			Bitmap b = Bitmap.createBitmap(35, 70, Bitmap.Config.ARGB_4444);
+		    try {
+		        File f = new File(path, name);
+		        b = BitmapFactory.decodeStream(new FileInputStream(f));
+		    } 
+		    catch (FileNotFoundException e) 
+		    {
+		        e.printStackTrace();
+		    }
+		    finally
+		    {
+		        return b;
+		    }
+
+
+		}*/
+		
+		
+
+		
+		
 		public String conver_ore_minuti(int millisecondi) {
 			String ore_minuti = "";
 			int secondi = millisecondi / 1000;
@@ -249,7 +305,7 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 		}
 
 		static class Holder {// holder serve a migliorare le prestazioni nello scrolling
-			public TextView secondaLinea, primaLinea;
+			public TextView secondaLinea, primaLinea, terzaLinea;
 			public ImageView imageView;
 			public RelativeLayout sfondo;
 		}

@@ -4,5 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="it.unipd.dei.esp1415.ListaSessioniActivity"
-    tools:ignore="MergeRootFrame" />
+    tools:ignore="MergeRootFrame"  />
+    
+
+    
+    
 

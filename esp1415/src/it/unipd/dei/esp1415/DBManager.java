@@ -1,5 +1,9 @@
 package it.unipd.dei.esp1415;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,10 +12,17 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 /**
  * Questo metodo incapsula l'interazione col database in modo da non dover
@@ -40,11 +51,14 @@ public class DBManager {
 												DBOpenHelper.COLUMN_X,
 												DBOpenHelper.COLUMN_Y,
 												DBOpenHelper.COLUMN_Z,
-												DBOpenHelper.COLUMN_FALL};  
+												DBOpenHelper.COLUMN_FALL};
+	  
+	  protected static Context context;
 	  
 
 	  public DBManager(Context context) {
 	    dbHelper = new DBOpenHelper(context);
+	    this.context = context;
 	  }
 
 	  public void open() throws SQLException {
@@ -70,9 +84,55 @@ public class DBManager {
 	    cursor.moveToFirst();
 	    Session newSession = cursorToSession(cursor);
 	    cursor.close();
+	    
+	    Date newSessionBegin = newSession.getSessionBegin();
+		Bitmap thumb = ThumbnailGenerator.createThumbnail(newSessionBegin); // genero la thumbnail
+		Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //salvo la data come nome dell'immagine
+		String name = formatter.format(newSessionBegin);
+		String thumbnail;
+		if(saveToInternalStorage(thumb, name)) //la salvo in memoria
+			 {thumbnail = name;
+			 newSession.setThumbnail(thumbnail);}
 	    return newSession;
 	  }
 	 
+	  public static boolean saveToInternalStorage(Bitmap image, String name) {
+
+		  try {
+		  // Use the compress method on the Bitmap object to write image to
+		  // the OutputStream
+		  FileOutputStream fos = context.openFileOutput(name, Context.MODE_PRIVATE);
+		  // Writing the bitmap to the output stream
+		  image.compress(Bitmap.CompressFormat.PNG, 100, fos);
+		  fos.close();
+		  return true;
+		  } catch (Exception e) {
+		  Log.e("saveToInternalStorage()", e.getMessage());
+		  return false;
+		  }
+		  }
+	  
+	/*    private String saveToInternalStorage(Bitmap bitmapImage, String name){
+	        ContextWrapper cw = new ContextWrapper(context);
+	         // path to /data/data/yourapp/app_data/imageDir
+	        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+	        // Create imageDir
+	        File mypath=new File(directory, name);
+
+	        FileOutputStream fos = null;
+	        try {           
+
+	            fos = new FileOutputStream(mypath);
+
+	       // Use the compress method on the BitMap object to write image to the OutputStream
+	            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+	            fos.close();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        return directory.getAbsolutePath();
+	    }*/
+	  
 	  
 	  /**
 	   * Utilizzato quando si crea una nuova sessione. La sessione viene creata, inserita nel db e restituita al chiamante.
@@ -106,6 +166,9 @@ public class DBManager {
 	    cursor.close();
 	    return newFall;
 	  }
+	  
+	  
+
 	  
 	  
 	  /**
@@ -271,8 +334,10 @@ public class DBManager {
 	  public boolean hasActiveSession(){
 		  Cursor cursor = database.query(DBOpenHelper.TABLE_SESSION,
 				  SessionColumns, DBOpenHelper.COLUMN_ATTIVA + " = " + 1, null, null, null, null);
-		  if (cursor.getCount () == 0) return false;
-		  return true;
+		  if (cursor.getCount () == 0) {cursor.close(); return false;}
+		  cursor.close();
+		  return true; 
+		 
 		  
 	  }
 	  
@@ -346,7 +411,7 @@ public class DBManager {
 	   */
 	  public void dummyInsert(){
 		  ArrayList<Session> sessions = new ArrayList<Session>();
-		  sessions = Randomizer.randomSession(10);
+		  sessions = Randomizer.randomSession(15);
 		  //metto una sessione attiva per test
 		  sessions.get(0).setActive(true);
 		  ContentValues values = new ContentValues();
