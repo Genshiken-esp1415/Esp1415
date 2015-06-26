@@ -11,8 +11,8 @@
     <ImageView
         android:id="@+id/thumbnail_label"
         android:contentDescription="@string/thumbnail_description"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/grafico_z"
         android:layout_alignEnd="@+id/grafico_z"
@@ -103,53 +103,6 @@
 	    android:textAppearance="?android:attr/textAppearanceLarge"
 	    android:textSize="40sp" />
 
-	<TextView
-	    android:id="@+id/ora_label"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignBottom="@+id/thumbnail_label"
-	    android:layout_alignLeft="@+id/latitudine_label"
-	    android:layout_alignStart="@+id/latitudine_label"
-	    android:text="@string/ora"
-	    android:textAppearance="?android:attr/textAppearanceLarge"
-	    android:textSize="40sp" />
-
-	<TextView
-	    android:id="@+id/latitudine_label"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/longitudine_label"
-	    android:layout_alignStart="@+id/longitudine_label"
-	    android:layout_below="@+id/ora"
-	    android:layout_marginTop="82dp"
-	    android:text="@string/latitudine"
-	    android:textAppearance="?android:attr/textAppearanceLarge"
-	    android:textSize="40sp" />
-
-	<TextView
-	    android:id="@+id/longitudine_label"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/grafico_x"
-	    android:layout_alignStart="@+id/grafico_x"
-	    android:layout_below="@+id/latitudine"
-	    android:layout_marginTop="72dp"
-	    android:text="@string/longitudine"
-	    android:textAppearance="?android:attr/textAppearanceLarge"
-	    android:textSize="40sp" />
-
-	<TextView
-	    android:id="@+id/notifica_label"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/longitudine_label"
-	    android:layout_alignStart="@+id/longitudine_label"
-	    android:layout_below="@+id/longitudine_label"
-	    android:layout_marginTop="57dp"
-	    android:text="@string/notifica"
-	    android:textAppearance="?android:attr/textAppearanceLarge"
-	    android:textSize="40sp" />
-
 	<it.unipd.dei.esp1415.GraphView
 	    android:id="@+id/grafico_x"
 	    android:layout_width="448dp"
@@ -174,5 +127,53 @@
 	    android:layout_height="76dp"
 	    android:layout_above="@+id/grafico_z"
 	    android:layout_alignLeft="@+id/grafico_z" />
+
+	<TextView
+	    android:id="@+id/ora_label"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/latitudine_label"
+	    android:layout_alignStart="@+id/latitudine_label"
+	    android:layout_below="@+id/data"
+	    android:layout_marginTop="30dp"
+	    android:text="@string/ora"
+	    android:textAppearance="?android:attr/textAppearanceLarge"
+	    android:textSize="40sp" />
+
+	<TextView
+	    android:id="@+id/longitudine_label"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/grafico_x"
+	    android:layout_alignStart="@+id/grafico_x"
+	    android:layout_below="@+id/latitudine_label"
+	    android:text="@string/longitudine"
+	    android:textAppearance="?android:attr/textAppearanceLarge"
+	    android:textSize="40sp" />
+
+	<TextView
+	    android:id="@+id/notifica_label"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/longitudine_label"
+	    android:layout_alignStart="@+id/longitudine_label"
+	    android:layout_below="@+id/longitudine"
+	    android:layout_marginTop="33dp"
+	    android:text="@string/notifica"
+	    android:textAppearance="?android:attr/textAppearanceLarge"
+	    android:textSize="40sp" />
+
+	<TextView
+	    android:id="@+id/latitudine_label"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/longitudine_label"
+	    android:layout_alignStart="@+id/longitudine_label"
+	    android:layout_below="@+id/ora"
+	    android:layout_marginTop="33dp"
+	    android:layout_toLeftOf="@+id/latitudine"
+	    android:text="@string/latitudine"
+	    android:textAppearance="?android:attr/textAppearanceLarge"
+	    android:textSize="40sp" />
 	
 </RelativeLayout>
