@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="it.unipd.dei.esp1415.OpzioniActivity" >
+
+        <item
+            android:id="@+id/fastest"
+            android:orderInCategory="100"
+            android:title="@string/molto_veloce"/>
+        <item
+            android:id="@+id/fast"
+            android:orderInCategory="100"
+            android:title="@string/veloce"/>
+        <item
+            android:id="@+id/normal"
+            android:orderInCategory="100"
+            android:title="@string/normale"/>
+        <item
+            android:id="@+id/slow"
+            android:orderInCategory="100"
+            android:title="@string/lenta"/>
+
+    </menu>

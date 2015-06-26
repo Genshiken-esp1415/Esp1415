@@ -8,83 +8,88 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
+/**
+ * Classe per la stampa del grafico di una funzione basata sui dati ricevuti dall'accelerometro
+ * @author Marco
+ */
 public class GraphView extends View {
 
-	private Paint paintX;
-	private Paint paintY;
-	private Paint paintZ;
+	private final int GRAPH_WIDTH = 448;
+	private final int GRAPH_HEIGHT = 76;
+	private final int GRAPH_CENTER = GRAPH_HEIGHT/2;
+	private final int X = 0;
+	private final int Y = 1;
+	//private final int Z = 2;
+
+	private Paint paint;
 	private Paint paintLine;
 	private int axis;
+	private int samples;
 	private ArrayList<AccelerometerData> accData;
-	
+
 	public GraphView(Context context, AttributeSet attrs) {
-		
+
 		super(context,attrs);
-		
-		paintX = new Paint();
-		paintX.setStyle(Style.STROKE);
-	    paintX.setStrokeWidth(1);
-	    paintX.setColor(Color.RED);
-	    
-	    paintY = new Paint();
-		paintY.setStyle(Style.STROKE);
-	    paintY.setStrokeWidth(1);
-	    paintY.setColor(Color.GREEN);
-	    
-	    paintZ = new Paint();
-		paintZ.setStyle(Style.STROKE);
-	    paintZ.setStrokeWidth(1);
-	    paintZ.setColor(Color.BLUE);
-		
-	    paintLine = new Paint();
+
+		//Paint per il disegno dello scheletro del grafico
+		paintLine = new Paint();
 		paintLine.setStyle(Style.STROKE);
-	    paintLine.setStrokeWidth(1);
-	    paintLine.setColor(Color.CYAN);
-	    
-	    setBackgroundResource(R.drawable.box);
-	    
+		paintLine.setStrokeWidth(1);
+		paintLine.setColor(Color.CYAN);
+
+		//cornice del grafico
+		setBackgroundResource(R.drawable.box);
+
 	}
-	
+
 	@Override
 	protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec){
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+		setMeasuredDimension(GRAPH_WIDTH,GRAPH_HEIGHT);
+	}
+
+	public void setGraphParameters(ArrayList<AccelerometerData> accData, int samples, int axis, int color){
+		this.accData = accData;
+		this.samples = samples;
+		this.axis = axis;
 		
-		int width = getMeasuredWidth();
-	    int height = getMeasuredHeight();
-		setMeasuredDimension(448,75);
-	}
-	
-	public void setAccelerometerData(ArrayList<AccelerometerData> accData){
-		this.accData=accData;
-	}
-	
-	public void setAxis(int axis){
-		this.axis=axis;
+		//Paint per il disegno della funzione graficata
+		paint = new Paint();
+		paint.setStyle(Style.STROKE);
+		paint.setStrokeWidth(1);
+		paint.setColor(color);
 	}
 
 	protected void onDraw(Canvas c){
 		if(accData != null){
 			super.onDraw(c);
 			
-			c.drawLine(0,37,480,37,paintLine);
+			//disegna una linea che rappresenta l'asse delle ascisse nel grafico
+			c.drawLine(0,GRAPH_CENTER,GRAPH_WIDTH,GRAPH_CENTER,paintLine);
 			
-			if(axis==0){
-		    	c.drawPoint(1,(accData.get(0).getX()+37)/2,paintX);
-			    for(int i=5;i<1000;i=i+4)
-			    	c.drawLine(i-4,(accData.get(i-4).getX()+37)/2,i,(accData.get(i).getX()+37)/2,paintX);
-			}else if(axis==1){
-				c.drawPoint(1,(accData.get(0).getY()+37)/2,paintY);
-			    for(int i=5;i<1000;i=i+4)
-			    	c.drawLine(i-4,(accData.get(i-4).getY()+37)/2,i,(accData.get(i).getY()+37)/2,paintY);
+			//in base al numero di campioni ricevuti, calcola la distanza tra un punto e il successivo nel grafico
+			int offset = (int) Math.round(GRAPH_WIDTH/(samples-1)+0.5);
+			
+			//grafica la funzione collegando ogni campione al successivo
+			if(axis==X){
+				c.drawPoint(1,(accData.get(0).getX()+GRAPH_CENTER)/2,paint);
+				for(int i=1;i<samples;i++)
+					c.drawLine(1+offset*(i-1),(accData.get(i-1).getX()+GRAPH_CENTER)/2,1+offset*i,(accData.get(i).getX()+GRAPH_CENTER)/2,paint);
+			}else if(axis==Y){
+				c.drawPoint(1,(accData.get(0).getY()+GRAPH_CENTER)/2,paint);
+				for(int i=1;i<samples;i++)
+					c.drawLine(1+offset*(i-1),(accData.get(i-1).getY()+GRAPH_CENTER)/2,1+offset*i,(accData.get(i).getY()+GRAPH_CENTER)/2,paint);
 			}else{
-				c.drawPoint(1,(accData.get(0).getZ()+37)/2,paintZ);
-				for(int i=5;i<1000;i=i+4)
-					c.drawLine(i-4,(accData.get(i-4).getZ()+37)/2,i,(accData.get(i).getZ()+37)/2,paintZ);
+				c.drawPoint(1,(accData.get(0).getZ()+GRAPH_CENTER)/2,paint);
+				for(int i=1;i<samples;i++)
+					c.drawLine(1+offset*(i-1),(accData.get(i-1).getZ()+GRAPH_CENTER)/2,1+offset*i,(accData.get(i).getZ()+GRAPH_CENTER)/2,paint);
 			}
-		}else
-			Log.v("GraphView","Canvas set to NULL");
+			
+			//ridisegna il bordo destro della cornice per eliminare il trasbordo della funzione graficata sulla cornice
+			c.drawLine(GRAPH_WIDTH-1, 0, GRAPH_WIDTH-1, GRAPH_HEIGHT, paintLine);
+		}
 	}
 }

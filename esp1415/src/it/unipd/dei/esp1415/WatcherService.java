@@ -198,17 +198,22 @@ public class WatcherService extends Service implements SensorEventListener{
 	
 	//uso questo task cosi da risparmiare batteria, utilizzando il gps solo quando viene segnalata una caduta
 	private class ProcessFallTask extends AsyncTask<String, Integer, Long> {
-		 protected void onPreExecute(){
+		 private int secondiPassati;
+
+		protected void onPreExecute(){
 			 
 			 // registro il listener cosi da avere aggiornamenti sulla posizione
 			    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0, locationListener);
+			    secondiPassati = 0;
 		 }
 		 
 		 protected Long doInBackground(String... params) {
 		    //ciclo finchè non ottengo una posizione dal gps
-		    while(!gotLocation){
+		    while(!gotLocation&&secondiPassati<3){
 		    	try {
 		    		Thread.sleep(1000);
+		    		secondiPassati++;
+		    		
 		    	} catch (InterruptedException e) {
 		    		Thread.interrupted();
 		    	}

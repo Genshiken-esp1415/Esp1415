@@ -110,6 +110,7 @@
 	    android:layout_width="448dp"
 	    android:layout_height="75dp"
 	    android:layout_alignLeft="@+id/grafico_y"
+	    android:layout_alignStart="@+id/grafico_y"
 	    android:layout_below="@+id/thumbnail_label"
 	    android:layout_marginTop="38dp" />
 
@@ -118,6 +119,7 @@
 	    android:layout_width="448dp"
 	    android:layout_height="75dp"
 	    android:layout_alignLeft="@+id/grafico_z"
+	    android:layout_alignStart="@+id/grafico_z"
 	    android:layout_below="@+id/grafico_x" />
 
 	<TextView

@@ -30,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
@@ -273,6 +274,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 	public static class MyListFragment extends ListFragment {
 		FallAdapter adapter;
 		private ArrayList<Fall> falls;
+		private Fall caduta_scelta;
 
 		public MyListFragment() {
 		}
@@ -321,6 +323,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 			
 			}
 		};
+		
 
 		@Override
 		public void onResume() {
@@ -339,6 +342,16 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 			LocalBroadcastManager.getInstance(this.getActivity())
 					.unregisterReceiver(mMessageReceiver);
 			super.onPause();
+		}
+		@Override
+		public void onListItemClick(ListView l, View v, int position, long id) {//gestisce click su elementi della lista
+			super.onListItemClick(l, v, position, id);
+			caduta_scelta = (Fall) getListAdapter().getItem(position);
+			Intent dettaglio_caduta = new Intent(getActivity().getApplicationContext(), DettaglioCadutaActivity.class);
+			Date idSessione = adapter.getItem(position).getFallTimestamp();
+			dettaglio_caduta.putExtra("IDCaduta", idSessione.getTime());
+			startActivity(dettaglio_caduta);
+
 		}
 	}
 
@@ -384,9 +397,12 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 			return rowFallView;
 
 		}
+		
+		
 
 	}
 
+	
 	public static String conver_ore_minuti_secondi(long millisecondi) {
 		String ore_minuti = "";
 		long secondi = millisecondi / 1000;

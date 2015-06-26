@@ -45,6 +45,12 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 	private static int pos;
 	
 	@Override
+	protected void onDestroy() {
+		db.close();
+		super.onDestroy();
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_lista_sessioni);
@@ -69,7 +75,7 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 		if (id == R.id.settings) // se viene premuto il pulsante impostazioni
 		{
 			Intent impostazioni = new Intent(ListaSessioniActivity.this,
-					SettingsActivity.class);
+					OpzioniActivity.class);
 			// attivazione dell'activity SettingsActivity.java
 			startActivity(impostazioni);
 			return true;

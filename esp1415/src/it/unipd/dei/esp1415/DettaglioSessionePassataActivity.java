@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 /**
@@ -123,6 +124,9 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity
 	 * A placeholder fragment containing a simple view.
 	 */
 	public static class MyListFragment extends ListFragment {
+		private Fall caduta_scelta;
+		private FallAdapter adapter;
+
 		public MyListFragment() {
 		}
 
@@ -139,12 +143,20 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity
 			//solo per testing prendo tutte le sessioni dal db
 			DBManager db = new DBManager(getActivity().getBaseContext());
 			db.open();
-//			ArrayList<Session> sessions = (ArrayList<Session>)db.getAllSessions();
-//			Session currentSession = sessions.get(2);
-			
 			currentSession.setFallList((ArrayList<Fall>)db.getAllFalls(currentSession.getSessionBegin()));
-			FallAdapter adapter = new FallAdapter(getActivity().getBaseContext(), currentSession.getFallList());
+			adapter = new FallAdapter(getActivity().getBaseContext(), currentSession.getFallList());
 			setListAdapter(adapter);
+		}
+		
+		@Override
+		public void onListItemClick(ListView l, View v, int position, long id) {//gestisce click su elementi della lista
+			super.onListItemClick(l, v, position, id);
+			caduta_scelta = (Fall) getListAdapter().getItem(position);
+			Intent dettaglio_caduta = new Intent(getActivity().getApplicationContext(), DettaglioCadutaActivity.class);
+			Date idSessione = adapter.getItem(position).getFallTimestamp();
+			dettaglio_caduta.putExtra("IDCaduta", idSessione.getTime());
+			dettaglio_caduta.putExtra("NomeSessione", currentSession.getName());
+			startActivity(dettaglio_caduta);
 
 		}
 	}
