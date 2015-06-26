@@ -11,12 +11,12 @@
     <TextView
         android:id="@+id/campionamento_label"
         android:layout_width="450dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:text="@string/campionamento"
-        android:textSize="30sp" />
+        android:textSize="26sp" />
 
     <Button
         android:id="@+id/salva_button"
@@ -48,33 +48,22 @@
         android:id="@+id/sveglia"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/durata_label"
-        android:layout_alignStart="@+id/durata_label"
+        android:layout_alignLeft="@+id/campionamento_label"
+        android:layout_alignStart="@+id/campionamento_label"
         android:layout_below="@+id/sveglia_label"
         android:onClick="showTimePickerDialog"
         android:text="@string/default_sveglia" />
 
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/email_label"
-        android:layout_alignStart="@+id/email_label"
-        android:layout_centerVertical="true"
-        android:ems="10"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress" />
-
     <TextView
         android:id="@+id/sveglia_label"
         android:layout_width="450dp"
-        android:layout_height="50dp"
-        android:layout_alignLeft="@+id/campionamento"
-        android:layout_alignStart="@+id/campionamento"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/campionamento_label"
+        android:layout_alignStart="@+id/campionamento_label"
         android:layout_below="@+id/campionamento"
-        android:layout_marginTop="57dp"
+        android:layout_marginTop="44dp"
         android:text="@string/promemoria"
-        android:textSize="30sp" />
+        android:textSize="26sp" />
 
     <Button
         android:id="@+id/minus"
@@ -98,30 +87,31 @@
     <TextView
         android:id="@+id/durata_label"
         android:layout_width="450dp"
-        android:layout_height="50dp"
-        android:layout_alignLeft="@+id/sveglia_label"
-        android:layout_alignStart="@+id/sveglia_label"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/campionamento_label"
+        android:layout_alignStart="@+id/campionamento_label"
         android:layout_below="@+id/sveglia"
         android:layout_marginTop="44dp"
         android:text="@string/durata_max"
-        android:textSize="30sp" />
+        android:textSize="26sp" />
 
     <TextView
         android:id="@+id/email_label"
         android:layout_width="450dp"
-        android:layout_height="50dp"
-        android:layout_above="@+id/email"
-        android:layout_alignLeft="@+id/minus"
-        android:layout_alignStart="@+id/minus"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/minus"
+        android:layout_alignLeft="@+id/campionamento_label"
+        android:layout_alignStart="@+id/campionamento_label"
+        android:layout_marginTop="44dp"
         android:text="@string/email_invio"
-        android:textSize="30sp" />
+        android:textSize="26sp" />
 
     <EditText
         android:id="@+id/password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/email"
-        android:layout_alignStart="@+id/email"
+        android:layout_alignLeft="@+id/campionamento_label"
+        android:layout_alignStart="@+id/campionamento_label"
         android:layout_below="@+id/email"
         android:ems="10"
         android:hint="@string/password"
@@ -135,7 +125,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/email"
-        android:layout_alignBottom="@+id/email"
         android:layout_toRightOf="@+id/email"
         android:layout_toEndOf="@+id/email"
         android:text="@string/gmail"
@@ -145,10 +134,11 @@
         android:id="@+id/sveglia_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/durata_label"
-        android:layout_alignTop="@+id/sveglia"
-        android:layout_toRightOf="@+id/email"
-        android:layout_toEndOf="@+id/email"
+        android:layout_alignBottom="@+id/sveglia"
+        android:layout_toRightOf="@+id/sveglia_label"
+        android:layout_toEndOf="@+id/sveglia_label"
+        android:layout_alignLeft="@+id/notifica_checkbox"
+        android:layout_alignStart="@+id/notifica_checkbox"
         android:onClick="onCheckboxClicked"
         android:text="@string/attiva_sveglia" />
 
@@ -157,7 +147,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/password"
-        android:layout_alignBottom="@+id/password"
         android:layout_toRightOf="@+id/password"
         android:layout_toEndOf="@+id/password"
         android:onClick="onCheckboxClicked"
@@ -187,30 +176,43 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/max_durata"
         android:layout_alignBottom="@+id/max_durata"
-        android:layout_toEndOf="@+id/sveglia"
-        android:layout_toRightOf="@+id/sveglia"
+        android:layout_toEndOf="@+id/plus"
+        android:layout_toRightOf="@+id/plus"
         android:text="@string/ore"
-        android:textSize="30sp" />
+        android:textSize="26sp" />
+
+    <TextView
+        android:id="@+id/contatti_label"
+        android:layout_width="450dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/password"
+        android:layout_alignLeft="@+id/campionamento_label"
+        android:layout_alignStart="@+id/campionamento_label"
+        android:layout_marginTop="44dp"
+        android:text="@string/lista_contatti"
+        android:textSize="26sp" />
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/campionamento_label"
+        android:layout_alignStart="@+id/campionamento_label"
+        android:layout_below="@+id/email_label"
+        android:ems="10"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress" />
 
     <ListView
         android:id="@+id/contatti"
         android:layout_width="match_parent"
         android:layout_height="275dp"
         android:layout_above="@+id/salva_button"
-        android:layout_alignLeft="@+id/contatti_label"
-        android:layout_alignStart="@+id/contatti_label"
-        android:layout_marginBottom="36dp"
+        android:layout_alignLeft="@+id/campionamento_label"
+        android:layout_alignStart="@+id/campionamento_label"
+        android:layout_below="@+id/contatti_label"
         android:listSelector="@android:color/transparent" >
-    </ListView>
 
-    <TextView
-        android:id="@+id/contatti_label"
-        android:layout_width="450dp"
-        android:layout_height="50dp"
-        android:layout_above="@+id/contatti"
-        android:layout_alignLeft="@+id/password"
-        android:layout_alignStart="@+id/password"
-        android:text="@string/lista_contatti"
-        android:textSize="30sp" />
+    </ListView>
 
 </RelativeLayout>
