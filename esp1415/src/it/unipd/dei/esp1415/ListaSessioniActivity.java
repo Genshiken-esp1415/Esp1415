@@ -61,16 +61,14 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+		// Inserisce il menù, aggiungendo elementi all'action bar se presenti
 		getMenuInflater().inflate(R.menu.lista_sessioni, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
+		// Gestione dei click nell'action bar
 		int id = item.getItemId();
 		if (id == R.id.settings) // se viene premuto il pulsante impostazioni
 		{
@@ -125,7 +123,7 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 		@Override
 		public void onActivityCreated(Bundle savedInstanceState) {
 			super.onActivityCreated(savedInstanceState);
-			//prendo tutte le sessioni dal db
+			//prendo tutte le sessioni dal database
 			db = new DBManager(getActivity().getBaseContext());
 			db.open();
 			adapter = new MyAdapter(getActivity().getBaseContext(), R.layout.adapter_lista_sessioni, (ArrayList<Session>)db.getAllSessions());
@@ -226,9 +224,9 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 			holder.primaLinea.setText(sessione.getName());
 			String data = (String) DateFormat.format("dd/MM/yy", sessione.getSessionBegin());
 			String ora = (String) DateFormat.format("kk:mm", sessione.getSessionBegin());
-			String seconda_riga = getContext().getString(R.string.data_e_ora) + " " + data + " " + ora;
+			String seconda_riga = getContext().getString(R.string.data_e_ora) + data + " " + ora;
 			holder.secondaLinea.setText(seconda_riga);
-			String terza_riga = getContext().getString(R.string.durata_2) + " " + 
+			String terza_riga = getContext().getString(R.string.durata_2) + 
 					conver_ore_minuti(sessione.getDuration()) + " - " + sessione.getNumberOfFalls();
 
 			if(sessione.getNumberOfFalls() == 1)
@@ -269,8 +267,7 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 			Bitmap thumbnail = null;
 			FileInputStream fis;
 			try {
-				String path = "data/data/it.unipd.dei.esp1415/app_Thumbnails";
-				path = path + "/" + filename;
+				String path = context.getDir("Thumbnails", Context.MODE_PRIVATE) + "/" + filename; 
 				File f = new File(path);
 				fis = new FileInputStream(f);
 				thumbnail = BitmapFactory.decodeStream(fis);
@@ -316,7 +313,7 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 			public ImageView imageView;
 			public RelativeLayout sfondo;
 		}
-	}// chiusura classe Adapter
+	}
 
-}// chiusura lista sessioni activity
+}
 
