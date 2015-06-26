@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -119,6 +120,12 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 				currentSession = db.createSession("Nuova Sessione");
 				currentSession.setActive(true);
 				db.setActiveSession(currentSession);
+				Date newSessionBegin = currentSession.getSessionBegin();
+				Bitmap thumbnail = ThumbnailGenerator.createThumbnail(newSessionBegin); // genero la thumbnail
+				String name = currentSession.getThumbnail(); //converto la data in stringa
+				if(ThumbnailGenerator.saveToInternalStorage(thumbnail, name,this.getActivity())){ //la salvo in memoria				 
+					currentSession.setThumbnail(name);
+				}
 				
 			}
 			this.getActivity().setTitle("Sessione attiva");
