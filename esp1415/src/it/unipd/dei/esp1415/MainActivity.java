@@ -42,8 +42,9 @@ public class MainActivity extends ActionBarActivity {
         	db.dummyInsert();
         }
         
-		Intent openListaSessioni = new Intent(this, DettaglioSessioneCorrenteActivity.class);
+		Intent openListaSessioni = new Intent(this, ListaSessioniActivity.class);
 		startActivity(openListaSessioni);
+        
         
     }
 

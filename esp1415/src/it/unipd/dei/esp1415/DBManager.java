@@ -1,5 +1,9 @@
 package it.unipd.dei.esp1415;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,9 +13,17 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.text.format.DateFormat;
+import android.util.Log;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 /**
  * Questo metodo incapsula l'interazione col database in modo da non dover
@@ -19,7 +31,7 @@ import android.database.sqlite.SQLiteDatabase;
  * per l'inserimento di dati e il reperimento di dati in forma di array,
  * tabelle, eccetera.
  * 
- * @author Andrea
+ * @author Andrea, Laura
  *
  */
 public class DBManager {
@@ -45,6 +57,7 @@ public class DBManager {
 
 	  public DBManager(Context context) {
 	    dbHelper = new DBOpenHelper(context);
+	    //this.context = context;
 	  }
 
 	  public void open() throws SQLException {
@@ -70,10 +83,37 @@ public class DBManager {
 	    cursor.moveToFirst();
 	    Session newSession = cursorToSession(cursor);
 	    cursor.close();
+	    
+	    /*Date newSessionBegin = newSession.getSessionBegin();
+		Bitmap thumb = ThumbnailGenerator.createThumbnail(newSessionBegin); // genero la thumbnail
+		Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //salvo la data come nome dell'immagine
+		String name = formatter.format(newSessionBegin);
+		String thumbnail;
+		if(saveToInternalStorage(thumb, name)) //la salvo in memoria
+			 {thumbnail = name;
+			 newSession.setThumbnail(thumbnail);}*/
 	    return newSession;
 	  }
 	 
-	  
+	/*  public static boolean saveToInternalStorage(Bitmap image, String name) {
+
+		  
+		try {
+			// Creo la directory nell'archivio interno
+			File mydir = context.getDir("Thumbnails", Context.MODE_PRIVATE); 
+			// Metto il file nella directory
+			File fileWithinMyDir = new File(mydir, name); 
+			// Stream per scrivere nel file
+			FileOutputStream out = new FileOutputStream(fileWithinMyDir); 
+			// Scrivo la bitmap nello stream
+			image.compress(Bitmap.CompressFormat.PNG, 100, out);
+			out.close();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}*/
+	    
 	  /**
 	   * Utilizzato quando si crea una nuova sessione. La sessione viene creata, inserita nel db e restituita al chiamante.
 	   * @param sessionName Il nome della sessione che si vuole creare.
@@ -372,18 +412,30 @@ public class DBManager {
 	    cursor.close();
 	    return fall;
 	  }
-	  
 	  /**Usato per sapere se c'è una sessione attiva nel database
 	   * @return
 	   */
 	  public boolean hasActiveSession(){
 		  Cursor cursor = database.query(DBOpenHelper.TABLE_SESSION,
 				  SessionColumns, DBOpenHelper.COLUMN_ATTIVA + " = " + 1, null, null, null, null);
-		  if (cursor.getCount () == 0) return false;
-		  return true;
+		  if (cursor.getCount () == 0) {cursor.close(); return false;}
+		  cursor.close();
+		  return true; 
+		 
 		  
 	  }
 	  
+//	  /**Usato per sapere se c'è una sessione attiva nel database
+//	   * @return
+//	   */
+//	  public boolean hasActiveSession(){
+//		  Cursor cursor = database.query(DBOpenHelper.TABLE_SESSION,
+//				  SessionColumns, DBOpenHelper.COLUMN_ATTIVA + " = " + 1, null, null, null, null);
+//		  if (cursor.getCount () == 0) return false;
+//		  return true;
+//		  
+//	  }
+//	  
 	  /**
 	   * Restituisce una sessione Session a partire da un cursor contenente dati di una riga di una query sql
 	   * @param cursor
@@ -438,12 +490,13 @@ public class DBManager {
 		  return date;
 	  }
 	  
+	  
 	  /**
 	   * Usato per convertire una data Date in una stringa contenente una data riconoscibile da sql
 	   * @param date
 	   * @return
 	   */
-	  private String dateToSqlDate(Date date){
+	  public static String dateToSqlDate(Date date){
 		  SimpleDateFormat sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 		  String sqlDate = sqlDateFormat.format(date);
 		  return sqlDate;
@@ -455,6 +508,8 @@ public class DBManager {
 	  public void dummyInsert(){
 		  ArrayList<Session> sessions = new ArrayList<Session>();
 		  sessions = Randomizer.randomSession(10);
+		  //metto una sessione attiva per test
+		  sessions.get(0).setActive(true);
 		  ContentValues values = new ContentValues();
 		  for(int i = 0; i<sessions.size();i++){
 			  values.clear();

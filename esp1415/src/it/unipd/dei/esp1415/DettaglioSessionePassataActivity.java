@@ -37,7 +37,7 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity
 		db = new DBManager(this);
 		db.open();
 		
-		currentSession = db.getSession((Date)intent.getSerializableExtra("IDSessione"));
+		currentSession = db.getSession(((Date)new Date(intent.getLongExtra("IDSessione",0L))));
 		setContentView(R.layout.activity_dettaglio_sessione_passata);
 		if (savedInstanceState == null) {
 			FragmentTransaction  fm = getSupportFragmentManager().beginTransaction();
@@ -139,8 +139,9 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity
 			//solo per testing prendo tutte le sessioni dal db
 			DBManager db = new DBManager(getActivity().getBaseContext());
 			db.open();
-			ArrayList<Session> sessions = (ArrayList<Session>)db.getAllSessions();
-			Session currentSession = sessions.get(2);
+//			ArrayList<Session> sessions = (ArrayList<Session>)db.getAllSessions();
+//			Session currentSession = sessions.get(2);
+			
 			currentSession.setFallList((ArrayList<Fall>)db.getAllFalls(currentSession.getSessionBegin()));
 			FallAdapter adapter = new FallAdapter(getActivity().getBaseContext(), currentSession.getFallList());
 			setListAdapter(adapter);

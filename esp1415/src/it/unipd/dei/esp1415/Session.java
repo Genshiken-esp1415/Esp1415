@@ -3,6 +3,8 @@ package it.unipd.dei.esp1415;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.graphics.Bitmap;
+
 /**
  * Classe contenitore per i dati relativi ad una sessione.
  * Presente un builder per sostituire il costruttore default.
@@ -19,6 +21,8 @@ public class Session {
 	private boolean active;
 	//arrayList con riferimenti alle cadute, tenuto ordinato per dataora di caduta
 	private ArrayList<Fall> fallList;
+	//thumbnail
+	private String thumbnail;
 	
 	private Session(SessionBuilder builder) {
 		this.SessionBegin = builder.sessionBegin;
@@ -26,6 +30,7 @@ public class Session {
 		this.duration = builder.duration;
 		this.active = builder.active;
 		this.fallList = builder.fallList;
+		this.thumbnail = builder.thumbnail;
 	}
 	
 	public Date getSessionBegin() {
@@ -48,6 +53,10 @@ public class Session {
 		return duration;
 	}
 	
+	public String getThumbnail() {
+		return thumbnail;
+	}
+	
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
@@ -68,6 +77,10 @@ public class Session {
 		this.fallList = fallList;
 	}
 	
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
+	}
+	
 	public int getNumberOfFalls() {
 		return fallList.size();
 	}
@@ -78,6 +91,7 @@ public class Session {
 		private int duration; 
 		private boolean active;
 		private ArrayList<Fall> fallList;
+		private String thumbnail;
 		
 		public SessionBuilder(Date sessionBegin) {
 			this.sessionBegin = sessionBegin;
@@ -104,6 +118,11 @@ public class Session {
 		
 		public SessionBuilder fallList(ArrayList<Fall> fallList) {
 			this.fallList = fallList;
+			return this;
+		}
+		
+		public SessionBuilder thumbnail(String thumbnail) {
+			this.thumbnail = thumbnail;
 			return this;
 		}
 		
