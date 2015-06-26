@@ -152,7 +152,7 @@ public class DBManager {
 	   * @param sessionName Il nome della sessione che si vuole creare.
 	   * @return
 	   */
-	  public Fall createFall(Date timestampFall, int fallNumber, double latitude, double longitude, LinkedList<AccelerometerData> accData, Date session) {
+	  public Fall createFall(Date timestampFall, int fallNumber, Double latitude, Double longitude, LinkedList<AccelerometerData> accData, Date session) {
 	    ContentValues values = new ContentValues();
 	    values.put(DBOpenHelper.COLUMN_TIMESTAMP_F, dateToSqlDate(timestampFall));
 	    values.put(DBOpenHelper.COLUMN_NUMBER, fallNumber);

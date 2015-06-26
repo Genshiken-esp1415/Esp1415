@@ -46,6 +46,8 @@ import android.widget.TextView.OnEditorActionListener;
  */
 public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 
+	
+
 	private static Session currentSession;
 	private static DBManager db;
 	private static Boolean serviceRunning;
@@ -65,6 +67,13 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 		serviceRunning = isMyServiceRunning(WatcherService.class);
 	}
 
+	@Override
+	protected void onDestroy() {
+		db.close();
+		
+		super.onDestroy();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -218,7 +227,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 					serviceRunning = false;
 					Intent s = new Intent(getActivity(),
 							DettaglioSessionePassataActivity.class);
-					s.putExtra("IDSessione", currentSession.getSessionBegin());
+					s.putExtra("IDSessione", currentSession.getSessionBegin().getTime());
 					startActivity(s);
 
 				}
@@ -309,7 +318,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 			public void onReceive(Context context, Intent intent) {
 				
 				//controllo per evitare scritture al layout dopo che è stato stoppato il service o scritture doppie
-				//TODO: clear perchè senno mi fa inserimenti doppi nell'adapter, i service fa troppi intent?
+				
 				Long millis = intent.getLongExtra("IDFall", 0);
 				//&& falls.get(falls.size()-1).getFallTimestamp()!=(new Date(millis))
 				if(serviceRunning ){
