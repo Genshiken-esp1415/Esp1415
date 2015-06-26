@@ -269,12 +269,17 @@ public class WatcherService extends Service implements SensorEventListener{
 
 		@Override
 		public void notificationUpdate(String notification) {
+			
 			if(!gotLocation){
 				 newFall = db.createFall(new Date(lastFall),fallNumber, null, null, samples, currentSession.getSessionBegin());
 				 	//TODO CONTROLLARE CHE FUNZIONI
 			 } else {
 			 newFall = db.createFall(new Date(lastFall),fallNumber, latitude, longitude, samples, currentSession.getSessionBegin());
 			 }
+			if(notification.compareTo("1")==0){
+				newFall.setNotified();
+				newFall = db.setNotified(newFall);
+			}
 			 noPosition = false;
 			 gotLocation = false;
 			 //segnalo a DettaglioSessioneCorrente la nuova caduta

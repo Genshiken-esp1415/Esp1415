@@ -117,9 +117,9 @@ public class NotificationSender extends AsyncTask<String, Void, String> {
 			e.printStackTrace();
 		}
 		if(findErrors(str))
-			return "inviata";
+			return "1";
 		else
-			return "non inviata";
+			return "0";
 	}
 	
 	//Ritorna il risultato dell'invio delle e-mail di notifica (inviato o non inviato)

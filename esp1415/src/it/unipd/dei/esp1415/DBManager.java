@@ -405,7 +405,7 @@ public class DBManager {
 	    whereArgs[0] =  dateToSqlDate(fall.getFallTimestamp());
 	    int updateId = database.update(DBOpenHelper.TABLE_FALL, values, whereClause, whereArgs);
 	    Cursor cursor = database.query(DBOpenHelper.TABLE_FALL,
-		        SessionColumns, whereClause, whereArgs,
+		        FallColumns, whereClause, whereArgs,
 		        null, null, null);
 	    cursor.moveToFirst();
 	    fall = cursorToFall(cursor);
