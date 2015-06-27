@@ -15,14 +15,15 @@ import android.view.View;
  * @author Marco
  */
 public class GraphView extends View {
-
+	
+	//Variabili per la dimensione del grafico e la posizione centrale in larghezza ed altezza
 	private final int GRAPH_WIDTH = 448;
 	private final int GRAPH_HEIGHT = 76;
-	private final int GRAPH_CENTER = GRAPH_HEIGHT/2;
+	private final int GRAPH_HEIGHT_CENTER = GRAPH_HEIGHT/2;
+	private final int GRAPH_WIDTH_CENTER = GRAPH_WIDTH/2;
 	
 	private final int X = 0;
 	private final int Y = 1;
-	//private final int Z = 2;
 
 	private Paint paint;
 	private Paint paintLine;
@@ -40,7 +41,7 @@ public class GraphView extends View {
 		paintLine.setStrokeWidth(1);
 		paintLine.setColor(Color.CYAN);
 
-		//cornice del grafico
+		//Cornice del grafico
 		setBackgroundResource(R.drawable.box);
 
 	}
@@ -55,10 +56,10 @@ public class GraphView extends View {
 	public void setGraphParameters(ArrayList<AccelerometerData> accData, int samples, int axis, int color){
 		this.accData = accData;
 		
-		//numero di campioni da graficare
+		//Numero di campioni da graficare
 		this.samples = samples;
 		
-		//asse (x, y o z) che riguarda i dati forniti
+		//Asse (x, y o z) che riguarda i dati forniti
 		this.axis = axis;
 		
 		//Paint per il disegno della funzione graficata
@@ -72,28 +73,31 @@ public class GraphView extends View {
 		if(accData != null){
 			super.onDraw(c);
 			
-			//disegna una linea che rappresenta l'asse delle ascisse nel grafico
-			c.drawLine(0,GRAPH_CENTER,GRAPH_WIDTH,GRAPH_CENTER,paintLine);
+			//Disegna una linea che rappresenta l'asse delle ascisse nel grafico
+			c.drawLine(0,GRAPH_HEIGHT_CENTER,GRAPH_WIDTH,GRAPH_HEIGHT_CENTER,paintLine);
 			
-			//in base al numero di campioni ricevuti, calcola la distanza tra un punto e il successivo nel grafico
+			//Disegna una linea che rappresenta l'asse delle ordinate nel grafico
+			c.drawLine(GRAPH_WIDTH_CENTER,0,GRAPH_WIDTH_CENTER,GRAPH_HEIGHT,paintLine);
+			
+			//In base al numero di campioni ricevuti, calcola la distanza tra un punto e il successivo nel grafico
 			int offset = (int) Math.round(GRAPH_WIDTH/(samples-1)+0.5);
 			
-			//grafica la funzione collegando ogni campione al successivo
+			//Grafica la funzione collegando ogni campione al successivo
 			if(axis==X){
-				c.drawPoint(1,(accData.get(0).getX()+GRAPH_CENTER),paint);
+				c.drawPoint(1,(accData.get(0).getX()+GRAPH_HEIGHT_CENTER),paint);
 				for(int i=1;i<samples;i++)
-					c.drawLine(1+offset*(i-1),(accData.get(i-1).getX()+GRAPH_CENTER),1+offset*i,(accData.get(i).getX()+GRAPH_CENTER),paint);
+					c.drawLine(1+offset*(i-1),(accData.get(i-1).getX()+GRAPH_HEIGHT_CENTER),1+offset*i,(accData.get(i).getX()+GRAPH_HEIGHT_CENTER),paint);
 			}else if(axis==Y){
-				c.drawPoint(1,(accData.get(0).getY()+GRAPH_CENTER),paint);
+				c.drawPoint(1,(accData.get(0).getY()+GRAPH_HEIGHT_CENTER),paint);
 				for(int i=1;i<samples;i++)
-					c.drawLine(1+offset*(i-1),(accData.get(i-1).getY()+GRAPH_CENTER),1+offset*i,(accData.get(i).getY()+GRAPH_CENTER),paint);
+					c.drawLine(1+offset*(i-1),(accData.get(i-1).getY()+GRAPH_HEIGHT_CENTER),1+offset*i,(accData.get(i).getY()+GRAPH_HEIGHT_CENTER),paint);
 			}else{
-				c.drawPoint(1,(accData.get(0).getZ()+GRAPH_CENTER),paint);
+				c.drawPoint(1,(accData.get(0).getZ()+GRAPH_HEIGHT_CENTER),paint);
 				for(int i=1;i<samples;i++)
-					c.drawLine(1+offset*(i-1),(accData.get(i-1).getZ()+GRAPH_CENTER),1+offset*i,(accData.get(i).getZ()+GRAPH_CENTER),paint);
+					c.drawLine(1+offset*(i-1),(accData.get(i-1).getZ()+GRAPH_HEIGHT_CENTER),1+offset*i,(accData.get(i).getZ()+GRAPH_HEIGHT_CENTER),paint);
 			}
 			
-			//ridisegna il bordo destro della cornice per eliminare il trasbordo della funzione graficata sulla cornice
+			//Ridisegna il bordo destro della cornice per eliminare il trasbordo della funzione graficata sulla cornice
 			c.drawLine(GRAPH_WIDTH-1, 0, GRAPH_WIDTH-1, GRAPH_HEIGHT, paintLine);
 		}
 	}

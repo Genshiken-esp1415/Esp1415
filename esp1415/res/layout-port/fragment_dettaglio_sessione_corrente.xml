@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:ems="10"
-        android:hint="nome sessione"
+        android:hint="@string/nome_sessione"
         android:textSize="30sp" 
         android:imeOptions="actionDone" 
         android:singleLine="true"  />
@@ -24,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/titoloLista"
+        android:layout_alignStart="@+id/titoloLista"
         android:layout_below="@+id/nomeSessione"
         android:text="@string/x_label"
         android:textSize="30sp" />
@@ -50,8 +51,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/nomeSessione"
         android:layout_toRightOf="@+id/xLabel"
+        android:layout_toEndOf="@+id/xLabel"
         android:maxLength="4"
-        android:text="xValue"
+        android:text="@string/x_value"
         android:textSize="30sp" />
 
     <TextView
@@ -60,19 +62,20 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/xValue"
         android:layout_toRightOf="@+id/yLabel"
+        android:layout_toEndOf="@+id/yLabel"
         android:maxLength="4"
-        android:text="yValue"
+        android:text="@string/y_value"
         android:textSize="30sp" />
 
     <TextView
         android:id="@+id/zValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView3"
         android:maxLength="4"
         android:layout_below="@+id/yValue"
         android:layout_toRightOf="@+id/zLabel"
-        android:text="zValue"
+        android:layout_toEndOf="@+id/zLabel"
+        android:text="@string/z_label"
         android:textSize="30sp" />
 
     <TextView
@@ -80,6 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/durataSessione"
         android:gravity="center_horizontal"
         android:text="@string/cadute"
@@ -99,7 +103,9 @@
         android:layout_height="60dp"
         android:layout_above="@+id/zValue"
         android:layout_toRightOf="@+id/titoloLista"
+        android:layout_toEndOf="@+id/titoloLista"
         android:baselineAlignBottom="false"
+        android:contentDescription="@string/play_description"
         android:src="@drawable/ic_play_button_256" />
 
     <ImageButton
@@ -108,6 +114,8 @@
         android:layout_height="60dp"
         android:layout_alignTop="@+id/playPauseButton"
         android:layout_toRightOf="@+id/playPauseButton"
+        android:layout_toEndOf="@+id/playPauseButton"
+        android:contentDescription="@string/stop_description"
         android:src="@drawable/ic_stop_circular_button_256" />
 
 </RelativeLayout>

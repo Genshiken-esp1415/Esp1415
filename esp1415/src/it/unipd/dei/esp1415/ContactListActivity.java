@@ -181,7 +181,7 @@ public class ContactListActivity extends Activity {
 			if(rowView == null){
 				Holder holder = new Holder();
 				rowView = inflater.inflate(R.layout.contactlistview_row, parent, false);
-				holder.row = (TextView) rowView.findViewById(R.id.tv);
+				holder.row = (TextView) rowView.findViewById(R.id.row);
 				rowView.setTag(holder);
 			}
 			Holder holder = (Holder) rowView.getTag();
