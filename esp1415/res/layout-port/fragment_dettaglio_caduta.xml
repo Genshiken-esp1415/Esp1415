@@ -126,7 +126,8 @@
 	    android:layout_width="448dp"
 	    android:layout_height="76dp"
 	    android:layout_above="@+id/grafico_z"
-	    android:layout_alignLeft="@+id/grafico_z" />
+	    android:layout_alignLeft="@+id/grafico_z"
+	    android:layout_alignStart="@+id/grafico_z" />
 
 	<TextView
 	    android:id="@+id/ora_label"
@@ -172,6 +173,7 @@
 	    android:layout_below="@+id/ora"
 	    android:layout_marginTop="33dp"
 	    android:layout_toLeftOf="@+id/latitudine"
+	    android:layout_toStartOf="@+id/latitudine"
 	    android:text="@string/latitudine"
 	    android:textAppearance="?android:attr/textAppearanceLarge"
 	    android:textSize="40sp" />

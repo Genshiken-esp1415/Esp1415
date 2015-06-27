@@ -39,14 +39,6 @@ public class MainActivity extends ActionBarActivity {
         }
         db.close();
 		Intent openListaSessioni = new Intent(this, ListaSessioniActivity.class);
-		//creo il db per il primo avvio e faccio inserimenti dummy per testing, se non � gi� stato popolato il db.
-		/*DBManager db = new DBManager(this);
-		db.open();
-		if(db.getAllSessions().size()==0){
-			db.dummyInsert();
-		}*/
-
-		//Intent openListaSessioni = new Intent(this, DettaglioCadutaActivity.class);
 		startActivity(openListaSessioni);
         
         

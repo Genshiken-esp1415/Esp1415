@@ -33,7 +33,9 @@
         android:layout_height="50dp"
         android:layout_alignBaseline="@+id/campionamento_label"
         android:layout_toRightOf="@+id/campionamento_label"
+        android:layout_toEndOf="@+id/campionamento_label"
         android:layout_marginLeft="30dp"
+        android:layout_marginStart="30dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:text="@string/promemoria"
@@ -58,7 +60,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_toRightOf="@+id/sveglia"
+        android:layout_toEndOf="@+id/sveglia"
         android:layout_marginLeft="130dp"
+        android:layout_marginStart="130dp"
         android:onClick="onCheckboxClicked"
         android:text="@string/attiva_sveglia" />
 	
@@ -121,6 +125,7 @@
         android:layout_alignBaseline="@+id/durata_label"
         android:layout_below="@id/sveglia"
         android:layout_alignLeft="@+id/sveglia_label"
+        android:layout_alignStart="@+id/sveglia_label"
         android:text="@string/email"
         android:textSize="26sp" />
     
@@ -195,6 +200,7 @@
         android:layout_alignTop="@+id/contatti"
         android:layout_marginTop="70dp"
         android:layout_alignLeft="@+id/sveglia_checkbox"
+        android:layout_alignStart="@+id/sveglia_checkbox"
         android:text="@string/contatti" />
     
     <Button

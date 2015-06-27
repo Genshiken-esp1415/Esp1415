@@ -69,8 +69,8 @@
         android:id="@+id/minus"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignLeft="@+id/durata_label"
-        android:layout_alignStart="@+id/durata_label"
+        android:layout_alignLeft="@+id/campionamento"
+        android:layout_alignStart="@+id/campionamento"
         android:layout_below="@+id/durata_label"
         android:text="@string/sottrazione" />
 

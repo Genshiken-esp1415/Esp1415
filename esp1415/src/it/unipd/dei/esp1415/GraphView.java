@@ -19,6 +19,7 @@ public class GraphView extends View {
 	private final int GRAPH_WIDTH = 448;
 	private final int GRAPH_HEIGHT = 76;
 	private final int GRAPH_CENTER = GRAPH_HEIGHT/2;
+	
 	private final int X = 0;
 	private final int Y = 1;
 	//private final int Z = 2;
@@ -53,7 +54,11 @@ public class GraphView extends View {
 
 	public void setGraphParameters(ArrayList<AccelerometerData> accData, int samples, int axis, int color){
 		this.accData = accData;
+		
+		//numero di campioni da graficare
 		this.samples = samples;
+		
+		//asse (x, y o z) che riguarda i dati forniti
 		this.axis = axis;
 		
 		//Paint per il disegno della funzione graficata

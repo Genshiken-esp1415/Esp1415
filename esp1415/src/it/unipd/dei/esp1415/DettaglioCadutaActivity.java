@@ -3,7 +3,6 @@ package it.unipd.dei.esp1415;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
