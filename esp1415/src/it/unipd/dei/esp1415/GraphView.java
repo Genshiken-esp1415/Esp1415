@@ -80,17 +80,17 @@ public class GraphView extends View {
 			
 			//grafica la funzione collegando ogni campione al successivo
 			if(axis==X){
-				c.drawPoint(1,(accData.get(0).getX()+GRAPH_CENTER)/2,paint);
+				c.drawPoint(1,(accData.get(0).getX()+GRAPH_CENTER),paint);
 				for(int i=1;i<samples;i++)
-					c.drawLine(1+offset*(i-1),(accData.get(i-1).getX()+GRAPH_CENTER)/2,1+offset*i,(accData.get(i).getX()+GRAPH_CENTER)/2,paint);
+					c.drawLine(1+offset*(i-1),(accData.get(i-1).getX()+GRAPH_CENTER),1+offset*i,(accData.get(i).getX()+GRAPH_CENTER),paint);
 			}else if(axis==Y){
-				c.drawPoint(1,(accData.get(0).getY()+GRAPH_CENTER)/2,paint);
+				c.drawPoint(1,(accData.get(0).getY()+GRAPH_CENTER),paint);
 				for(int i=1;i<samples;i++)
-					c.drawLine(1+offset*(i-1),(accData.get(i-1).getY()+GRAPH_CENTER)/2,1+offset*i,(accData.get(i).getY()+GRAPH_CENTER)/2,paint);
+					c.drawLine(1+offset*(i-1),(accData.get(i-1).getY()+GRAPH_CENTER),1+offset*i,(accData.get(i).getY()+GRAPH_CENTER),paint);
 			}else{
-				c.drawPoint(1,(accData.get(0).getZ()+GRAPH_CENTER)/2,paint);
+				c.drawPoint(1,(accData.get(0).getZ()+GRAPH_CENTER),paint);
 				for(int i=1;i<samples;i++)
-					c.drawLine(1+offset*(i-1),(accData.get(i-1).getZ()+GRAPH_CENTER)/2,1+offset*i,(accData.get(i).getZ()+GRAPH_CENTER)/2,paint);
+					c.drawLine(1+offset*(i-1),(accData.get(i-1).getZ()+GRAPH_CENTER),1+offset*i,(accData.get(i).getZ()+GRAPH_CENTER),paint);
 			}
 			
 			//ridisegna il bordo destro della cornice per eliminare il trasbordo della funzione graficata sulla cornice
