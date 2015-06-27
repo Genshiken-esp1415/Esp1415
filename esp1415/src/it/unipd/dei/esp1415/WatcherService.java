@@ -41,6 +41,7 @@ public class WatcherService extends Service implements SensorEventListener{
 	long timePassed;
 	private int sensorDelay;
 	private LinkedList<AccelerometerData> samples; 
+	private LinkedList<AccelerometerData> fallSamples;
 	int sampleMaxSize;
 	private Intent intent;
 	private boolean taskRunning;
@@ -89,6 +90,7 @@ public class WatcherService extends Service implements SensorEventListener{
 		case 3: sampleRate = 200000000; break;
 		}
 		samples = new LinkedList<AccelerometerData>();
+		fallSamples = new LinkedList<AccelerometerData>();
 		sampleMaxSize = 1000000/((sensorDelay+1)*2);
 		// registro la classe come listener dell'accelerometro
 		sm.registerListener((SensorEventListener) this, Accel, sensorDelay);
@@ -160,7 +162,9 @@ public class WatcherService extends Service implements SensorEventListener{
 					samples.remove();
 				}
 				//se sono passati almeno 5 secondi dall'ultima caduta la segnalo
-				if (startTask){					
+				if (startTask&&(timestamp-lastFallNano>500000000)){					
+					// compio i dati dell'accelerometro relativi alla caduta in una lista apposita
+					fallSamples = (LinkedList<AccelerometerData>) samples.clone();
 					//lancio la task per recuperare la posizione, mandare la mail e registrare la caduta nel db
 					new ProcessFallTask().execute("NEW FALL EVENT"); 
 					startTask = false;
@@ -179,7 +183,7 @@ public class WatcherService extends Service implements SensorEventListener{
 				float a = Math.round(Math.sqrt(Math.pow(measuredData.getX(),2)+Math.pow(measuredData.getY(),2)+ Math.pow(measuredData.getZ(),2)));
 				currentAcceleration = Math.abs(a-CALIBRATION);
 				if ((currentAcceleration > 10) && 
-						(!taskRunning))
+						(!taskRunning)&&!startTask)
 				{
 					//memorizzo il timestamp della caduta
 					lastFallNano = timestamp;
@@ -263,7 +267,7 @@ public class WatcherService extends Service implements SensorEventListener{
 			 ArrayList<String> dest = new ArrayList<String>();
 			 dest.add("marco@speronello.com");
 			 NotificationSender sender = new NotificationSender("genshiken1415@gmail.com","qwertyjkl",dest,this);
-			 sender.buildMessage(db.dateToSqlDate(new Date(lastFall)),"14:45:05",Double.toString(latitude),Double.toString(longitude));
+			 sender.buildMessage(DBManager.dateToSqlDate(new Date(lastFall)),"14:45:05",Double.toString(latitude),Double.toString(longitude));
 			 sender.execute();
 		 }
 
@@ -271,10 +275,10 @@ public class WatcherService extends Service implements SensorEventListener{
 		public void notificationUpdate(String notification) {
 			
 			if(!gotLocation){
-				 newFall = db.createFall(new Date(lastFall),fallNumber, null, null, samples, currentSession.getSessionBegin());
-				 	//TODO CONTROLLARE CHE FUNZIONI
+				 newFall = db.createFall(new Date(lastFall),fallNumber, null, null, fallSamples, currentSession.getSessionBegin());
+				 	//TODO cercare di sostituire 0,0 in lat e long con n/a nei vari oggetti
 			 } else {
-			 newFall = db.createFall(new Date(lastFall),fallNumber, latitude, longitude, samples, currentSession.getSessionBegin());
+			 newFall = db.createFall(new Date(lastFall),fallNumber, latitude, longitude, fallSamples, currentSession.getSessionBegin());
 			 }
 			if(notification.compareTo("1")==0){
 				newFall.setNotified();
