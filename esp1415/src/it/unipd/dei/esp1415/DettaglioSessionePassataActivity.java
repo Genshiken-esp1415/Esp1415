@@ -38,7 +38,7 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity
 		db = new DBManager(this);
 		db.open();
 		
-		currentSession = db.getSession(((Date)new Date(intent.getLongExtra("IDSessione",0L))));
+		currentSession = db.getSession(new Date(intent.getLongExtra("IDSessione",0L)));
 		setContentView(R.layout.activity_dettaglio_sessione_passata);
 		if (savedInstanceState == null) {
 			FragmentTransaction  fm = getSupportFragmentManager().beginTransaction();

@@ -1,5 +1,6 @@
 package it.unipd.dei.esp1415;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -197,19 +198,49 @@ public class WatcherService extends Service implements SensorEventListener{
 	}
 	
 	//uso questo task cosi da risparmiare batteria, utilizzando il gps solo quando viene segnalata una caduta
-	private class ProcessFallTask extends AsyncTask<String, Integer, Long> {
+	private class ProcessFallTask extends AsyncTask<String, Integer, Long> implements AsyncInterface {
 		 private int secondiPassati;
+		private boolean gps_enabled;
+		private boolean network_enabled;
+		private final int MAX_LOCATION_WAIT = 20;
+		private boolean noPosition;
 
 		protected void onPreExecute(){
 			 
 			 // registro il listener cosi da avere aggiornamenti sulla posizione
 			    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0, locationListener);
-			    secondiPassati = 0;
-		 }
-		 
+			    gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+	            network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+
+
+	            if (!gps_enabled && !network_enabled) {  Context context = getApplicationContext();
+	            int duration = Toast.LENGTH_SHORT;
+	            Toast toast = Toast.makeText(context, "nothing is enabled", duration);
+	            toast.show();
+
+	            }
+
+	            if (gps_enabled){
+	            	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
+	            			locationListener);
+	            }
+	            else if (network_enabled){
+	            	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
+	            			locationListener);
+	            }
+	            else {
+	            	secondiPassati=MAX_LOCATION_WAIT;
+	            	noPosition = true;
+	            }
+	            secondiPassati = 0;
+		}
+
 		 protected Long doInBackground(String... params) {
+			 Long result = 0L;
+			 if(noPosition){return result;};
 		    //ciclo finchè non ottengo una posizione dal gps
-		    while(!gotLocation&&secondiPassati<3){
+		    while(!gotLocation&&secondiPassati<120){
 		    	try {
 		    		Thread.sleep(1000);
 		    		secondiPassati++;
@@ -218,7 +249,7 @@ public class WatcherService extends Service implements SensorEventListener{
 		    		Thread.interrupted();
 		    	}
 		    }
-		    Long result = 0L;
+		    
 		    return result;
 		 }
 
@@ -227,18 +258,37 @@ public class WatcherService extends Service implements SensorEventListener{
 			 //tolgo il listener cosi da risparmiare batteria
 			 locationManager.removeUpdates(locationListener);
 			 //ripristino la variabile di controllo sull'ottenimento di una posizione
-			 gotLocation = false;
 			 //registro la nuova caduta nel db
 			 fallNumber ++;
-			 newFall = db.createFall(new Date(lastFall),fallNumber, latitude, longitude, samples, currentSession.getSessionBegin());
+			 ArrayList<String> dest = new ArrayList<String>();
+			 dest.add("marco@speronello.com");
+			 NotificationSender sender = new NotificationSender("genshiken1415@gmail.com","qwertyjkl",dest,this);
+			 sender.buildMessage(db.dateToSqlDate(new Date(lastFall)),"14:45:05",Double.toString(latitude),Double.toString(longitude));
+			 sender.execute();
+		 }
+
+		@Override
+		public void notificationUpdate(String notification) {
 			
+			if(!gotLocation){
+				 newFall = db.createFall(new Date(lastFall),fallNumber, null, null, samples, currentSession.getSessionBegin());
+				 	//TODO CONTROLLARE CHE FUNZIONI
+			 } else {
+			 newFall = db.createFall(new Date(lastFall),fallNumber, latitude, longitude, samples, currentSession.getSessionBegin());
+			 }
+			if(notification.compareTo("1")==0){
+				newFall.setNotified();
+				newFall = db.setNotified(newFall);
+			}
+			 noPosition = false;
+			 gotLocation = false;
 			 //segnalo a DettaglioSessioneCorrente la nuova caduta
 			 Intent intent=new Intent("Fall");
 			 intent.putExtra("IDFall",newFall.getFallTimestamp().getTime());
 			 newFall = null;
 			 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 			 taskRunning = false;
-		 }
+		}
 	}
 
 }

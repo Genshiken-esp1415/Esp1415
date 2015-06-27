@@ -152,7 +152,7 @@ public class DBManager {
 	   * @param sessionName Il nome della sessione che si vuole creare.
 	   * @return
 	   */
-	  public Fall createFall(Date timestampFall, int fallNumber, double latitude, double longitude, LinkedList<AccelerometerData> accData, Date session) {
+	  public Fall createFall(Date timestampFall, int fallNumber, Double latitude, Double longitude, LinkedList<AccelerometerData> accData, Date session) {
 	    ContentValues values = new ContentValues();
 	    values.put(DBOpenHelper.COLUMN_TIMESTAMP_F, dateToSqlDate(timestampFall));
 	    values.put(DBOpenHelper.COLUMN_NUMBER, fallNumber);
@@ -405,7 +405,7 @@ public class DBManager {
 	    whereArgs[0] =  dateToSqlDate(fall.getFallTimestamp());
 	    int updateId = database.update(DBOpenHelper.TABLE_FALL, values, whereClause, whereArgs);
 	    Cursor cursor = database.query(DBOpenHelper.TABLE_FALL,
-		        SessionColumns, whereClause, whereArgs,
+		        FallColumns, whereClause, whereArgs,
 		        null, null, null);
 	    cursor.moveToFirst();
 	    fall = cursorToFall(cursor);
