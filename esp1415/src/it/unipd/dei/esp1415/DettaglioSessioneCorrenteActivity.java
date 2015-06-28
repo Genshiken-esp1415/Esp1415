@@ -35,16 +35,18 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 /**
- * Questa activity conterrà il dettaglio sulla sessione corrente. Descrizione di
+ * Questa activity conterrï¿½ il dettaglio sulla sessione corrente. Descrizione di
  * come interagisce col WatcherService: 1)creo una nuova sessione e imposto la
- * sessione come attiva nel db o ripristino la sessione in corso se è già
- * presente una sessione attiva nel db; 2)controllo se il service è già attivo,
- * se è attivo mostro pausa, se non è attivo mostro il tasto play 3)premuto play
+ * sessione come attiva nel db o ripristino la sessione in corso se ï¿½ giï¿½
+ * presente una sessione attiva nel db; 2)controllo se il service ï¿½ giï¿½ attivo,
+ * se ï¿½ attivo mostro pausa, se non ï¿½ attivo mostro il tasto play 3)premuto play
  * il service viene avviato; 4)premuto pausa uccido il service; 5)premuto stop
  * imposto la sessione come non attiva nel db e uccido il service; 6)uso un
- * broadcast receiver per tenere aggiornata l'UI mentre l'app è in foreground;
+ * broadcast receiver per tenere aggiornata l'UI mentre l'app ï¿½ in foreground;
  */
 public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
+
+	
 
 	private static Session currentSession;
 	private static DBManager db;
@@ -65,6 +67,13 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 		serviceRunning = isMyServiceRunning(WatcherService.class);
 	}
 
+	@Override
+	protected void onDestroy() {
+		db.close();
+		
+		super.onDestroy();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -112,7 +121,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 			// se non sono presenti sessioni attive creo una nuova sessione e
 			// avvio il service
 			if (db.hasActiveSession()) {
-				// è presente se l'app è andata in background mentre c'era una
+				// ï¿½ presente se l'app ï¿½ andata in background mentre c'era una
 				// sessione attiva
 				currentSession = db.getActiveSession();
 			} else {
@@ -175,7 +184,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 				@Override
 				public void onClick(View arg0) {
 					if (serviceRunning) {
-						// uccido il service però gli dico di non disattivare la
+						// uccido il service perï¿½ gli dico di non disattivare la
 						// sessione
 						Intent i = new Intent(getActivity(),
 								WatcherService.class);
@@ -218,7 +227,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 					serviceRunning = false;
 					Intent s = new Intent(getActivity(),
 							DettaglioSessionePassataActivity.class);
-					s.putExtra("IDSessione", currentSession.getSessionBegin());
+					s.putExtra("IDSessione", currentSession.getSessionBegin().getTime());
 					startActivity(s);
 
 				}
@@ -231,7 +240,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 		private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				//controllo per evitare scritture al layout dopo che è stato stoppato il service
+				//controllo per evitare scritture al layout dopo che ï¿½ stato stoppato il service
 				if(serviceRunning){
 				// Extract data included in the Intent
 				Float x = intent.getFloatExtra("xValue", 0f);
@@ -308,8 +317,8 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				
-				//controllo per evitare scritture al layout dopo che è stato stoppato il service o scritture doppie
-				//TODO: clear perchè senno mi fa inserimenti doppi nell'adapter, i service fa troppi intent?
+				//controllo per evitare scritture al layout dopo che ï¿½ stato stoppato il service o scritture doppie
+				
 				Long millis = intent.getLongExtra("IDFall", 0);
 				//&& falls.get(falls.size()-1).getFallTimestamp()!=(new Date(millis))
 				if(serviceRunning ){
@@ -415,7 +424,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 	}
 
 	/**
-	 * controllo se il service è già stato avviato
+	 * controllo se il service ï¿½ giï¿½ stato avviato
 	 * 
 	 * @param serviceClass
 	 * @return

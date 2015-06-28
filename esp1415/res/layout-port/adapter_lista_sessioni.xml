@@ -48,7 +48,7 @@
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
         android:layout_centerVertical="true"
-        android:contentDescription="@string/description" />
+        android:contentDescription="@string/thumbnail_description" />
 
     <!-- - layout_marginStart per supportare meglio layout da destra a sinistra, marginLeft per supportare API più vecchie di 17, lo stesso dicasi per layout_alignParent e layout_margin -->
 

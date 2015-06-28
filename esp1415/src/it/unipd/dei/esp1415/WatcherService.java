@@ -1,5 +1,6 @@
 package it.unipd.dei.esp1415;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -38,8 +39,9 @@ public class WatcherService extends Service implements SensorEventListener{
 	private static DBManager db;
 	private Session currentSession;
 	long timePassed;
-	private int sensorDelay;
+	//private int SettingValues.sSensorDelay;
 	private LinkedList<AccelerometerData> samples; 
+	private LinkedList<AccelerometerData> fallSamples;
 	int sampleMaxSize;
 	private Intent intent;
 	private boolean taskRunning;
@@ -66,8 +68,8 @@ public class WatcherService extends Service implements SensorEventListener{
 		db = new DBManager(getBaseContext());
 		db.open();	
 		currentSession = db.getActiveSession();
-		// inizializzo startTime con la data di inizio sessione + la durata già
-		// trascorsa (necessario se è stata messa in pausa la sessione)
+		// inizializzo startTime con la data di inizio sessione + la durata giï¿½
+		// trascorsa (necessario se ï¿½ stata messa in pausa la sessione)
 		startDate = new Date();
 		duration = currentSession.getDuration();
 		fallNumber = (db.getAllFalls(currentSession.getSessionBegin()).size());
@@ -79,18 +81,19 @@ public class WatcherService extends Service implements SensorEventListener{
 		measuredData = new AccelerometerData(0,0,0,0);
 		Sensor Accel = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		//Imposto il sensor delay
-		sensorDelay = SensorManager.SENSOR_DELAY_FASTEST;
+		SettingValues.sSensorDelay = SensorManager.SENSOR_DELAY_FASTEST;
 		//imposto il samplerate a seguito del sensor delay scelto
-		switch (sensorDelay){
+		switch (SettingValues.sSensorDelay){
 		case 0: sampleRate = 0; break;
 		case 1: sampleRate = 20000000; break;
 		case 2: sampleRate = 60000000; break;
 		case 3: sampleRate = 200000000; break;
 		}
 		samples = new LinkedList<AccelerometerData>();
-		sampleMaxSize = 1000000/((sensorDelay+1)*2);
+		fallSamples = new LinkedList<AccelerometerData>();
+		sampleMaxSize = 1000000/((SettingValues.sSensorDelay+1)*2);
 		// registro la classe come listener dell'accelerometro
-		sm.registerListener((SensorEventListener) this, Accel, sensorDelay);
+		sm.registerListener((SensorEventListener) this, Accel, SettingValues.sSensorDelay);
 		// Acquire a reference to the system Location Manager
 		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new LocationListener() {
@@ -154,12 +157,14 @@ public class WatcherService extends Service implements SensorEventListener{
 				//gestisco la memorizzazione dei dati su coda
 				measuredData = new AccelerometerData(timestamp,event.values[0],event.values[1],event.values[2]);
 				samples.add(measuredData);
-				//se il dato in testa alla coda è piu vecchio di un secondo lo scarto
+				//se il dato in testa alla coda ï¿½ piu vecchio di un secondo lo scarto
 				if(timestamp-samples.getFirst().getTimestamp()>1000000000 && samples.getFirst()!=null){
 					samples.remove();
 				}
 				//se sono passati almeno 5 secondi dall'ultima caduta la segnalo
-				if (startTask){					
+				if (startTask&&(timestamp-lastFallNano>500000000)){					
+					// compio i dati dell'accelerometro relativi alla caduta in una lista apposita
+					fallSamples = (LinkedList<AccelerometerData>) samples.clone();
 					//lancio la task per recuperare la posizione, mandare la mail e registrare la caduta nel db
 					new ProcessFallTask().execute("NEW FALL EVENT"); 
 					startTask = false;
@@ -174,11 +179,11 @@ public class WatcherService extends Service implements SensorEventListener{
 				intent.putExtra("zValue",measuredData.getZ());
 				intent.putExtra("duration",duration+timePassed);
 				LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-				//calcolo il modulo dell'accelerazione-forza di gravità per stimare una caduta
+				//calcolo il modulo dell'accelerazione-forza di gravitï¿½ per stimare una caduta
 				float a = Math.round(Math.sqrt(Math.pow(measuredData.getX(),2)+Math.pow(measuredData.getY(),2)+ Math.pow(measuredData.getZ(),2)));
 				currentAcceleration = Math.abs(a-CALIBRATION);
 				if ((currentAcceleration > 10) && 
-						(!taskRunning))
+						(!taskRunning)&&!startTask)
 				{
 					//memorizzo il timestamp della caduta
 					lastFallNano = timestamp;
@@ -197,19 +202,49 @@ public class WatcherService extends Service implements SensorEventListener{
 	}
 	
 	//uso questo task cosi da risparmiare batteria, utilizzando il gps solo quando viene segnalata una caduta
-	private class ProcessFallTask extends AsyncTask<String, Integer, Long> {
+	private class ProcessFallTask extends AsyncTask<String, Integer, Long> implements AsyncInterface {
 		 private int secondiPassati;
+		private boolean gps_enabled;
+		private boolean network_enabled;
+		private final int MAX_LOCATION_WAIT = 20;
+		private boolean noPosition;
 
 		protected void onPreExecute(){
 			 
 			 // registro il listener cosi da avere aggiornamenti sulla posizione
 			    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0, locationListener);
-			    secondiPassati = 0;
-		 }
-		 
+			    gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+	            network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+
+
+	            if (!gps_enabled && !network_enabled) {  Context context = getApplicationContext();
+	            int duration = Toast.LENGTH_SHORT;
+	            Toast toast = Toast.makeText(context, "nothing is enabled", duration);
+	            toast.show();
+
+	            }
+
+	            if (gps_enabled){
+	            	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
+	            			locationListener);
+	            }
+	            else if (network_enabled){
+	            	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
+	            			locationListener);
+	            }
+	            else {
+	            	secondiPassati=MAX_LOCATION_WAIT;
+	            	noPosition = true;
+	            }
+	            secondiPassati = 0;
+		}
+
 		 protected Long doInBackground(String... params) {
-		    //ciclo finchè non ottengo una posizione dal gps
-		    while(!gotLocation&&secondiPassati<3){
+			 Long result = 0L;
+			 if(noPosition){return result;};
+		    //ciclo finchï¿½ non ottengo una posizione dal gps
+		    while(!gotLocation&&secondiPassati<120){
 		    	try {
 		    		Thread.sleep(1000);
 		    		secondiPassati++;
@@ -218,7 +253,7 @@ public class WatcherService extends Service implements SensorEventListener{
 		    		Thread.interrupted();
 		    	}
 		    }
-		    Long result = 0L;
+		    
 		    return result;
 		 }
 
@@ -227,18 +262,37 @@ public class WatcherService extends Service implements SensorEventListener{
 			 //tolgo il listener cosi da risparmiare batteria
 			 locationManager.removeUpdates(locationListener);
 			 //ripristino la variabile di controllo sull'ottenimento di una posizione
-			 gotLocation = false;
 			 //registro la nuova caduta nel db
 			 fallNumber ++;
-			 newFall = db.createFall(new Date(lastFall),fallNumber, latitude, longitude, samples, currentSession.getSessionBegin());
+			 ArrayList<String> dest = new ArrayList<String>();
+			 dest.add("marco@speronello.com");
+			 NotificationSender sender = new NotificationSender("genshiken1415@gmail.com","qwertyjkl",dest,this);
+			 sender.buildMessage(DBManager.dateToSqlDate(new Date(lastFall)),"14:45:05",Double.toString(latitude),Double.toString(longitude));
+			 sender.execute();
+		 }
+
+		@Override
+		public void notificationUpdate(String notification) {
 			
+			if(!gotLocation){
+				 newFall = db.createFall(new Date(lastFall),fallNumber, null, null, fallSamples, currentSession.getSessionBegin());
+				 	//TODO cercare di sostituire 0,0 in lat e long con n/a nei vari oggetti
+			 } else {
+			 newFall = db.createFall(new Date(lastFall),fallNumber, latitude, longitude, fallSamples, currentSession.getSessionBegin());
+			 }
+			if(notification.compareTo("1")==0){
+				newFall.setNotified();
+				newFall = db.setNotified(newFall);
+			}
+			 noPosition = false;
+			 gotLocation = false;
 			 //segnalo a DettaglioSessioneCorrente la nuova caduta
 			 Intent intent=new Intent("Fall");
 			 intent.putExtra("IDFall",newFall.getFallTimestamp().getTime());
 			 newFall = null;
 			 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 			 taskRunning = false;
-		 }
+		}
 	}
 
 }

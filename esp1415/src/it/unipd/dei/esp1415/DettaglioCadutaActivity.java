@@ -3,12 +3,12 @@ package it.unipd.dei.esp1415;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,6 +66,12 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK)
+			finish();
+		return true;
+	}
+	
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
@@ -111,9 +117,9 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 			GraphView graphX = (GraphView) rootView.findViewById(R.id.grafico_x);
 			GraphView graphY = (GraphView) rootView.findViewById(R.id.grafico_y);
 			GraphView graphZ = (GraphView) rootView.findViewById(R.id.grafico_z);
-			graphX.setGraphParameters(accData,100,X,Color.RED);
-			graphY.setGraphParameters(accData,100,Y,Color.BLUE);
-			graphZ.setGraphParameters(accData,100,Z,Color.GREEN);
+			graphX.setGraphParameters(accData,accData.size(),X,Color.RED);
+			graphY.setGraphParameters(accData,accData.size(),Y,Color.BLUE);
+			graphZ.setGraphParameters(accData,accData.size(),Z,Color.GREEN);
 					
 //			Intent emailIntent = new Intent();
 //			emailIntent.setAction(Intent.ACTION_SEND);

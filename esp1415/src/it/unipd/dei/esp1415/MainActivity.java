@@ -1,6 +1,9 @@
 package it.unipd.dei.esp1415;
 
 
+import java.io.File;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 /**
  * La main Activity contiene un redirect alla lista delle sessioni per il
@@ -38,15 +42,20 @@ public class MainActivity extends ActionBarActivity {
         	db.dummyInsert();
         }
         db.close();
+        
+        File f = new File(getApplicationContext().getFilesDir().getPath() + "/settings.txt");
+        //if ((new File("/data/data/it.unipd.dei.esp1415/files/settings.txt")).exists()) {
+        if (f.exists()) {
+        	SettingValues.readSettings(this);
+        } else {
+        	SettingValues.setDefault();
+        }
+        if ((new File(getApplicationContext().getFilesDir().getPath() + "/contactlist.txt")).exists()){
+        	Toast.makeText(this, "Contact list trovata", Toast.LENGTH_LONG).show();
+        	SettingValues.setSelectedContacts(this);
+        }
+        
 		Intent openListaSessioni = new Intent(this, ListaSessioniActivity.class);
-		//creo il db per il primo avvio e faccio inserimenti dummy per testing, se non � gi� stato popolato il db.
-		/*DBManager db = new DBManager(this);
-		db.open();
-		if(db.getAllSessions().size()==0){
-			db.dummyInsert();
-		}*/
-
-		//Intent openListaSessioni = new Intent(this, DettaglioCadutaActivity.class);
 		startActivity(openListaSessioni);
         
         

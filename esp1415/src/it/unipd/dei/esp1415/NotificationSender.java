@@ -35,14 +35,15 @@ public class NotificationSender extends AsyncTask<String, Void, String> {
 	private String latitude="";
 	private String longitude="";
 
-	public AsyncInterface delegate=null;
+	public AsyncInterface delegate;
 
-	public NotificationSender(String username, String password, ArrayList<String> dest){
+	public NotificationSender(String username, String password, ArrayList<String> dest, AsyncInterface delegate){
 		this.server = "smtp.gmail.com";
 		this.port = 465;
 		this.username = username;
 		this.password = Base64.encodeToString(password.getBytes(),Base64.CRLF);
 		this.dest = dest;
+		this.delegate = delegate;
 	}
 	
 	//Inizializzazione parametri della caduta
@@ -116,9 +117,9 @@ public class NotificationSender extends AsyncTask<String, Void, String> {
 			e.printStackTrace();
 		}
 		if(findErrors(str))
-			return "inviata";
+			return "1";
 		else
-			return "non inviata";
+			return "0";
 	}
 	
 	//Ritorna il risultato dell'invio delle e-mail di notifica (inviato o non inviato)
