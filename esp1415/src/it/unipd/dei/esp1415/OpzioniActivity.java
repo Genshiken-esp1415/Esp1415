@@ -276,7 +276,7 @@ public class OpzioniActivity extends ActionBarActivity {
 			});
 			
 			//Legge le opzioni precedentemente scelte da file di testo
-			readSettings();
+			readSettings();	
 
 			//Configura il pulsante per il salvataggio delle opzioni su file di testo 
 			Button salva = (Button) rootView.findViewById(R.id.salva_button);
@@ -375,13 +375,13 @@ public class OpzioniActivity extends ActionBarActivity {
 			bw.write(maxDuration.getText() + "\r\n");
 			bw.write(alarmButton.getText() + "\r\n");
 			if(alarm.isChecked())
-				bw.write("tick sveglia\r\n");
+				bw.write(SettingValues.ENABLED + "\r\n");
 			else
-				bw.write("untick sveglia\r\n");
+				bw.write(SettingValues.DISABLED + "\r\n");
 			if(notification.isChecked())
-				bw.write("tick notification\r\n");
+				bw.write(SettingValues.ENABLED + "\r\n");
 			else
-				bw.write("untick notification\r\n");
+				bw.write(SettingValues.DISABLED + "\r\n");
 			if((!email.getText().toString().equals("") && !password.getText().toString().equals(""))){
 				bw.write(email.getText() + "\r\n");
 				bw.write(password.getText().toString());

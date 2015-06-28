@@ -164,7 +164,9 @@ public class ContactListActivity extends Activity {
 		return selectedContacts;
 	}
 
-	//ArrayAdapter personalizzato per la gestione delle singole righe della ListView degli indirizzi
+	/**
+	 * ArrayAdapter personalizzato per la gestione delle singole righe della ListView degli indirizzi
+	 */
 	private class ContactListArrayAdapter extends ArrayAdapter<ContactData>{
 
 		ArrayList<ContactData> items;

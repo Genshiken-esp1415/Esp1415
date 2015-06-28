@@ -39,7 +39,7 @@ public class WatcherService extends Service implements SensorEventListener{
 	private static DBManager db;
 	private Session currentSession;
 	long timePassed;
-	private int sensorDelay;
+	//private int SettingValues.sSensorDelay;
 	private LinkedList<AccelerometerData> samples; 
 	private LinkedList<AccelerometerData> fallSamples;
 	int sampleMaxSize;
@@ -68,8 +68,8 @@ public class WatcherService extends Service implements SensorEventListener{
 		db = new DBManager(getBaseContext());
 		db.open();	
 		currentSession = db.getActiveSession();
-		// inizializzo startTime con la data di inizio sessione + la durata già
-		// trascorsa (necessario se è stata messa in pausa la sessione)
+		// inizializzo startTime con la data di inizio sessione + la durata giï¿½
+		// trascorsa (necessario se ï¿½ stata messa in pausa la sessione)
 		startDate = new Date();
 		duration = currentSession.getDuration();
 		fallNumber = (db.getAllFalls(currentSession.getSessionBegin()).size());
@@ -81,9 +81,9 @@ public class WatcherService extends Service implements SensorEventListener{
 		measuredData = new AccelerometerData(0,0,0,0);
 		Sensor Accel = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		//Imposto il sensor delay
-		sensorDelay = SensorManager.SENSOR_DELAY_FASTEST;
+		SettingValues.sSensorDelay = SensorManager.SENSOR_DELAY_FASTEST;
 		//imposto il samplerate a seguito del sensor delay scelto
-		switch (sensorDelay){
+		switch (SettingValues.sSensorDelay){
 		case 0: sampleRate = 0; break;
 		case 1: sampleRate = 20000000; break;
 		case 2: sampleRate = 60000000; break;
@@ -91,9 +91,9 @@ public class WatcherService extends Service implements SensorEventListener{
 		}
 		samples = new LinkedList<AccelerometerData>();
 		fallSamples = new LinkedList<AccelerometerData>();
-		sampleMaxSize = 1000000/((sensorDelay+1)*2);
+		sampleMaxSize = 1000000/((SettingValues.sSensorDelay+1)*2);
 		// registro la classe come listener dell'accelerometro
-		sm.registerListener((SensorEventListener) this, Accel, sensorDelay);
+		sm.registerListener((SensorEventListener) this, Accel, SettingValues.sSensorDelay);
 		// Acquire a reference to the system Location Manager
 		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new LocationListener() {
@@ -157,7 +157,7 @@ public class WatcherService extends Service implements SensorEventListener{
 				//gestisco la memorizzazione dei dati su coda
 				measuredData = new AccelerometerData(timestamp,event.values[0],event.values[1],event.values[2]);
 				samples.add(measuredData);
-				//se il dato in testa alla coda è piu vecchio di un secondo lo scarto
+				//se il dato in testa alla coda ï¿½ piu vecchio di un secondo lo scarto
 				if(timestamp-samples.getFirst().getTimestamp()>1000000000 && samples.getFirst()!=null){
 					samples.remove();
 				}
@@ -179,7 +179,7 @@ public class WatcherService extends Service implements SensorEventListener{
 				intent.putExtra("zValue",measuredData.getZ());
 				intent.putExtra("duration",duration+timePassed);
 				LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-				//calcolo il modulo dell'accelerazione-forza di gravità per stimare una caduta
+				//calcolo il modulo dell'accelerazione-forza di gravitï¿½ per stimare una caduta
 				float a = Math.round(Math.sqrt(Math.pow(measuredData.getX(),2)+Math.pow(measuredData.getY(),2)+ Math.pow(measuredData.getZ(),2)));
 				currentAcceleration = Math.abs(a-CALIBRATION);
 				if ((currentAcceleration > 10) && 
@@ -243,7 +243,7 @@ public class WatcherService extends Service implements SensorEventListener{
 		 protected Long doInBackground(String... params) {
 			 Long result = 0L;
 			 if(noPosition){return result;};
-		    //ciclo finchè non ottengo una posizione dal gps
+		    //ciclo finchï¿½ non ottengo una posizione dal gps
 		    while(!gotLocation&&secondiPassati<120){
 		    	try {
 		    		Thread.sleep(1000);
