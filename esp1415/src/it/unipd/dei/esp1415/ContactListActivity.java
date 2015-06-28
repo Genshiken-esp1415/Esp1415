@@ -1,12 +1,9 @@
 package it.unipd.dei.esp1415;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
@@ -61,7 +58,7 @@ public class ContactListActivity extends Activity {
 		ArrayList<ContactData> contacts = new ArrayList<ContactData>();
 
 		//Carica da file di testo i contatti precedentemente selezionati, se presenti
-		ArrayList<String> presentContacts = readSelectedContacts();
+		//ArrayList<String> SettingValues.sDest = readSelectedContacts();
 
 		//Cursore che punta alla lista di contatti in rubrica a cui è anche associata una e-mail
 		Cursor cursor = this.getContentResolver().query(Email.CONTENT_URI, PROJECTION, null,
@@ -75,7 +72,7 @@ public class ContactListActivity extends Activity {
 			 * Se l'indirizzo era già stato scelto, l'attributo added viene settato di conseguenza
 			 */
 			if(!name.equals(address)){ 
-				if(presentContacts.contains(address))
+				if(SettingValues.sDest.contains(address))
 					contacts.add(new ContactData(name,address,true));
 				else
 					contacts.add(new ContactData(name,address,false));
@@ -129,9 +126,16 @@ public class ContactListActivity extends Activity {
 		try {
 			FileOutputStream output = openFileOutput("contactlist.txt", MODE_PRIVATE);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(output));
+			
+			//Per assicurarsi che non si presentino duplicati di alcun tipo
+			SettingValues.sDest.clear();
+			SettingValues.sName.clear();
 			for(int i=0;i<dest.size();i++){
-				if(dest.get(i).getAdded())
+				if (dest.get(i).getAdded()) {
 					bw.append(dest.get(i).getName() + ": " + dest.get(i).getAddress() + "\r\n");
+					SettingValues.sName.add(dest.get(i).getName());
+					SettingValues.sDest.add(dest.get(i).getAddress());
+				}
 			}
 			bw.close();
 		} catch (FileNotFoundException e) {
@@ -139,29 +143,6 @@ public class ContactListActivity extends Activity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * Legge da file gli indirizzi scelti. Viene utilizzato all'avvio dell'activity per rilevare gli indirizzi già
-	 * scelti in precedenza e colorare le righe della lista corrispondenti.  
-	 */
-	private ArrayList<String> readSelectedContacts(){
-		ArrayList<String> selectedContacts = new ArrayList<String>();
-
-		try {
-			FileInputStream input = openFileInput("contactlist.txt");
-			BufferedReader br = new BufferedReader(new InputStreamReader(input));
-			String line;
-			while((line = br.readLine()) != null)
-				selectedContacts.add(line);
-			br.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return selectedContacts;
 	}
 
 	/**

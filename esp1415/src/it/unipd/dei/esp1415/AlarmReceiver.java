@@ -1,5 +1,7 @@
 package it.unipd.dei.esp1415;
 
+import java.util.Calendar;
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -17,13 +19,19 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		//Controllo necessario per rendere persistente la notifica dopo un riavvio del dispositivo
-		if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+		DBManager db = new DBManager(context);
+		db.open();
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.HOUR_OF_DAY, SettingValues.sAlarmHour);
+		calendar.set(Calendar.MINUTE, SettingValues.sAlarmMinute);
+		calendar.set(Calendar.SECOND, 0);
+
+		if(!(System.currentTimeMillis()-calendar.getTimeInMillis()>0)) {
 			Intent notificationIntent = new Intent(context, OpzioniActivity.class);
 			PendingIntent contentIntent = PendingIntent.getActivity(context,
 					0, notificationIntent,
 					PendingIntent.FLAG_CANCEL_CURRENT);
-			
+
 			//Si configura la notifica con un messaggio di avviso all'utente
 			NotificationCompat.Builder mBuilder =
 					new NotificationCompat.Builder(context)
@@ -32,7 +40,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 			.setContentText("Ricordati di iniziare la registrazione")
 			.setContentIntent(contentIntent)
 			.setAutoCancel(true);
-			
+
 			NotificationManager mNotificationManager =
 					(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			mNotificationManager.notify(0, mBuilder.build());

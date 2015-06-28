@@ -1,13 +1,10 @@
 package it.unipd.dei.esp1415;
 
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,6 +17,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -59,7 +57,8 @@ public class OpzioniActivity extends ActionBarActivity {
 	private static ArrayAdapter<String> arrayAdapter;
 	private static AlarmManager alarmMgr;
 
-
+	static Calendar calendar = Calendar.getInstance();
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -84,14 +83,14 @@ public class OpzioniActivity extends ActionBarActivity {
 	 * dall'utente.
 	 */
 	public void onCheckboxClicked(View view) {
-		boolean checked = ((CheckBox) view).isChecked();
-
 		switch(view.getId()) {
 		case R.id.sveglia_checkbox:
-			if (checked)
-				fireAlarm((String) alarmButton.getText());
-			else
+			if (((CheckBox) view).isChecked()) {
+				//fireAlarm((String) alarmButton.getText());
+				fireAlarm();
+			} else {
 				eraseAlarm();
+			}
 			break;
 			/*case R.id.notification_checkbox:
 	            if (checked)
@@ -105,7 +104,7 @@ public class OpzioniActivity extends ActionBarActivity {
 	 * Configura ed imposta una notification di sistema all'orario specificato dall'utente.
 	 * @param time
 	 */
-	private static void fireAlarm(String time){
+	private static void fireAlarm(){
 		Toast.makeText(context, "Allarme aggiunto", Toast.LENGTH_SHORT).show();
 		
 		//Inizializza l'AlarmManager e chiama la classe d'appoggio per la configurazione della notifica
@@ -116,11 +115,9 @@ public class OpzioniActivity extends ActionBarActivity {
 		//Se una notifica era già stata impostata in precedenza, viene cancellata
 		if (alarmMgr!= null)
 			eraseAlarm();
-		
-		Calendar calendar = Calendar.getInstance();
 
 		//Si costruisce la stringa corrispondente all'orario a cui visualizzare la notifica, nel formato hh:mm:ss
-		String buf = "";
+		/*String buf = "";
 		int i=0;
 		for(;time.charAt(i)!=':';i++)
 			buf += time.charAt(i);
@@ -131,7 +128,11 @@ public class OpzioniActivity extends ActionBarActivity {
 			buf += time.charAt(i);
 		calendar.set(Calendar.MINUTE, Integer.parseInt(buf));
 		calendar.set(Calendar.SECOND, 0);
+		*/
 		
+		calendar.set(Calendar.HOUR_OF_DAY, SettingValues.sAlarmHour);
+		calendar.set(Calendar.MINUTE, SettingValues.sAlarmMinute);
+		calendar.set(Calendar.SECOND, 0);
 		/* Se l'orario scelto è successivo all'orario attuale all'interno della giornata, si incrementa il giorno di uno
 		 * per impedire che la notifica venga lanciata immediatamente.
 		 */
@@ -276,8 +277,9 @@ public class OpzioniActivity extends ActionBarActivity {
 			});
 			
 			//Legge le opzioni precedentemente scelte da file di testo
-			readSettings();	
-
+			setText();	
+				
+			
 			//Configura il pulsante per il salvataggio delle opzioni su file di testo 
 			Button salva = (Button) rootView.findViewById(R.id.salva_button);
 			salva.setOnClickListener(new View.OnClickListener() {
@@ -319,6 +321,8 @@ public class OpzioniActivity extends ActionBarActivity {
 		 * fireAlarm, per la configurazione della notifica stessa.
 		 */
 		public void onTimeSet(TimePicker view, int hourOfDay, int minuteOfHour) {
+			SettingValues.sAlarmHour = hourOfDay;
+			SettingValues.sAlarmMinute = minuteOfHour;
 			String hour = Integer.toString(hourOfDay);
 			String minute = Integer.toString(minuteOfHour);
 			if(hourOfDay<10)
@@ -327,7 +331,8 @@ public class OpzioniActivity extends ActionBarActivity {
 				minute = "0" + minute;
 			alarmButton.setText(hour+":"+minute);
 			if(alarm.isChecked())
-				fireAlarm(hour+":"+minute);
+				//fireAlarm(hour+":"+minute);
+				fireAlarm();
 		}
 	}
 
@@ -335,32 +340,23 @@ public class OpzioniActivity extends ActionBarActivity {
 	 * Legge la lista di contatti precedentemente scelti per l'invio delle e-mail di notification
 	 * @return
 	 */
+
 	private static ArrayList<String> readSelectedContacts(){
 		ArrayList<String> selectedContacts = new ArrayList<String>();
-		try {
-			FileInputStream input = context.openFileInput("contactlist.txt");
-			BufferedReader br = new BufferedReader(new InputStreamReader(input));
-			String line;
-			while((line = br.readLine()) != null)
-				selectedContacts.add(line);
-			br.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		for (int i=0;i<SettingValues.sDest.size();i++) {
+			selectedContacts.add(SettingValues.sName.get(i) + ": " + SettingValues.sDest.get(i));
 		}
 		return selectedContacts;
 	}
-
 	/**
 	 * Aggiorna la listView dei contatti scelti per l'invio delle e-mail di notification
 	 */
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		arrayAdapter.clear();
-		ArrayList<String> contacts = readSelectedContacts();
-		for(int i=0;i<contacts.size();i++)
-			arrayAdapter.add(contacts.get(i));
+		for (int i=0;i<SettingValues.sDest.size();i++) {
+			arrayAdapter.add(SettingValues.sName.get(i) + ": " + SettingValues.sDest.get(i));
+		}
 		arrayAdapter.notifyDataSetChanged();
 	}
 
@@ -371,21 +367,25 @@ public class OpzioniActivity extends ActionBarActivity {
 		try {
 			FileOutputStream output = context.openFileOutput("settings.txt", MODE_PRIVATE);
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(output));
+			
+			SettingValues.setSensorDelay(sampleRateButton.getText().toString());
 			bw.write(sampleRateButton.getText() + "\r\n");
-			bw.write(maxDuration.getText() + "\r\n");
-			bw.write(alarmButton.getText() + "\r\n");
-			if(alarm.isChecked())
-				bw.write(SettingValues.ENABLED + "\r\n");
-			else
-				bw.write(SettingValues.DISABLED + "\r\n");
-			if(notification.isChecked())
-				bw.write(SettingValues.ENABLED + "\r\n");
-			else
-				bw.write(SettingValues.DISABLED + "\r\n");
+			SettingValues.sMaxDuration = Integer.parseInt((String) maxDuration.getText());
+			bw.write(SettingValues.sMaxDuration + "\r\n");
+			setTime((String) alarmButton.getText());
+			bw.write(SettingValues.sAlarmHour + "\r\n");
+			bw.write(SettingValues.sAlarmMinute + "\r\n");
+			SettingValues.sAlarmCheck = alarm.isChecked();
+			bw.write(SettingValues.sAlarmCheck + "\r\n");
+			SettingValues.sNotificationCheck = notification.isChecked();
+			bw.write(SettingValues.sNotificationCheck + "\r\n");
 			if((!email.getText().toString().equals("") && !password.getText().toString().equals(""))){
-				bw.write(email.getText() + "\r\n");
-				bw.write(password.getText().toString());
+				SettingValues.sEmail = email.getText().toString();
+				SettingValues.sPassword = password.getText().toString();
+				bw.write(SettingValues.sEmail + "\r\n");
+				bw.write(SettingValues.sPassword);
 			}
+			
 			bw.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -393,11 +393,57 @@ public class OpzioniActivity extends ActionBarActivity {
 			e.printStackTrace();
 		}
 	}
-
+	
+	private static void setText() {
+		
+		String hour = Integer.toString(SettingValues.sAlarmHour);
+		String minute = Integer.toString(SettingValues.sAlarmMinute);
+		if (SettingValues.sAlarmHour<10)
+			hour = "0" + hour;
+		if (SettingValues.sAlarmMinute<10)
+			minute = "0" + minute;
+		alarmButton.setText(hour+":"+minute);
+		maxDuration.setText(((Integer)SettingValues.sMaxDuration).toString());
+		alarm.setChecked(SettingValues.sAlarmCheck);
+		notification.setChecked(SettingValues.sNotificationCheck);
+		email.setText(SettingValues.sEmail);
+		password.setText(SettingValues.sPassword);	
+		switch (SettingValues.sSensorDelay) {
+			case SensorManager.SENSOR_DELAY_FASTEST:
+				sampleRateButton.setText("Molto alta");
+				break;
+			case SensorManager.SENSOR_DELAY_GAME:
+				sampleRateButton.setText("Alta");
+				break;
+			case SensorManager.SENSOR_DELAY_NORMAL:
+				sampleRateButton.setText("Normale");
+				break;
+			case SensorManager.SENSOR_DELAY_UI:
+				sampleRateButton.setText("Bassa");
+				break;
+		}
+		
+		
+		
+		
+		}
+	
+	private static void setTime(String time){
+		String buf = "";
+		int i=0;
+		for(;time.charAt(i)!=':';i++)
+			buf += time.charAt(i);
+		SettingValues.sAlarmHour = Integer.parseInt(buf);
+		i++;
+		buf = "";
+		for(;i<time.length();i++)
+			buf += time.charAt(i);
+		SettingValues.sAlarmMinute = Integer.parseInt(buf);
+	}
 	/**
 	 * Recupera le impostazione dal file di testo relativo e configura i campi dell'activity in base ad esse.
 	 */
-	private static void readSettings(){
+	/*private static void readSettings(){
 		try {
 			FileInputStream input = context.openFileInput("settings.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(input));
@@ -426,6 +472,6 @@ public class OpzioniActivity extends ActionBarActivity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 }

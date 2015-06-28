@@ -67,10 +67,10 @@
         </activity>
 
         <receiver
-            android:name=".AlarmReceiver"
-            android:enabled="false" >
+            android:name="it.unipd.dei.esp1415.AlarmReceiver"
+            android:enabled="false">
             <intent-filter>
-                <action android:name="android.intent.action.ACTION_BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         
