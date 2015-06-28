@@ -1,13 +1,17 @@
 package it.unipd.dei.esp1415;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.SensorManager;
 
 public class SettingValues {
@@ -99,4 +103,41 @@ public class SettingValues {
 		}
 	}
 	
+	protected static boolean saveToInternalStorage(Bitmap image, String name, Context context) {
+		try {
+			// Crea la directory nell'archivio interno
+			File myDir = context.getDir("Thumbnails", Context.MODE_PRIVATE);
+			// Mette il file nella directory
+			File fileWithinMyDir = new File(myDir, name);
+			// Stream per scrivere nel file
+			FileOutputStream out = new FileOutputStream(fileWithinMyDir);
+			// Scrive la bitmap nello stream
+			image.compress(Bitmap.CompressFormat.PNG, 100, out);
+			out.close();
+			return true;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public static Bitmap loadImageFromStorage(String filename, Context context) {
+		Bitmap thumbnail = null;
+		FileInputStream stream;
+		try {
+			String path = context.getDir("Thumbnails", Context.MODE_PRIVATE) + "/" + filename; 
+			File file = new File(path);
+			stream = new FileInputStream(file);
+			thumbnail = BitmapFactory.decodeStream(stream);
+			stream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return thumbnail;
+		}
 }

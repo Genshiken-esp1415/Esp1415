@@ -6,6 +6,7 @@ import java.util.Date;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -21,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Questa activity conterrà il dettaglio su una sessione passata
@@ -109,7 +111,12 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity
 			
 //			ArrayList<Session> sessions = (ArrayList<Session>)db.getAllSessions();
 //			currentSession = sessions.get(2);
-			currentSession.setFallList((ArrayList<Fall>)db.getAllFalls(currentSession.getSessionBegin()));			
+			currentSession.setFallList((ArrayList<Fall>)db.getAllFalls(currentSession.getSessionBegin()));
+			// caricamento thumbnail
+			String thumbnailName = DBManager.dateToSqlDate(currentSession.getSessionBegin());	
+			Bitmap thumbnail = SettingValues.loadImageFromStorage(thumbnailName, getActivity().getApplicationContext());
+			ImageView thumbnailImageView = (ImageView) rootView.findViewById(R.id.thumbnailSessione);
+			thumbnailImageView.setImageBitmap(thumbnail);		
 			TextView timeStampSessioneTextView = (TextView) rootView.findViewById(R.id.timestampsessione);
 			TextView durataSessioneTextView = (TextView) rootView.findViewById(R.id.durataSessione);
 			String timestamp = (String) DateFormat.format("dd/MM/yy - kk:mm", currentSession.getSessionBegin());
