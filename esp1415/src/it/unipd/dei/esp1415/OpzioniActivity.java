@@ -1,11 +1,5 @@
 package it.unipd.dei.esp1415;
 
-
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -32,7 +26,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 /**
  * Activity per la scelta delle opzioni e dei contatti a cui spedire le notifiche
@@ -84,16 +77,11 @@ public class OpzioniActivity extends ActionBarActivity {
 		switch(view.getId()) {
 		case R.id.sveglia_checkbox:
 			if (((CheckBox) view).isChecked()) {
-				//fireAlarm((String) alarmButton.getText());
 				SettingValues.fireAlarm(context);
 			} else {
 				SettingValues.eraseAlarm(context);
 			}
 			break;
-			/*case R.id.notification_checkbox:
-	            if (checked)
-	            else
-	            break;*/
 		}
 	}
 
@@ -148,7 +136,7 @@ public class OpzioniActivity extends ActionBarActivity {
 					if(duration<2)
 						hours.setText("ora");
 					else
-						hours.setText("hours");
+						hours.setText("ore");
 				}
 			});
 
@@ -279,55 +267,38 @@ public class OpzioniActivity extends ActionBarActivity {
 	}
 
 	/**
-	 * Memorizza le impostazioni su un file di testo
+	 * Memorizza le impostazioni
 	 */
 	private static void writeSettings(){
-		try {
-			FileOutputStream output = context.openFileOutput("settings.txt", MODE_PRIVATE);
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(output));
-
-			SettingValues.setSensorDelay(sampleRateButton.getText().toString());
-			bw.write(sampleRateButton.getText() + "\r\n");
-			SettingValues.sMaxDuration = Integer.parseInt((String) maxDuration.getText());
-			bw.write(SettingValues.sMaxDuration + "\r\n");
-			//setTime((String) alarmButton.getText());
-			//bw.write(SettingValues.sAlarmHour + "\r\n");
-			//bw.write(SettingValues.sAlarmMinute + "\r\n");
-			SettingValues.sAlarmCheck = alarm.isChecked();
-			bw.write(SettingValues.sAlarmCheck + "\r\n");
-			SettingValues.sNotificationCheck = notification.isChecked();
-			bw.write(SettingValues.sNotificationCheck + "\r\n");
-			if((!email.getText().toString().equals("") && !password.getText().toString().equals(""))){
-				SettingValues.sEmail = email.getText().toString();
-				SettingValues.sPassword = password.getText().toString();
-				bw.write(SettingValues.sEmail + "\r\n");
-				bw.write(SettingValues.sPassword);
-			}
-
-			bw.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		editor.putInt("sensorDelay",SettingValues.getSensorDelay(sampleRateButton.getText().toString()));
+		editor.putInt("maxDuration",Integer.parseInt((String) maxDuration.getText()));
+		editor.putBoolean("alarmCheck",alarm.isChecked());
+		editor.putBoolean("notificationCheck",notification.isChecked());
+		if((!email.getText().toString().equals("") && !password.getText().toString().equals(""))){
+			editor.putString("email", email.getText().toString());
+			editor.putString("password", password.getText().toString());
 		}
+		editor.commit();
 	}
-
+	
+	/**
+	 * Imposta il testo delle varie view in base alle impostazioni scelte (o di default)
+	 */
 	private static void setText() {
 		String hour = Integer.toString(preferences.getInt("hour", 8));
 		String minute = Integer.toString(preferences.getInt("minute", 0));
 		if (preferences.getInt("hour",8)<10){
 			hour = "0" + hour;
-			Toast.makeText(context, "" + preferences.getInt("hour",8), Toast.LENGTH_LONG).show();
 		}
 		if (preferences.getInt("minute",0)<10)
 			minute = "0" + minute;
 		alarmButton.setText(hour+":"+minute);
-		maxDuration.setText(((Integer)SettingValues.sMaxDuration).toString());
-		alarm.setChecked(SettingValues.sAlarmCheck);
-		notification.setChecked(SettingValues.sNotificationCheck);
-		email.setText(SettingValues.sEmail);
-		password.setText(SettingValues.sPassword);	
-		switch (SettingValues.sSensorDelay) {
+		maxDuration.setText(((Integer)preferences.getInt("maxDuration", 8)).toString());
+		alarm.setChecked(preferences.getBoolean("alarmCheck", false));
+		notification.setChecked(preferences.getBoolean("notificationCheck", false));
+		email.setText(preferences.getString("email",""));
+		password.setText(preferences.getString("password",""));	
+		switch (preferences.getInt("sensorDelay",SensorManager.SENSOR_DELAY_GAME)) {
 		case SensorManager.SENSOR_DELAY_FASTEST:
 			sampleRateButton.setText("Molto alta");
 			break;

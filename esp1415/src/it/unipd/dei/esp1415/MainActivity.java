@@ -43,13 +43,13 @@ public class MainActivity extends ActionBarActivity {
         }
         db.close();
         
-        File f = new File(getApplicationContext().getFilesDir().getPath() + "/settings.txt");
+        /*File f = new File(getApplicationContext().getFilesDir().getPath() + "/settings.txt");
         //if ((new File("/data/data/it.unipd.dei.esp1415/files/settings.txt")).exists()) {
         if (f.exists()) {
         	SettingValues.readSettings(this);
         } else {
         	SettingValues.setDefault();
-        }
+        }*/
         if ((new File(getApplicationContext().getFilesDir().getPath() + "/contactlist.txt")).exists()){
         	Toast.makeText(this, "Contact list trovata", Toast.LENGTH_LONG).show();
         	SettingValues.setSelectedContacts(this);

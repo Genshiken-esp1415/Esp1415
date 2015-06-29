@@ -22,20 +22,9 @@ import android.widget.Toast;
 public class SettingValues {
 
 
-	protected static final String LAST_NOTIFICATION= "lastNotification";
-
 	protected static final boolean ENABLED = true;
 	protected static final boolean DISABLED = false;
 
-	protected static int sSensorDelay;
-	protected static int sMaxDuration;
-	protected static int sAlarmHour;
-	protected static int sAlarmMinute;
-	protected static String sAlarm;
-	protected static boolean sAlarmCheck;
-	protected static boolean sNotificationCheck;
-	protected static String sEmail;
-	protected static String sPassword;
 	protected static ArrayList<String> sDest = new ArrayList<String>();
 	protected static ArrayList<String> sName = new ArrayList<String>();
 
@@ -43,43 +32,6 @@ public class SettingValues {
 	protected static PendingIntent sAlarmIntent;
 	protected static Calendar sCalendar;
 	protected static SharedPreferences sPreferences;
-
-	protected static void setDefault() {
-		sSensorDelay = SensorManager.SENSOR_DELAY_GAME;
-		sMaxDuration = 8;
-		sAlarmHour = 8;
-		sAlarmMinute = 0;
-		sAlarm = "8:00";
-		sAlarmCheck = DISABLED;
-		sNotificationCheck = DISABLED;
-		sEmail = "";
-		sPassword = "";
-	}
-
-	protected static void readSettings(Context context) {
-		try {
-			FileInputStream input = context.openFileInput("settings.txt");
-			BufferedReader br = new BufferedReader(new InputStreamReader(input));
-			String line;
-			if ((line = br.readLine()) == null) {
-				return;
-			} else {
-				setSensorDelay(line);
-			}			
-			sMaxDuration = Integer.parseInt(br.readLine());
-			sAlarmCheck = Boolean.parseBoolean(br.readLine());
-			sNotificationCheck = Boolean.parseBoolean(br.readLine());
-			if( (line = br.readLine()) != null){
-				sEmail = line;
-				sPassword = br.readLine();
-			}
-			br.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 	protected static ArrayList<String> setSelectedContacts(Context context) {
 		try {
@@ -101,18 +53,17 @@ public class SettingValues {
 		return sDest;
 	}
 
-	protected static void setSensorDelay(String sampleRate){
+	protected static int getSensorDelay(String sampleRate){
 		if (sampleRate.equals("Molto alta")) {
-			sSensorDelay = SensorManager.SENSOR_DELAY_FASTEST;
+			return SensorManager.SENSOR_DELAY_FASTEST;
 		} else if (sampleRate.equals("Alta")) {
-			sSensorDelay = SensorManager.SENSOR_DELAY_GAME;
+			return SensorManager.SENSOR_DELAY_GAME;
 		} else if (sampleRate.equals("Normale")) {
-			sSensorDelay = SensorManager.SENSOR_DELAY_NORMAL;
+			return SensorManager.SENSOR_DELAY_NORMAL;
 		} else {
-			sSensorDelay = SensorManager.SENSOR_DELAY_UI;
+			return SensorManager.SENSOR_DELAY_UI;
 		}
 	}
-	
 	/**
 	 * Configura ed imposta una notification di sistema all'orario specificato dall'utente.
 	 * @param time

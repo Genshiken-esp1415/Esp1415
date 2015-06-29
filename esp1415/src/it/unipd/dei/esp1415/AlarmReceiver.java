@@ -21,7 +21,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		DBManager db = new DBManager(context);
-		
+
 		db.open();
 		SharedPreferences preferences = context.getSharedPreferences("MyPref", Context.MODE_PRIVATE); 
 
@@ -30,9 +30,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 		calendar.set(Calendar.MINUTE, preferences.getInt("minute",0));
 		calendar.set(Calendar.DAY_OF_MONTH, preferences.getInt("day", 0));
 		calendar.set(Calendar.SECOND, 0);
-		
-		Toast.makeText(context, preferences.getInt("day", 0) + " FUCK " + SettingValues.sCalendar.get(Calendar.DAY_OF_MONTH), Toast.LENGTH_LONG).show();
-		if((preferences.getInt("day", 0) == SettingValues.sCalendar.get(Calendar.DAY_OF_MONTH)) && (System.currentTimeMillis()-calendar.getTimeInMillis())>5000){
+
+		if (db.hasActiveSession() || (preferences.getInt("day", 0) == SettingValues.sCalendar.get(Calendar.DAY_OF_MONTH)) 
+				&& (System.currentTimeMillis()-calendar.getTimeInMillis())>5000) {
 			SettingValues.fireAlarm(context);
 		} else {
 			Intent notificationIntent = new Intent(context, OpzioniActivity.class);
@@ -48,15 +48,14 @@ public class AlarmReceiver extends BroadcastReceiver {
 			.setContentText("Ricordati di iniziare la registrazione")
 			.setContentIntent(contentIntent)
 			.setAutoCancel(true);
-			
+
 			SharedPreferences.Editor editor = preferences.edit();
 			editor.putInt("day", SettingValues.sCalendar.get(Calendar.DAY_OF_MONTH));
 			editor.commit();
-			
+
 			NotificationManager mNotificationManager =
 					(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			mNotificationManager.notify(0, mBuilder.build());
-			Toast.makeText(context, "Alarm received!", Toast.LENGTH_LONG).show();
 		}
 	}
 }

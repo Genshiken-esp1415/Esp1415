@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -37,9 +38,10 @@ public class WatcherService extends Service implements SensorEventListener{
 	private long lastFall;
 	private long lastFallNano;
 	private static DBManager db;
+	private static SharedPreferences preferences;
 	private Session currentSession;
 	long timePassed;
-	//private int SettingValues.sSensorDelay;
+	private int sensorDelay;
 	private LinkedList<AccelerometerData> samples; 
 	private LinkedList<AccelerometerData> fallSamples;
 	int sampleMaxSize;
@@ -81,9 +83,10 @@ public class WatcherService extends Service implements SensorEventListener{
 		measuredData = new AccelerometerData(0,0,0,0);
 		Sensor Accel = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		//Imposto il sensor delay
-		SettingValues.sSensorDelay = SensorManager.SENSOR_DELAY_FASTEST;
+		preferences = getApplicationContext().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+		sensorDelay = preferences.getInt("sensorDelay",SensorManager.SENSOR_DELAY_GAME);
 		//imposto il samplerate a seguito del sensor delay scelto
-		switch (SettingValues.sSensorDelay){
+		switch (sensorDelay){
 		case 0: sampleRate = 0; break;
 		case 1: sampleRate = 20000000; break;
 		case 2: sampleRate = 60000000; break;
@@ -91,9 +94,9 @@ public class WatcherService extends Service implements SensorEventListener{
 		}
 		samples = new LinkedList<AccelerometerData>();
 		fallSamples = new LinkedList<AccelerometerData>();
-		sampleMaxSize = 1000000/((SettingValues.sSensorDelay+1)*2);
+		sampleMaxSize = 1000000/((sensorDelay+1)*2);
 		// registro la classe come listener dell'accelerometro
-		sm.registerListener((SensorEventListener) this, Accel, SettingValues.sSensorDelay);
+		sm.registerListener((SensorEventListener) this, Accel, sensorDelay);
 		// Acquire a reference to the system Location Manager
 		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new LocationListener() {
@@ -264,11 +267,13 @@ public class WatcherService extends Service implements SensorEventListener{
 			 //ripristino la variabile di controllo sull'ottenimento di una posizione
 			 //registro la nuova caduta nel db
 			 fallNumber ++;
-			 ArrayList<String> dest = new ArrayList<String>();
-			 dest.add("marco@speronello.com");
-			 NotificationSender sender = new NotificationSender("genshiken1415@gmail.com","qwertyjkl",dest,this);
-			 sender.buildMessage(DBManager.dateToSqlDate(new Date(lastFall)),"14:45:05",Double.toString(latitude),Double.toString(longitude));
-			 sender.execute();
+			 if(preferences.getBoolean("NotificationCheck",false)){
+				 if(!preferences.getString("email", "").equals("") && !preferences.getString("password", "").equals("") && !SettingValues.sDest.isEmpty()){
+					 NotificationSender sender = new NotificationSender(preferences.getString("email", "")+"gmail.com",preferences.getString("password", ""),SettingValues.sDest,this);
+					 sender.buildMessage(DBManager.dateToSqlDate(new Date(lastFall)),"14:45:05",Double.toString(latitude),Double.toString(longitude));
+					 sender.execute();
+				 }
+			 }
 		 }
 
 		@Override
