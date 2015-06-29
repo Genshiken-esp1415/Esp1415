@@ -258,7 +258,7 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 				}
 			
 			//TODO solo per test imposto tutte le thumbnail delle sessioni passate
-			Date newSessionBegin = session.getSessionBegin();
+			/*Date newSessionBegin = session.getSessionBegin();
 			Bitmap thumnailGen = ThumbnailGenerator.createThumbnail(newSessionBegin); 
 			// conversione della data in stringa
 			String name = DBManager.dateToSqlDate(newSessionBegin); 
@@ -267,9 +267,9 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 				// setto la thumbnail nella sessione
 				session.setThumbnail(name); 
 				}
-			
+			*/
 			// impostazione della thumbnail
-			name = session.getThumbnail();
+			String name = session.getThumbnail();
 			Bitmap thumbnail = SettingValues.loadImageFromStorage(name, sContext);
 			holder.imageView.setImageBitmap(thumbnail);
 			return rowView;

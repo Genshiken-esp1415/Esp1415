@@ -113,7 +113,9 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity
 //			currentSession = sessions.get(2);
 			currentSession.setFallList((ArrayList<Fall>)db.getAllFalls(currentSession.getSessionBegin()));
 			// caricamento thumbnail
-			String thumbnailName = DBManager.dateToSqlDate(currentSession.getSessionBegin());	
+			//String thumbnailName = DBManager.dateToSqlDate(currentSession.getSessionBegin());
+			String thumbnailName = currentSession.getThumbnail();
+			Toast.makeText(getActivity(), thumbnailName, Toast.LENGTH_SHORT).show(); 
 			Bitmap thumbnail = SettingValues.loadImageFromStorage(thumbnailName, getActivity().getApplicationContext());
 			ImageView thumbnailImageView = (ImageView) rootView.findViewById(R.id.thumbnailSessione);
 			thumbnailImageView.setImageBitmap(thumbnail);		
@@ -163,6 +165,7 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity
 			Date idSessione = adapter.getItem(position).getFallTimestamp();
 			dettaglio_caduta.putExtra("IDCaduta", idSessione.getTime());
 			dettaglio_caduta.putExtra("NomeSessione", currentSession.getName());
+			dettaglio_caduta.putExtra("timestampSessione", currentSession.getSessionBegin().getTime());
 			startActivity(dettaglio_caduta);
 
 		}

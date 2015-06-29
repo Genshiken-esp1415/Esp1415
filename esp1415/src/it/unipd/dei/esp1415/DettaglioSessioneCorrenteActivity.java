@@ -136,6 +136,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 				// salvataggio in memoria della thumbnail
 				if (SettingValues.saveToInternalStorage(thumnailGen, name, getActivity().getBaseContext())) { 
 					// setto la thumbnail nella sessione
+					//db.getSession(newSessionBegin).setThumbnail(name);
 					currentSession.setThumbnail(name); 
 					}
 				db.setActiveSession(currentSession);
