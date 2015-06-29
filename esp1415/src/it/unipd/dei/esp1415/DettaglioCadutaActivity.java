@@ -30,7 +30,6 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 	private final static int Z = 2;
 	private DBManager db;
 	private static Fall currentFall;
-	private static Date currentSessionTimestamp;
 	private static String sessionName;
 	
 	@Override
@@ -40,8 +39,6 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 		Intent intent = getIntent();
 		db = new DBManager(this);
 		db.open();
-		currentSessionTimestamp = new Date();
-		currentSessionTimestamp.setTime(intent.getLongExtra("timestampSessione", 0L));
 		currentFall = db.getFall((Date) new Date(intent.getLongExtra("IDCaduta",0L)));
 	    currentFall.setFallData((ArrayList<AccelerometerData>)db.getAccData(currentFall.getFallTimestamp()));
 	    sessionName = intent.getStringExtra("NomeSessione");
@@ -111,7 +108,8 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 			TextView latitudine = (TextView) rootView.findViewById(R.id.latitudine);
 			TextView longitudine = (TextView) rootView.findViewById(R.id.longitudine);
 			ImageView thumbnailImageView = (ImageView) rootView.findViewById(R.id.thumbnail_label);
-			String thumbnailName = DBManager.dateToSqlDate(currentSessionTimestamp);	
+			Date currentSession = currentFall.getSession();
+			String thumbnailName = DBManager.dateToSqlDate(currentSession);	
 			Bitmap thumbnail = SettingValues.loadImageFromStorage(thumbnailName, getActivity().getApplicationContext());
 			thumbnailImageView.setImageBitmap(thumbnail);		
 			data.setText(DateFormat.format("dd/MM/yy",dataCaduta));

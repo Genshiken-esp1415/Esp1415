@@ -4,6 +4,8 @@ import it.unipd.dei.esp1415.R;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -126,6 +128,17 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 		
 			}	
 
+		@Override
+		public void onResume() {
+			super.onResume();
+			sAdapter.clear();
+			List<Session> dbSessions = sDb.getAllSessions();
+			for(int i=0; i<dbSessions.size(); i++) {
+				sAdapter.add(dbSessions.get(i));
+			}	
+			sAdapter.notifyDataSetChanged();
+		}
+		
 		// metodo che gestisce il tocco prolungato
 		@Override
 		public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) { 
@@ -257,24 +270,13 @@ public class ListaSessioniActivity extends ActionBarActivity implements renameDi
 				holder.firstLine.setTextColor(Color.BLACK);
 				}
 			
-			//TODO solo per test imposto tutte le thumbnail delle sessioni passate
-			/*Date newSessionBegin = session.getSessionBegin();
-			Bitmap thumnailGen = ThumbnailGenerator.createThumbnail(newSessionBegin); 
-			// conversione della data in stringa
-			String name = DBManager.dateToSqlDate(newSessionBegin); 
-			// salvataggio in memoria della thumbnail
-			if (SettingValues.saveToInternalStorage(thumnailGen, name, sContext)) { 
-				// setto la thumbnail nella sessione
-				session.setThumbnail(name); 
-				}
-			*/
 			// impostazione della thumbnail
 			String name = session.getThumbnail();
 			Bitmap thumbnail = SettingValues.loadImageFromStorage(name, sContext);
 			holder.imageView.setImageBitmap(thumbnail);
 			return rowView;
 		}
-				
+		
 		public String conversionFromMilliseconds(int milliseconds) {
 			String hoursAndMinutes = "";
 			int seconds = milliseconds / 1000;

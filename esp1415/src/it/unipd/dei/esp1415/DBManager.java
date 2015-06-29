@@ -82,7 +82,6 @@ public class DBManager {
 	        null, null, DBOpenHelper.COLUMN_TIMESTAMP_S + " DESC");
 	    cursor.moveToFirst();
 	    Session newSession = cursorToSession(cursor);
-	    newSession.setThumbnail(dateToSqlDate(newSession.getSessionBegin()));
 	    cursor.close();
 	    return newSession;
 	  }

@@ -38,9 +38,9 @@ public class MainActivity extends ActionBarActivity {
         //creo il db per il primo avvio e faccio inserimenti dummy per testing, se non � gi� stato popolato il db.
         DBManager db = new DBManager(this);
         db.open();
-        if(db.getAllSessions().size()==0){
+        /*if(db.getAllSessions().size()==0){
         	db.dummyInsert();
-        }
+        }*/
         db.close();
         
         File f = new File(getApplicationContext().getFilesDir().getPath() + "/settings.txt");

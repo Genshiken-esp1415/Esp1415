@@ -16,7 +16,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/grafico_z"
         android:layout_alignEnd="@+id/grafico_z"
-        android:layout_marginTop="35dp" />
+        android:layout_marginTop="35dp"
+        android:background="@drawable/box" />
 
     <!-- <ImageView
         android:id="@+id/grafico_label"

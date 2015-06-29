@@ -96,6 +96,16 @@
         android:layout_below="@+id/zLabel"
         android:text="@string/durata"
         android:textSize="40sp" />
+    
+	<ImageView
+        android:id="@+id/thumbnailSessione"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignTop="@+id/xValue"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/thumbnail_description"
+        android:background="@drawable/box" />
 
     <ImageButton
         android:id="@+id/playPauseButton"

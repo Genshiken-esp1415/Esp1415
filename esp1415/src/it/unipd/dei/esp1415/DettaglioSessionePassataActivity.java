@@ -22,7 +22,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Questa activity conterrà il dettaglio su una sessione passata
@@ -113,9 +112,7 @@ public class DettaglioSessionePassataActivity extends ActionBarActivity
 //			currentSession = sessions.get(2);
 			currentSession.setFallList((ArrayList<Fall>)db.getAllFalls(currentSession.getSessionBegin()));
 			// caricamento thumbnail
-			//String thumbnailName = DBManager.dateToSqlDate(currentSession.getSessionBegin());
 			String thumbnailName = currentSession.getThumbnail();
-			Toast.makeText(getActivity(), thumbnailName, Toast.LENGTH_SHORT).show(); 
 			Bitmap thumbnail = SettingValues.loadImageFromStorage(thumbnailName, getActivity().getApplicationContext());
 			ImageView thumbnailImageView = (ImageView) rootView.findViewById(R.id.thumbnailSessione);
 			thumbnailImageView.setImageBitmap(thumbnail);		

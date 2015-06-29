@@ -8,10 +8,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.hardware.SensorManager;
 
 public class SettingValues {
@@ -140,4 +144,24 @@ public class SettingValues {
 		}
 		return thumbnail;
 		}
+	
+	// Questo metodo dato il timestamp della sessione crea una thumbnail unica
+	public static Bitmap createThumbnail(Date sessionBegin)
+	{
+		long timestamp = sessionBegin.getTime();
+		Random random = new Random();
+	    int a = (int)((timestamp >> 32)) + random.nextInt();
+		long rightDigits = timestamp  & 0xffffffff;
+		int b = (int)(rightDigits);
+		Bitmap.Config configuration = Bitmap.Config.ARGB_4444;
+		Bitmap left = Bitmap.createBitmap(35, 70, configuration);
+		left.eraseColor(a);
+		Bitmap right = Bitmap.createBitmap(35, 70, configuration);
+		right.eraseColor(b);
+	    Bitmap thumbnail = Bitmap.createBitmap(70, 70, configuration);
+	    Canvas canvas = new Canvas(thumbnail);
+	    canvas.drawBitmap(left, null, new Rect(0, 0, canvas.getWidth() / 2, canvas.getHeight()), null);
+	    canvas.drawBitmap(right, null, new Rect(canvas.getWidth() / 2, 0, canvas.getWidth(), canvas.getHeight()), null);   
+		return thumbnail;  
+    }
 }

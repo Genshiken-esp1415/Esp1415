@@ -103,6 +103,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 		private TextView yValue;
 		private TextView zValue;
 		private TextView durataSessioneTextView;
+		private ImageView thumbnailImageView;
 		private Intent i;
 		private ImageButton playPauseButton;
 		private ImageButton stopButton;
@@ -130,15 +131,11 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 				currentSession.setActive(true);
 				// generazione e impostazione della thumbnail
 				Date newSessionBegin = currentSession.getSessionBegin();
-				Bitmap thumnailGen = ThumbnailGenerator.createThumbnail(newSessionBegin); 
+				Bitmap thumnailGen = SettingValues.createThumbnail(newSessionBegin); 
 				// conversione della data in stringa
 				String name = DBManager.dateToSqlDate(newSessionBegin); 
 				// salvataggio in memoria della thumbnail
-				if (SettingValues.saveToInternalStorage(thumnailGen, name, getActivity().getBaseContext())) { 
-					// setto la thumbnail nella sessione
-					//db.getSession(newSessionBegin).setThumbnail(name);
-					currentSession.setThumbnail(name); 
-					}
+				SettingValues.saveToInternalStorage(thumnailGen, name, getActivity().getBaseContext());
 				db.setActiveSession(currentSession);
 				
 			}
@@ -156,6 +153,11 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 					.findViewById(R.id.playPauseButton);
 			stopButton = (ImageButton) rootView
 					.findViewById(R.id.stopButton);
+			// caricamento thumbnail
+			thumbnailImageView = (ImageView) rootView.findViewById(R.id.thumbnailSessione);
+			String thumbnailName = currentSession.getThumbnail();
+			Bitmap thumbnail = SettingValues.loadImageFromStorage(thumbnailName, getActivity().getApplicationContext());
+			thumbnailImageView.setImageBitmap(thumbnail);		
 			
 			nomeSessione.setImeOptions(EditorInfo.IME_ACTION_DONE);
 			nomeSessione

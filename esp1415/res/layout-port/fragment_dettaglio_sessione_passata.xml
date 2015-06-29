@@ -11,10 +11,11 @@
  
     <ImageView
         android:id="@+id/thumbnailSessione"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/box" />
 
     <TextView
         android:id="@+id/timestampsessione"

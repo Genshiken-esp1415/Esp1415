@@ -21,8 +21,6 @@ public class Session {
 	private boolean active;
 	//arrayList con riferimenti alle cadute, tenuto ordinato per dataora di caduta
 	private ArrayList<Fall> fallList;
-	//thumbnail
-	private String thumbnail;
 	
 	private Session(SessionBuilder builder) {
 		this.SessionBegin = builder.sessionBegin;
@@ -30,7 +28,6 @@ public class Session {
 		this.duration = builder.duration;
 		this.active = builder.active;
 		this.fallList = builder.fallList;
-		this.thumbnail = builder.thumbnail;
 	}
 	
 	public Date getSessionBegin() {
@@ -53,8 +50,10 @@ public class Session {
 		return duration;
 	}
 	
+	// restituisce il nome del dile contenente la thumbnail
 	public String getThumbnail() {
-		return thumbnail;
+		String thumbnailName = DBManager.dateToSqlDate(this.SessionBegin); 
+		return thumbnailName;
 	}
 	
 	public void setDuration(int duration) {
@@ -76,11 +75,7 @@ public class Session {
 	public void setFallList(ArrayList<Fall> fallList) {
 		this.fallList = fallList;
 	}
-	
-	public void setThumbnail(String thumbnail) {
-		this.thumbnail = thumbnail;
-	}
-	
+		
 	public int getNumberOfFalls() {
 		return fallList.size();
 	}
@@ -91,7 +86,6 @@ public class Session {
 		private int duration; 
 		private boolean active;
 		private ArrayList<Fall> fallList;
-		private String thumbnail;
 		
 		public SessionBuilder(Date sessionBegin) {
 			this.sessionBegin = sessionBegin;
@@ -120,12 +114,7 @@ public class Session {
 			this.fallList = fallList;
 			return this;
 		}
-		
-		public SessionBuilder thumbnail(String thumbnail) {
-			this.thumbnail = thumbnail;
-			return this;
-		}
-		
+				
 		public Session build() {
 			return new Session(this);
 		}
