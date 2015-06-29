@@ -38,9 +38,8 @@
 	    android:layout_alignParentLeft="true"
 	    android:layout_alignParentStart="true"
 	    android:layout_alignParentTop="true"
-	    android:background="@drawable/box"
 	    android:contentDescription="@string/thumbnail_description"
-	    android:src="@drawable/thumbnail_placeholder" />
+	    android:background="@drawable/box" />
 
 	<it.unipd.dei.esp1415.GraphView
 	    android:id="@+id/grafico_y"

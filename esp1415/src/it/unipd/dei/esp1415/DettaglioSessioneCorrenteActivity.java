@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -102,6 +103,7 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 		private TextView yValue;
 		private TextView zValue;
 		private TextView durataSessioneTextView;
+		private ImageView thumbnailImageView;
 		private Intent i;
 		private ImageButton playPauseButton;
 		private ImageButton stopButton;
@@ -127,6 +129,13 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 			} else {
 				currentSession = db.createSession("Nuova Sessione");
 				currentSession.setActive(true);
+				// generazione e impostazione della thumbnail
+				Date newSessionBegin = currentSession.getSessionBegin();
+				Bitmap thumnailGen = SettingValues.createThumbnail(newSessionBegin); 
+				// conversione della data in stringa
+				String name = DBManager.dateToSqlDate(newSessionBegin); 
+				// salvataggio in memoria della thumbnail
+				SettingValues.saveToInternalStorage(thumnailGen, name, getActivity().getBaseContext());
 				db.setActiveSession(currentSession);
 				
 			}
@@ -144,6 +153,11 @@ public class DettaglioSessioneCorrenteActivity extends ActionBarActivity {
 					.findViewById(R.id.playPauseButton);
 			stopButton = (ImageButton) rootView
 					.findViewById(R.id.stopButton);
+			// caricamento thumbnail
+			thumbnailImageView = (ImageView) rootView.findViewById(R.id.thumbnailSessione);
+			String thumbnailName = currentSession.getThumbnail();
+			Bitmap thumbnail = SettingValues.loadImageFromStorage(thumbnailName, getActivity().getApplicationContext());
+			thumbnailImageView.setImageBitmap(thumbnail);		
 			
 			nomeSessione.setImeOptions(EditorInfo.IME_ACTION_DONE);
 			nomeSessione

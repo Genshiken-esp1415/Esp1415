@@ -17,8 +17,7 @@
         android:layout_alignRight="@+id/grafico_z"
         android:layout_alignEnd="@+id/grafico_z"
         android:layout_marginTop="35dp"
-        android:background="@drawable/box"
-        android:src="@drawable/thumbnail_placeholder" />
+        android:background="@drawable/box" />
 
     <!-- <ImageView
         android:id="@+id/grafico_label"

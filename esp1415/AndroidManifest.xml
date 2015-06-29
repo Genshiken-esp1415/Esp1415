@@ -53,10 +53,6 @@
     </service>
         
         <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" >
-        </activity>
-        <activity
             android:name=".ContactListActivity"
             android:label="@string/title_activity_contactlist" >
         </activity>

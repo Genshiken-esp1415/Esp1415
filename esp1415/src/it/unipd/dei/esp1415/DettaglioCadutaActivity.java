@@ -14,8 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 
 /**
@@ -37,7 +39,7 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 		Intent intent = getIntent();
 		db = new DBManager(this);
 		db.open();
-		currentFall = db.getFall(((Date)new Date(intent.getLongExtra("IDCaduta",0L))));
+		currentFall = db.getFall((Date) new Date(intent.getLongExtra("IDCaduta",0L)));
 	    currentFall.setFallData((ArrayList<AccelerometerData>)db.getAccData(currentFall.getFallTimestamp()));
 	    sessionName = intent.getStringExtra("NomeSessione");
 		db.close();
@@ -105,6 +107,11 @@ public class DettaglioCadutaActivity extends ActionBarActivity {
 			TextView notifica = (TextView) rootView.findViewById(R.id.notifica);
 			TextView latitudine = (TextView) rootView.findViewById(R.id.latitudine);
 			TextView longitudine = (TextView) rootView.findViewById(R.id.longitudine);
+			ImageView thumbnailImageView = (ImageView) rootView.findViewById(R.id.thumbnail_label);
+			Date currentSession = currentFall.getSession();
+			String thumbnailName = DBManager.dateToSqlDate(currentSession);	
+			Bitmap thumbnail = SettingValues.loadImageFromStorage(thumbnailName, getActivity().getApplicationContext());
+			thumbnailImageView.setImageBitmap(thumbnail);		
 			data.setText(DateFormat.format("dd/MM/yy",dataCaduta));
 			ora.setText(DateFormat.format("kk:mm:ss",dataCaduta));
 			latitudine.setText(Double.toString(currentFall.getLatitude()));

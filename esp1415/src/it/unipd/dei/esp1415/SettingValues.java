@@ -1,12 +1,16 @@
 package it.unipd.dei.esp1415;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -18,7 +22,10 @@ import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
 import android.text.format.DateFormat;
 import android.widget.Toast;
-
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 public class SettingValues {
 
 
@@ -130,4 +137,61 @@ public class SettingValues {
 					PackageManager.DONT_KILL_APP);
 		}
 	}
+	protected static boolean saveToInternalStorage(Bitmap image, String name, Context context) {
+		try {
+			// Crea la directory nell'archivio interno
+			File myDir = context.getDir("Thumbnails", Context.MODE_PRIVATE);
+			// Mette il file nella directory
+			File fileWithinMyDir = new File(myDir, name);
+			// Stream per scrivere nel file
+			FileOutputStream out = new FileOutputStream(fileWithinMyDir);
+			// Scrive la bitmap nello stream
+			image.compress(Bitmap.CompressFormat.PNG, 100, out);
+			out.close();
+			return true;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public static Bitmap loadImageFromStorage(String filename, Context context) {
+		Bitmap thumbnail = null;
+		FileInputStream stream;
+		try {
+			String path = context.getDir("Thumbnails", Context.MODE_PRIVATE) + "/" + filename; 
+			File file = new File(path);
+			stream = new FileInputStream(file);
+			thumbnail = BitmapFactory.decodeStream(stream);
+			stream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return thumbnail;
+		}
+	
+	// Questo metodo dato il timestamp della sessione crea una thumbnail unica
+	public static Bitmap createThumbnail(Date sessionBegin)
+	{
+		long timestamp = sessionBegin.getTime();
+		Random random = new Random();
+	    int a = (int)((timestamp >> 32)) + random.nextInt();
+		long rightDigits = timestamp  & 0xffffffff;
+		int b = (int)(rightDigits);
+		Bitmap.Config configuration = Bitmap.Config.ARGB_4444;
+		Bitmap left = Bitmap.createBitmap(35, 70, configuration);
+		left.eraseColor(a);
+		Bitmap right = Bitmap.createBitmap(35, 70, configuration);
+		right.eraseColor(b);
+	    Bitmap thumbnail = Bitmap.createBitmap(70, 70, configuration);
+	    Canvas canvas = new Canvas(thumbnail);
+	    canvas.drawBitmap(left, null, new Rect(0, 0, canvas.getWidth() / 2, canvas.getHeight()), null);
+	    canvas.drawBitmap(right, null, new Rect(canvas.getWidth() / 2, 0, canvas.getWidth(), canvas.getHeight()), null);   
+		return thumbnail;  
+    }
 }

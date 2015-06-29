@@ -83,36 +83,8 @@ public class DBManager {
 	    cursor.moveToFirst();
 	    Session newSession = cursorToSession(cursor);
 	    cursor.close();
-	    
-	    /*Date newSessionBegin = newSession.getSessionBegin();
-		Bitmap thumb = ThumbnailGenerator.createThumbnail(newSessionBegin); // genero la thumbnail
-		Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //salvo la data come nome dell'immagine
-		String name = formatter.format(newSessionBegin);
-		String thumbnail;
-		if(saveToInternalStorage(thumb, name)) //la salvo in memoria
-			 {thumbnail = name;
-			 newSession.setThumbnail(thumbnail);}*/
 	    return newSession;
 	  }
-	 
-	/*  public static boolean saveToInternalStorage(Bitmap image, String name) {
-
-		  
-		try {
-			// Creo la directory nell'archivio interno
-			File mydir = context.getDir("Thumbnails", Context.MODE_PRIVATE); 
-			// Metto il file nella directory
-			File fileWithinMyDir = new File(mydir, name); 
-			// Stream per scrivere nel file
-			FileOutputStream out = new FileOutputStream(fileWithinMyDir); 
-			// Scrivo la bitmap nello stream
-			image.compress(Bitmap.CompressFormat.PNG, 100, out);
-			out.close();
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}*/
 	    
 	  /**
 	   * Utilizzato quando si crea una nuova sessione. La sessione viene creata, inserita nel db e restituita al chiamante.
@@ -263,7 +235,7 @@ public class DBManager {
 	    Date timestamp = session.getSessionBegin();
 	    System.out.println("Comment deleted with timestamp: " + timestamp);
 	    database.delete(DBOpenHelper.TABLE_SESSION, DBOpenHelper.COLUMN_TIMESTAMP_S
-	        + " = " + dateToSqlDate(timestamp), null);
+	        + " = '" + dateToSqlDate(timestamp) +"'", null);
 	  }
 
 	  /**
