@@ -121,7 +121,7 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 			// currentSession = sessions.get(2);
 			sCurrentSession.setFallList((ArrayList<Fall>) sDb
 					.getAllFalls(sCurrentSession.getSessionBegin()));
-			// caricamento thumbnail
+			// Caricamento thumbnail
 			String thumbnailName = sCurrentSession.getThumbnail();
 			Bitmap thumbnail = Utilities.loadImageFromStorage(thumbnailName,
 					getActivity().getApplicationContext());
@@ -132,11 +132,12 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 					.findViewById(R.id.session_timestamp);
 			TextView sessionDurationTextView = (TextView) rootView
 					.findViewById(R.id.session_length);
-			String timestamp = (String) DateFormat.format("dd/MM/yy - kk:mm",
+			String timestamp = this.getString(R.string.date_and_time) + DateFormat.format("dd/MM/yy - kk:mm",
 					sCurrentSession.getSessionBegin());
 			sessionTimestampTextView.setText(timestamp);
-			sessionDurationTextView.setText(Utilities.millisToHourMinuteSecond(sCurrentSession
-					.getDuration(), false));
+			String duration = this.getString(R.string.session_duration) + Utilities.millisToHourMinuteSecond(sCurrentSession
+					.getDuration(), false);
+			sessionDurationTextView.setText(duration);
 			this.getActivity().setTitle(sCurrentSession.getName());
 			return rootView;
 		}
@@ -184,8 +185,6 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 			Date idSessione = mAdapter.getItem(position).getFallTimestamp();
 			fallDetails.putExtra("IDCaduta", idSessione.getTime());
 			fallDetails.putExtra("NomeSessione", sCurrentSession.getName());
-			fallDetails.putExtra("timestampSessione", sCurrentSession
-					.getSessionBegin().getTime());
 			startActivity(fallDetails);
 
 		}

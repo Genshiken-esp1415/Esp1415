@@ -255,12 +255,10 @@ public class SessionListActivity extends ActionBarActivity implements
 			// Imposta i campi della prima e della seconda riga
 			Session session = mSessions.get(position);
 			holder.firstLine.setText(session.getName());
-			String date = (String) DateFormat.format("dd/MM/yy",
-					session.getSessionBegin());
-			String hour = (String) DateFormat.format("kk:mm",
+			String date = (String) DateFormat.format("dd/MM/yy kk:mm",
 					session.getSessionBegin());
 			String secondLine = getContext().getString(R.string.date_and_time)
-					+ date + " " + hour;
+					+ date;
 			holder.secondLine.setText(secondLine);
 			String thirdLine = getContext().getString(R.string.session_duration)
 					+ Utilities.millisToHourMinuteSecond(session.getDuration(), false) + " - "
