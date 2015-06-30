@@ -30,10 +30,6 @@ import android.graphics.Rect;
  * Classe contentenente varie variabili statiche e metodi di utilità utilizzati
  * dalle altre classi e activity.
  */
-/**
- * @author Laura
- *
- */
 public class Utilities {
 
 	protected static final boolean ENABLED = true;
