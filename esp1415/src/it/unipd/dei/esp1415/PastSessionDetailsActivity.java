@@ -51,6 +51,13 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 		}
 
 	}
+	
+	@Override
+	public void onBackPressed () {
+		Intent sessionList = new Intent(this, SessionListActivity.class);
+		sessionList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(sessionList);
+		}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -128,8 +135,8 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 			String timestamp = (String) DateFormat.format("dd/MM/yy - kk:mm",
 					sCurrentSession.getSessionBegin());
 			sessionTimestampTextView.setText(timestamp);
-			sessionDurationTextView.setText(conver_ore_minuti(sCurrentSession
-					.getDuration()));
+			sessionDurationTextView.setText(Utilities.millisToHourMinuteSecond(sCurrentSession
+					.getDuration(), false));
 			this.getActivity().setTitle(sCurrentSession.getName());
 			return rootView;
 		}
@@ -165,7 +172,7 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 					sCurrentSession.getFallList());
 			setListAdapter(mAdapter);
 		}
-
+		
 		// Click su elementi della lista
 		@Override
 		public void onListItemClick(ListView l, View v, int position, long id) {// gestisce
@@ -221,17 +228,6 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 			return rowFallView;
 
 		}
-	}
-
-	// TODO segare_via_questo_abominio_ma_di_brutto
-	public static String conver_ore_minuti(int millisecondi) {
-		String ore_minuti = "";
-		int secondi = millisecondi / 1000;
-		int minuti = secondi / 60;
-		int ore = minuti / 60;
-		minuti = minuti % 60;
-		ore_minuti = ore + "h " + minuti + "m";
-		return ore_minuti;
 	}
 
 }

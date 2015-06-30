@@ -1,6 +1,5 @@
 package it.unipd.dei.esp1415;
 import java.io.BufferedReader;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,7 +28,7 @@ import android.graphics.Rect;
 
 /**
  * Classe contentenente varie variabili statiche e metodi di utilità utilizzati
- * dalle altre classi e activity
+ * dalle altre classi e activity.
  */
 public class Utilities {
 
@@ -152,7 +151,7 @@ public class Utilities {
 	}
 
 	/**
-	 * Cancella la notifica di sistema precedentemente impostata, se presente
+	 * Cancella la notifica di sistema precedentemente impostata, se presente.
 	 * 
 	 * @param context
 	 */
@@ -169,6 +168,14 @@ public class Utilities {
 		}
 	}
 
+	/**
+	 * Salva nella memoria interna l'immagine data, associandole il nome scelto.
+	 * 
+	 * @param image
+	 * @param name
+	 * @param context
+	 * @return
+	 */
 	public static boolean saveToInternalStorage(Bitmap image, String name,
 			Context context) {
 		try {
@@ -176,7 +183,7 @@ public class Utilities {
 			File myDir = context.getDir("Thumbnails", Context.MODE_PRIVATE);
 			// Mette il file nella directory
 			File fileWithinMyDir = new File(myDir, name);
-			// Stream per scrivere nel file
+			// Crea uno stream per scrivere nel file
 			FileOutputStream out = new FileOutputStream(fileWithinMyDir);
 			// Scrive la bitmap nello stream
 			image.compress(Bitmap.CompressFormat.PNG, 100, out);
@@ -191,14 +198,24 @@ public class Utilities {
 		}
 	}
 
+	/**
+	 * Recupera dalla memoria interna il file col nome passatogli come parametro.
+	 * 
+	 * @param filename
+	 * @param context
+	 * @return
+	 */
 	public static Bitmap loadImageFromStorage(String filename, Context context) {
 		Bitmap thumbnail = null;
 		FileInputStream stream;
 		try {
+			// Genera il path del file richiesto
 			String path = context.getDir("Thumbnails", Context.MODE_PRIVATE)
 					+ "/" + filename;
 			File file = new File(path);
+			// Associa uno stream al file
 			stream = new FileInputStream(file);
+			// Crea la bitmap dallo stream
 			thumbnail = BitmapFactory.decodeStream(stream);
 			stream.close();
 		} catch (FileNotFoundException e) {
@@ -209,18 +226,28 @@ public class Utilities {
 		return thumbnail;
 	}
 
-	// Questo metodo dato il timestamp della sessione crea una thumbnail unica
+	/**
+	 * Dato il timestamp della sessione crea una thumbnail associata.
+	 * 
+	 * @param sessionBegin
+	 * @return
+	 */
 	public static Bitmap createThumbnail(Date sessionBegin) {
 		long timestamp = sessionBegin.getTime();
 		Random random = new Random();
-		int a = (int) ((timestamp >> 32)) + random.nextInt();
+		// Prende i quattro byte a sinistra del timestamp e ci aggiunge un numero casuale
+		int a = (int) (timestamp >> 32) + random.nextInt();
+		// Prende i quattro byte a destra del timestamp
 		long rightDigits = timestamp & 0xffffffff;
-		int b = (int) (rightDigits);
+		int b = (int) rightDigits;
 		Bitmap.Config configuration = Bitmap.Config.ARGB_4444;
+		// Crea un'immagine e la colora usando l'intero generato prima coi byte sinistri del timestamp
 		Bitmap left = Bitmap.createBitmap(35, 70, configuration);
 		left.eraseColor(a);
+		// Crea un'immagine e la colora usando l'intero generato prima coi byte destri del timestamp
 		Bitmap right = Bitmap.createBitmap(35, 70, configuration);
 		right.eraseColor(b);
+		// Crea un'immagine che sarà la fusione delle due immagini create precedentemente
 		Bitmap thumbnail = Bitmap.createBitmap(70, 70, configuration);
 		Canvas canvas = new Canvas(thumbnail);
 		canvas.drawBitmap(left, null, new Rect(0, 0, canvas.getWidth() / 2,
@@ -228,5 +255,29 @@ public class Utilities {
 		canvas.drawBitmap(right, null, new Rect(canvas.getWidth() / 2, 0,
 				canvas.getWidth(), canvas.getHeight()), null);
 		return thumbnail;
+	}
+	
+	/**
+	 * Converte da millisecondi a ore, minuti e secondi.
+	 * 
+	 * @param millis
+	 * @param returnSeconds
+	 * @return
+	 */
+	public static String millisToHourMinuteSecond(long millis, boolean returnSeconds) {
+		String time = "";
+		long seconds = millis / 1000;
+		long minutes = seconds / 60;
+		long hours = minutes / 60;
+		minutes = minutes % 60;
+		seconds = seconds - hours * 3600 - minutes * 60;
+		if (returnSeconds == true) {
+			time = hours + " h " + minutes + " m " + seconds + " s ";
+			return time;
+			}
+		else{
+			time = hours + " h " + minutes + " m ";
+			return time;
+			}
 	}
 }

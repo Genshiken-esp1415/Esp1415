@@ -15,7 +15,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.PopupMenu;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,13 +59,6 @@ public class SettingsActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new SettingsFragment()).commit();
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.settings, menu);
-		return true;
 	}
 
 	/**
@@ -157,7 +149,7 @@ public class SettingsActivity extends ActionBarActivity {
 					.findViewById(R.id.contacts);
 			if (contacts != null) {
 				sArrayAdapter = new ArrayAdapter<String>(getActivity(),
-						android.R.layout.simple_list_item_1, contacts);
+						android.R.layout.selected_contacts_view, contacts);
 				contactList.setAdapter(sArrayAdapter);
 			}
 			Button contactListButton = (Button) rootView
@@ -293,6 +285,7 @@ public class SettingsActivity extends ActionBarActivity {
 		for (int i = 0; i < Utilities.sDest.size(); i++) {
 			sArrayAdapter.add(Utilities.sName.get(i) + ": "
 					+ Utilities.sDest.get(i));
+			
 		}
 		sArrayAdapter.notifyDataSetChanged();
 	}

@@ -99,8 +99,8 @@ public class ContactListActivity extends Activity {
 					sArrayAdapter.items.get(position).setAdded(true);
 				} else {
 					sArrayAdapter.items.get(position).setAdded(false);
-					sArrayAdapter.notifyDataSetChanged();
 				}
+				sArrayAdapter.notifyDataSetChanged();
 			}
 		});
 

@@ -63,7 +63,6 @@ public class SessionListActivity extends ActionBarActivity implements
 		return true;
 	}
 
-	// Metodo che gestisce i click nell'action bar
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
@@ -102,7 +101,7 @@ public class SessionListActivity extends ActionBarActivity implements
 				.getName();
 		// Rinominazione nell'adapter
 		SessionListFragment.sAdapter.mSessions.get(sPosition).setName(name);
-		// Notifico all'adapter i cambiamenti
+		// Notifica all'adapter i cambiamenti
 		SessionListFragment.sAdapter.notifyDataSetChanged();
 	}
 
@@ -124,7 +123,7 @@ public class SessionListActivity extends ActionBarActivity implements
 			// Prende tutte le sessioni dal database
 			sDb = new DBManager(getActivity().getBaseContext());
 			sDb.open();
-			// Carico l'adapter
+			// Carica l'adapter
 			sAdapter = new MyAdapter(getActivity().getBaseContext(),
 					R.layout.session_list_adapter,
 					(ArrayList<Session>) sDb.getAllSessions());
@@ -138,6 +137,7 @@ public class SessionListActivity extends ActionBarActivity implements
 		public void onResume() {
 			super.onResume();
 			sAdapter.clear();
+			// Riprende tutte le sessioni dal database
 			List<Session> dbSessions = sDb.getAllSessions();
 			for (int i = 0; i < dbSessions.size(); i++) {
 				sAdapter.add(dbSessions.get(i));
@@ -145,7 +145,6 @@ public class SessionListActivity extends ActionBarActivity implements
 			sAdapter.notifyDataSetChanged();
 		}
 
-		// Metodo che gestisce il tocco prolungato
 		@Override
 		public void onCreateContextMenu(ContextMenu menu, View v,
 				ContextMenuInfo menuInfo) {
@@ -163,7 +162,6 @@ public class SessionListActivity extends ActionBarActivity implements
 			}
 		}
 
-		// Metodo che gestisce il menù del tocco prolungato
 		@Override
 		public boolean onContextItemSelected(MenuItem item) {
 			{
@@ -184,7 +182,7 @@ public class SessionListActivity extends ActionBarActivity implements
 					sDb.deleteSession(sSelectedSession);
 					// Rimozione dalla lista
 					sAdapter.remove(sSelectedSession);
-					// notifico all'adapter i cambiamenti
+					// Notifica all'adapter i cambiamenti
 					sAdapter.notifyDataSetChanged();
 					// Notifica di avvenuta cancellazione
 					Toast.makeText(
@@ -199,7 +197,6 @@ public class SessionListActivity extends ActionBarActivity implements
 			}
 		}
 
-		// Metodo per gestire i click su elementi della lista
 		@Override
 		public void onListItemClick(ListView l, View v, int position, long id) {
 			super.onListItemClick(l, v, position, id);
@@ -224,7 +221,6 @@ public class SessionListActivity extends ActionBarActivity implements
 
 	}
 
-	// Classe per l'adapter
 	public static class MyAdapter extends ArrayAdapter<Session> {
 		ArrayList<Session> mSessions;
 		static Context sContext;
@@ -267,7 +263,7 @@ public class SessionListActivity extends ActionBarActivity implements
 					+ date + " " + hour;
 			holder.secondLine.setText(secondLine);
 			String thirdLine = getContext().getString(R.string.session_duration)
-					+ conversionFromMilliseconds(session.getDuration()) + " - "
+					+ Utilities.millisToHourMinuteSecond(session.getDuration(), false) + " - "
 					+ session.getNumberOfFalls();
 
 			if (session.getNumberOfFalls() == 1) {
@@ -277,7 +273,7 @@ public class SessionListActivity extends ActionBarActivity implements
 				holder.thirdLine.setText(thirdLine + " "
 						+ getContext().getString(R.string.falls_lower_case));
 			}
-			// Per la sessione attiva cambio determinati parametri
+			// Per la sessione attiva cambia determinati parametri
 			boolean active = session.isActive();
 			if (active) {
 				// Il 60 davanti al numero esadecimale decide la trasparenza
@@ -304,16 +300,6 @@ public class SessionListActivity extends ActionBarActivity implements
 			Bitmap thumbnail = Utilities.loadImageFromStorage(name, sContext);
 			holder.imageView.setImageBitmap(thumbnail);
 			return rowView;
-		}
-
-		public String conversionFromMilliseconds(int milliseconds) {
-			String hoursAndMinutes = "";
-			int seconds = milliseconds / 1000;
-			int minutes = seconds / 60;
-			int hours = minutes / 60;
-			minutes = minutes % 60;
-			hoursAndMinutes = hours + "h " + minutes + "m";
-			return hoursAndMinutes;
 		}
 
 		static class Holder {

@@ -17,7 +17,8 @@
         android:hint="@string/session_name"
         android:textSize="30sp" 
         android:imeOptions="actionDone" 
-        android:singleLine="true"  />
+        android:singleLine="true"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/xLabel"
@@ -27,7 +28,8 @@
         android:layout_alignStart="@+id/list_title"
         android:layout_below="@+id/session_name"
         android:text="@string/x_label"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/yLabel"
@@ -35,7 +37,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/xLabel"
         android:text="@string/y_label"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/zLabel"
@@ -43,7 +46,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/yLabel"
         android:text="@string/z_label"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/xValue"
@@ -54,7 +58,8 @@
         android:layout_toEndOf="@+id/xLabel"
         android:maxLength="4"
         android:text="@string/x_value"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/yValue"
@@ -65,7 +70,8 @@
         android:layout_toEndOf="@+id/yLabel"
         android:maxLength="4"
         android:text="@string/y_value"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/zValue"
@@ -76,7 +82,8 @@
         android:layout_toRightOf="@+id/zLabel"
         android:layout_toEndOf="@+id/zLabel"
         android:text="@string/z_label"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/list_title"
@@ -87,7 +94,8 @@
         android:layout_below="@+id/session_length"
         android:gravity="center_horizontal"
         android:text="@string/falls"
-        android:textSize="40sp" />
+        android:textSize="40sp"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/session_length"
@@ -95,7 +103,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/zLabel"
         android:text="@string/duration"
-        android:textSize="40sp" />
+        android:textSize="40sp"
+        android:textColor="#000000" />
     
 	<ImageView
         android:id="@+id/session_thumbnail"

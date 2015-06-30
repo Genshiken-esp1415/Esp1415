@@ -16,7 +16,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:text="@string/sampling"
-        android:textSize="26sp" />
+        android:textSize="26sp"
+        android:textColor="#000000" />
     
 	<Button
         android:id="@+id/sampling"
@@ -39,7 +40,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:text="@string/memo"
-        android:textSize="26sp" />
+        android:textSize="26sp"
+        android:textColor="#000000" />
 	
 	<Button
         android:id="@+id/alarm"
@@ -75,7 +77,8 @@
         android:layout_below="@+id/sampling"
         android:layout_marginTop="30dp"
         android:text="@string/max_duration"
-        android:textSize="26sp" />
+        android:textSize="26sp"
+        android:textColor="#000000" />
 	
 	<Button
         android:id="@+id/minus"
@@ -95,7 +98,8 @@
         android:layout_toRightOf="@+id/minus"
         android:layout_toEndOf="@+id/minus"
         android:text="@string/default_duration"
-        android:textSize="40sp" />
+        android:textSize="40sp"
+        android:textColor="#000000" />
     
     <Button
         android:id="@+id/plus"
@@ -116,7 +120,8 @@
         android:layout_toEndOf="@+id/plus"
         android:layout_toRightOf="@+id/plus"
         android:text="@string/hours"
-        android:textSize="26sp" />
+        android:textSize="26sp"
+        android:textColor="#000000" />
     
     <TextView
         android:id="@+id/email_label"
@@ -127,7 +132,8 @@
         android:layout_alignLeft="@+id/alarm_label"
         android:layout_alignStart="@+id/alarm_label"
         android:text="@string/email"
-        android:textSize="26sp" />
+        android:textSize="26sp"
+        android:textColor="#000000" />
     
     <EditText
         android:id="@+id/email"
@@ -140,7 +146,8 @@
         android:ems="10"
         android:textSize="20sp"
         android:hint="@string/email"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:textColor="#000000" />
     
     <TextView
         android:id="@+id/gmail"
@@ -150,7 +157,8 @@
         android:layout_toRightOf="@+id/email"
         android:layout_toEndOf="@+id/email"
         android:text="@string/gmail"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:textColor="#000000" />
         
     <CheckBox
         android:id="@+id/notification_checkbox"
@@ -171,7 +179,8 @@
         android:layout_below="@+id/email"
         android:ems="10"
         android:hint="@string/password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:textColor="#000000" />
     
     <TextView
         android:id="@+id/contacts_label"
@@ -181,7 +190,8 @@
         android:layout_alignStart="@+id/minus"
         android:layout_below="@+id/password"
         android:text="@string/contact_list"
-        android:textSize="26sp" />
+        android:textSize="26sp"
+        android:textColor="#000000" />
 
     <ListView
         android:id="@+id/contacts"

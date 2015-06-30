@@ -43,7 +43,7 @@ import android.widget.TextView.OnEditorActionListener;
  * se è attivo mostro pausa, se non è attivo mostro il tasto play 3)premuto play
  * il service viene avviato; 4)premuto pausa uccido il service; 5)premuto stop
  * imposto la sessione come non attiva nel db e uccido il service; 6)uso un
- * broadcast receiver per tenere aggiornata l'UI mentre l'app è in foreground;
+ * broadcast receiver per tenere aggiornata l'UI mentre l'app è in foreground.
  */
 public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
@@ -71,13 +71,6 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		sDb.close();
 
 		super.onDestroy();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.current_session_details, menu);
-		return true;
 	}
 
 	@Override
@@ -187,8 +180,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			// Imposto i valori iniziali dei campi del layout
 			sessionName.setText(sCurrentSession.getName());
 			mSessionLengthTextView
-					.setText(millisToHourMinuteSecond(sCurrentSession
-							.getDuration()));
+					.setText(Utilities.millisToHourMinuteSecond(sCurrentSession
+							.getDuration(), true));
 			mXValue.setText("");
 			mYValue.setText("");
 			mZValue.setText("");
@@ -279,7 +272,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					mYValue.setText(y.toString());
 					mZValue.setText(z.toString());
 					mSessionLengthTextView
-							.setText(millisToHourMinuteSecond(duration));
+							.setText(Utilities.millisToHourMinuteSecond(duration, true));
 				}
 			}
 		};
@@ -441,17 +434,6 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
 		}
 
-	}
-
-	public static String millisToHourMinuteSecond(long millis) {
-		String time = "";
-		long seconds = millis / 1000;
-		long minutes = seconds / 60;
-		long hours = minutes / 60;
-		minutes = minutes % 60;
-		seconds = seconds - hours * 3600 - minutes * 60;
-		time = hours + " h " + minutes + " m " + seconds + " s ";
-		return time;
 	}
 
 	/**
