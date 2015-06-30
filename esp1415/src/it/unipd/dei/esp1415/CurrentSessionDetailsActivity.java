@@ -420,7 +420,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					.findViewById(R.id.notified);
 			mFallNumberTextView.setText(String.valueOf(mFalls.get(position)
 					.getFallNumber()));
-			mTimestamp = (String) DateFormat.format("dd/MM/yy - kk:mm", mFalls
+			mTimestamp = (String) DateFormat.format("dd/MM/yy - kk:mm:ss", mFalls
 					.get(position).getFallTimestamp());
 			mFallTimestampTextView.setText(mTimestamp);
 

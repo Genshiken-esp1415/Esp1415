@@ -132,7 +132,7 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 					.findViewById(R.id.session_timestamp);
 			TextView sessionDurationTextView = (TextView) rootView
 					.findViewById(R.id.session_length);
-			String timestamp = this.getString(R.string.date_and_time) + DateFormat.format("dd/MM/yy - kk:mm",
+			String timestamp = this.getString(R.string.date_and_time) + DateFormat.format("dd/MM/yy kk:mm",
 					sCurrentSession.getSessionBegin());
 			sessionTimestampTextView.setText(timestamp);
 			String duration = this.getString(R.string.session_duration) + Utilities.millisToHourMinuteSecond(sCurrentSession
@@ -214,7 +214,7 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 					.findViewById(R.id.notified);
 			fallNumberTextView.setText(String.valueOf(falls.get(position)
 					.getFallNumber()));
-			String timestamp = (String) DateFormat.format("dd/MM/yy - kk:mm",
+			String timestamp = (String) DateFormat.format("dd/MM/yy - kk:mm:ss",
 					falls.get(position).getFallTimestamp());
 			timestampFallTextView.setText(timestamp);
 

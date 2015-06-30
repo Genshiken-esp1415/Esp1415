@@ -1,5 +1,6 @@
 package it.unipd.dei.esp1415;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -182,6 +183,9 @@ public class SessionListActivity extends ActionBarActivity implements
 					sDb.deleteSession(sSelectedSession);
 					// Rimozione dalla lista
 					sAdapter.remove(sSelectedSession);
+					// Rimozione della thumbnail
+					String name = sSelectedSession.getThumbnail();
+					removeThumbnail(name, getActivity().getBaseContext());
 					// Notifica all'adapter i cambiamenti
 					sAdapter.notifyDataSetChanged();
 					// Notifica di avvenuta cancellazione
@@ -195,6 +199,20 @@ public class SessionListActivity extends ActionBarActivity implements
 				}
 				return super.onContextItemSelected(item);
 			}
+		}
+		
+		/**
+		 * Rimuove la thumbnail col nome passatogli come parametro.
+		 * 
+		 * @param filename
+		 * @param context
+		 */
+		public static void removeThumbnail(String filename, Context context){
+			// Genera il path del file da rimuovere
+			String path = context.getDir("Thumbnails", Context.MODE_PRIVATE)
+					+ "/" + filename;
+			File file = new File(path);
+			file.delete();
 		}
 
 		@Override
