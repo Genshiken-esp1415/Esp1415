@@ -8,6 +8,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -149,7 +150,7 @@ public class SettingsActivity extends ActionBarActivity {
 					.findViewById(R.id.contacts);
 			if (contacts != null) {
 				sArrayAdapter = new ArrayAdapter<String>(getActivity(),
-						android.R.layout.selected_contacts_view, contacts);
+						R.layout.selected_contacts_view, contacts);
 				contactList.setAdapter(sArrayAdapter);
 			}
 			Button contactListButton = (Button) rootView
