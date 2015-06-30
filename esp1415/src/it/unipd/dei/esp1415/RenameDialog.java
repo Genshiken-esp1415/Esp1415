@@ -1,4 +1,6 @@
 package it.unipd.dei.esp1415;
+import it.unipd.dei.esp1415.*;
+
 import java.util.Date;
 
 import android.app.Activity;
@@ -15,21 +17,18 @@ import android.widget.EditText;
  * Questa classe definisce una Dialog che permette di rinominare una sessione.
  * Nella classe chiamante sono da implementare i metodi dell'interfaccia
  * renameDialogListener.
- * 
- * @author Andrea
- *
  */
-public class renameDialog extends DialogFragment {
+public class RenameDialog extends DialogFragment {
 
-	private EditText sessionName;
-	private DBManager myDbmanager;
-	private  String oldName;
-	private Date sessionId;
-	private Session currentSession;
+	private EditText mSessionName;
+	private DBManager mMyDbmanager;
+	private String mOldName;
+	private Date mSessionId;
+	private Session mCurrentSession;
 	
 	public interface renameDialogListener {
-        public void onDialogPositiveClick(renameDialog dialog);
-        public void onDialogNegativeClick(renameDialog dialog);
+        public void onDialogPositiveClick(RenameDialog dialog);
+        public void onDialogNegativeClick(RenameDialog dialog);
     }
     
     // Use this instance of the interface to deliver action events
@@ -54,12 +53,12 @@ public class renameDialog extends DialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
 		//setting the db
-		myDbmanager = new DBManager(getActivity());
-		myDbmanager.open();
+		mMyDbmanager = new DBManager(getActivity());
+		mMyDbmanager.open();
 		//Importing the bundle of task info
 		Bundle args;
 		args = this.getArguments();
-		sessionId=new Date(args.getLong("id"));
+		mSessionId=new Date(args.getLong("id"));
 
 
 		// Use the Builder class for convenient dialog construction
@@ -67,24 +66,24 @@ public class renameDialog extends DialogFragment {
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		View layout = inflater.inflate(R.layout.dialog_rename,null);
 
-		sessionName=(EditText)layout.findViewById(R.id.renameField);
-		currentSession = myDbmanager.getSession(sessionId);
-		oldName = currentSession.getName();
+		mSessionName=(EditText)layout.findViewById(R.id.renameField);
+		mCurrentSession = mMyDbmanager.getSession(mSessionId);
+		mOldName = mCurrentSession.getName();
 		
 		//create done, advancedview and cancel buttons
 		//TODO: clear the redundation of the check and position
 		builder.setView(layout)
-		.setMessage(oldName)
+		.setMessage(mOldName)
 		.setPositiveButton(R.string.rename, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				currentSession.setName(sessionName.getText().toString());
-				myDbmanager.renameSession(currentSession);
-				mListener.onDialogPositiveClick(renameDialog.this);
+				mCurrentSession.setName(mSessionName.getText().toString());
+				mMyDbmanager.renameSession(mCurrentSession);
+				mListener.onDialogPositiveClick(RenameDialog.this);
 			}
 		})
 		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
-				mListener.onDialogNegativeClick(renameDialog.this);
+				mListener.onDialogNegativeClick(RenameDialog.this);
 
 			}
 		})

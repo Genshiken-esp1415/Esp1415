@@ -1,9 +1,7 @@
 package it.unipd.dei.esp1415;
 
-
 import java.io.File;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,12 +15,13 @@ import android.widget.Toast;
 
 /**
  * La main Activity contiene un redirect alla lista delle sessioni per il
- * momento. Una volta deciso quale activity funger� da main verra incorporata in
- * questa. In ogni caso non � un problema, visto che verr� gestito tutto con i
- * fragment. Guardate qua per la descrizione di fragment: 
- * http://developer.android.com/guide/components/fragments.html
- * Per il momento frega, sviluppiamo le activity indipendentemente e poi per la visuale su tablet le uniremo in futuro.
- * Basta inserire il codice del layout nel fragment relativo all'activity, invece che nel layout.
+ * momento. Una volta deciso quale activity fungerà da main verra incorporata in
+ * questa. In ogni caso non è un problema, visto che verrà gestito tutto con i
+ * fragment. Guardate qua per la descrizione di fragment:
+ * http://developer.android.com/guide/components/fragments.html Per il momento
+ * frega, sviluppiamo le activity indipendentemente e poi per la visuale su
+ * tablet le uniremo in futuro. Basta inserire il codice del layout nel fragment
+ * relativo all'activity, invece che nel layout.
  *
  */
 public class MainActivity extends ActionBarActivity {
@@ -33,36 +32,30 @@ public class MainActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_main);
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
-			.add(R.id.container, new PlaceholderFragment()).commit();
+					.add(R.id.container, new MainFragment()).commit();
 		}
-        //creo il db per il primo avvio e faccio inserimenti dummy per testing, se non � gi� stato popolato il db.
-        DBManager db = new DBManager(this);
-        db.open();
-        /*if(db.getAllSessions().size()==0){
-        	db.dummyInsert();
-        }*/
-        db.close();
-        
-        /*File f = new File(getApplicationContext().getFilesDir().getPath() + "/settings.txt");
-        //if ((new File("/data/data/it.unipd.dei.esp1415/files/settings.txt")).exists()) {
-        if (f.exists()) {
-        	SettingValues.readSettings(this);
-        } else {
-        	SettingValues.setDefault();
-        }*/
-        if ((new File(getApplicationContext().getFilesDir().getPath() + "/contactlist.txt")).exists()){
-        	Toast.makeText(this, "Contact list trovata", Toast.LENGTH_LONG).show();
-        	SettingValues.setSelectedContacts(this);
-        }
-        
-		Intent openListaSessioni = new Intent(this, ListaSessioniActivity.class);
+		// Creo il db per il primo avvio e faccio inserimenti dummy per testing,
+		// se non è già stato popolato il db.
+		DBManager db = new DBManager(this);
+		db.open();
+		/*
+		 * if(db.getAllSessions().size()==0){ db.dummyInsert(); }
+		 */
+		db.close();
+
+		// Se sono stati scelti in passato degli indirizzi e-mail per l'invio
+		// delle notifiche, vengono letti dal corrispondente file di testo
+		if ((new File(getApplicationContext().getFilesDir().getPath()
+				+ "/contactlist.txt")).exists()) {
+			Toast.makeText(this, "Contact list trovata", Toast.LENGTH_LONG)
+					.show();
+			Utilities.setSelectedContacts(this);
+		}
+
+		Intent openListaSessioni = new Intent(this, SessionListActivity.class);
 		startActivity(openListaSessioni);
-        
-        
-    }
 
-	
-
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,15 +80,15 @@ public class MainActivity extends ActionBarActivity {
 	 * A placeholder fragment containing a simple view.
 	 */
 
-	public static class PlaceholderFragment extends Fragment{
-		public PlaceholderFragment() {
+	public static class MainFragment extends Fragment {
+		public MainFragment() {
 		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_dettaglio_caduta,
-					container, false);
+			View rootView = inflater.inflate(
+					R.layout.fragment_dettaglio_caduta, container, false);
 			return rootView;
 		}
 	}

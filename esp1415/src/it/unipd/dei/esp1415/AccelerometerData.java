@@ -1,49 +1,53 @@
 package it.unipd.dei.esp1415;
+
+
 /**
  * classe contenitore per i dati registrati dall'accelerometro.
- * @author Andrea
- *
  */
 public class AccelerometerData {
-	float x;
-	float y;
-	float z;
-	long timestamp;
-	
+	private float mX;
+	private float mY;
+	private float mZ;
+	private long mTimestamp;
+
 	public AccelerometerData(long timestamp, float x, float y, float z) {
 		super();
-		this.x = x;
-		this.y = y;
-		this.z = z;
-		this.timestamp = timestamp;
+		this.mX = x;
+		this.mY = y;
+		this.mZ = z;
+		this.mTimestamp = timestamp;
 	}
-	
+
 	public float getX() {
-		return x;
+		return mX;
 	}
+
 	public void setX(float x) {
-		this.x = x;
+		this.mX = x;
 	}
+
 	public float getY() {
-		return y;
+		return mY;
 	}
+
 	public void setY(float y) {
-		this.y = y;
+		this.mY = y;
 	}
-	
+
 	public long getTimestamp() {
-		return timestamp;
+		return mTimestamp;
 	}
 
 	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
+		this.mTimestamp = timestamp;
 	}
 
 	public float getZ() {
-		return z;
+		return mZ;
 	}
+
 	public void setZ(float z) {
-		this.z = z;
+		this.mZ = z;
 	}
-	
+
 }

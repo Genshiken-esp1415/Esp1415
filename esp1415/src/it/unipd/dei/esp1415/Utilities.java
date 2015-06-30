@@ -1,6 +1,8 @@
 package it.unipd.dei.esp1415;
+import it.unipd.dei.esp1415.*;
 
 import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,30 +28,43 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-public class SettingValues {
 
+/**
+ * Classe contentenente varie variabili statiche e metodi di utilità utilizzati
+ * dalle altre classi e activity
+ */
+public class Utilities {
 
 	protected static final boolean ENABLED = true;
 	protected static final boolean DISABLED = false;
 
-	protected static ArrayList<String> sDest = new ArrayList<String>();
-	protected static ArrayList<String> sName = new ArrayList<String>();
+	public static ArrayList<String> sDest = new ArrayList<String>();
+	public static ArrayList<String> sName = new ArrayList<String>();
 
 	protected static AlarmManager sAlarmMgr;
 	protected static PendingIntent sAlarmIntent;
 	protected static Calendar sCalendar;
 	protected static SharedPreferences sPreferences;
 
-	protected static ArrayList<String> setSelectedContacts(Context context) {
+	/**
+	 * Restituisce l'array con gli indirizzi e-mail, letti da un file di testo,
+	 * a cui inviare le notifiche.
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static ArrayList<String> setSelectedContacts(Context context) {
 		try {
 			FileInputStream input = context.openFileInput("contactlist.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(input));
+
 			String line;
 			int i;
 			while ((line = br.readLine()) != null) {
-				for(i=0;line.charAt(i)!=':';i++); 
+				for (i = 0; line.charAt(i) != ':'; i++)
+					;
 				sName.add(line.substring(0, i));
-				sDest.add(line.substring(i+2,line.length()));
+				sDest.add(line.substring(i + 2, line.length()));
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
@@ -60,7 +75,7 @@ public class SettingValues {
 		return sDest;
 	}
 
-	protected static int getSensorDelay(String sampleRate){
+	public static int getSensorDelay(String sampleRate) {
 		if (sampleRate.equals("Molto alta")) {
 			return SensorManager.SENSOR_DELAY_FASTEST;
 		} else if (sampleRate.equals("Alta")) {
@@ -71,73 +86,93 @@ public class SettingValues {
 			return SensorManager.SENSOR_DELAY_UI;
 		}
 	}
+
 	/**
-	 * Configura ed imposta una notification di sistema all'orario specificato dall'utente.
+	 * Configura ed imposta una notification di sistema all'orario specificato
+	 * dall'utente.
+	 * 
 	 * @param time
 	 */
-	protected static void fireAlarm(Context context){
+	public static void fireAlarm(Context context) {
 
 		Toast.makeText(context, "Allarme aggiunto", Toast.LENGTH_SHORT).show();
-		sPreferences = context.getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+		sPreferences = context.getSharedPreferences("MyPref",
+				Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sPreferences.edit();
 
-		//Inizializza l'AlarmManager e chiama la classe d'appoggio per la configurazione della notifica
-		sAlarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		// Inizializza l'AlarmManager e chiama la classe d'appoggio per la
+		// configurazione della notifica
+		sAlarmMgr = (AlarmManager) context
+				.getSystemService(Context.ALARM_SERVICE);
 		Intent intent = new Intent(context, AlarmReceiver.class);
 		sAlarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
-		//Se una notifica era già stata impostata in precedenza, viene cancellata
-		if (sAlarmMgr!= null)
+		// Se una notifica era già stata impostata in precedenza, viene
+		// cancellata
+		if (sAlarmMgr != null) {
 			eraseAlarm(context);
+		}
 
 		sCalendar = Calendar.getInstance();
 		sCalendar.set(Calendar.HOUR_OF_DAY, sPreferences.getInt("hour", 8));
 		sCalendar.set(Calendar.MINUTE, sPreferences.getInt("minute", 0));
 		sCalendar.set(Calendar.SECOND, 0);
 
-		/* Se l'orario scelto è successivo all'orario attuale all'interno della giornata, si incrementa il giorno di uno
-		 * per impedire che la notifica venga lanciata immediatamente.
+		/*
+		 * Se l'orario scelto è successivo all'orario attuale all'interno della
+		 * giornata, si incrementa il giorno di uno per impedire che la notifica
+		 * venga lanciata immediatamente.
 		 */
-		if(System.currentTimeMillis()-sCalendar.getTimeInMillis()>0){
+		if (System.currentTimeMillis() - sCalendar.getTimeInMillis() > 0) {
 			Toast.makeText(context, "fanculo", Toast.LENGTH_SHORT).show();
 			sCalendar.add(Calendar.DAY_OF_MONTH, 1);
-		} 
+		}
 
 		editor.putInt("day", sCalendar.get(Calendar.DAY_OF_MONTH));
 		editor.putInt("hour", sCalendar.get(Calendar.HOUR_OF_DAY));
 		editor.putInt("minute", sCalendar.get(Calendar.MINUTE));
 		editor.commit();
 
-		Toast.makeText(context, DateFormat.format("dd/MM/yy kk:mm:ss",sCalendar.getTime()), Toast.LENGTH_SHORT).show();
+		Toast.makeText(context,
+				DateFormat.format("dd/MM/yy kk:mm:ss", sCalendar.getTime()),
+				Toast.LENGTH_SHORT).show();
 
-		//L'AlarmManager setta la notifica, che deve comparire ogni giorno all'orario appena stabilito
-		sAlarmMgr.set(AlarmManager.RTC, sCalendar.getTimeInMillis(), sAlarmIntent);
+		// L'AlarmManager setta la notifica, che deve comparire ogni giorno
+		// all'orario appena stabilito
+		sAlarmMgr.set(AlarmManager.RTC, sCalendar.getTimeInMillis(),
+				sAlarmIntent);
 		sAlarmMgr.setRepeating(AlarmManager.RTC, sCalendar.getTimeInMillis(),
 				AlarmManager.INTERVAL_DAY, sAlarmIntent);
 
-		//Necessario perché le impostazioni della notifica persistano al riavvio del dispositivo
+		// Necessario perché le impostazioni della notifica persistano al
+		// riavvio del dispositivo
 		ComponentName receiver = new ComponentName(context, AlarmReceiver.class);
 		PackageManager pm = context.getPackageManager();
 		pm.setComponentEnabledSetting(receiver,
 				PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
 				PackageManager.DONT_KILL_APP);
 	}
-	
+
 	/**
 	 * Cancella la notifica di sistema precedentemente impostata, se presente
+	 * 
+	 * @param context
 	 */
-	protected static void eraseAlarm(Context context){
-		if(sAlarmMgr!=null){
+	public static void eraseAlarm(Context context) {
+		if (sAlarmMgr != null) {
 			sAlarmMgr.cancel(sAlarmIntent);
 
-			ComponentName receiver = new ComponentName(context, AlarmReceiver.class);
+			ComponentName receiver = new ComponentName(context,
+					AlarmReceiver.class);
 			PackageManager pm = context.getPackageManager();
 			pm.setComponentEnabledSetting(receiver,
 					PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
 					PackageManager.DONT_KILL_APP);
 		}
 	}
-	protected static boolean saveToInternalStorage(Bitmap image, String name, Context context) {
+
+	public static boolean saveToInternalStorage(Bitmap image, String name,
+			Context context) {
 		try {
 			// Crea la directory nell'archivio interno
 			File myDir = context.getDir("Thumbnails", Context.MODE_PRIVATE);
@@ -157,12 +192,13 @@ public class SettingValues {
 			return false;
 		}
 	}
-	
+
 	public static Bitmap loadImageFromStorage(String filename, Context context) {
 		Bitmap thumbnail = null;
 		FileInputStream stream;
 		try {
-			String path = context.getDir("Thumbnails", Context.MODE_PRIVATE) + "/" + filename; 
+			String path = context.getDir("Thumbnails", Context.MODE_PRIVATE)
+					+ "/" + filename;
 			File file = new File(path);
 			stream = new FileInputStream(file);
 			thumbnail = BitmapFactory.decodeStream(stream);
@@ -173,25 +209,26 @@ public class SettingValues {
 			e.printStackTrace();
 		}
 		return thumbnail;
-		}
-	
+	}
+
 	// Questo metodo dato il timestamp della sessione crea una thumbnail unica
-	public static Bitmap createThumbnail(Date sessionBegin)
-	{
+	public static Bitmap createThumbnail(Date sessionBegin) {
 		long timestamp = sessionBegin.getTime();
 		Random random = new Random();
-	    int a = (int)((timestamp >> 32)) + random.nextInt();
-		long rightDigits = timestamp  & 0xffffffff;
-		int b = (int)(rightDigits);
+		int a = (int) ((timestamp >> 32)) + random.nextInt();
+		long rightDigits = timestamp & 0xffffffff;
+		int b = (int) (rightDigits);
 		Bitmap.Config configuration = Bitmap.Config.ARGB_4444;
 		Bitmap left = Bitmap.createBitmap(35, 70, configuration);
 		left.eraseColor(a);
 		Bitmap right = Bitmap.createBitmap(35, 70, configuration);
 		right.eraseColor(b);
-	    Bitmap thumbnail = Bitmap.createBitmap(70, 70, configuration);
-	    Canvas canvas = new Canvas(thumbnail);
-	    canvas.drawBitmap(left, null, new Rect(0, 0, canvas.getWidth() / 2, canvas.getHeight()), null);
-	    canvas.drawBitmap(right, null, new Rect(canvas.getWidth() / 2, 0, canvas.getWidth(), canvas.getHeight()), null);   
-		return thumbnail;  
-    }
+		Bitmap thumbnail = Bitmap.createBitmap(70, 70, configuration);
+		Canvas canvas = new Canvas(thumbnail);
+		canvas.drawBitmap(left, null, new Rect(0, 0, canvas.getWidth() / 2,
+				canvas.getHeight()), null);
+		canvas.drawBitmap(right, null, new Rect(canvas.getWidth() / 2, 0,
+				canvas.getWidth(), canvas.getHeight()), null);
+		return thumbnail;
+	}
 }

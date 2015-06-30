@@ -3,122 +3,121 @@ package it.unipd.dei.esp1415;
 import java.util.ArrayList;
 import java.util.Date;
 
-import android.graphics.Bitmap;
-
 /**
- * Classe contenitore per i dati relativi ad una sessione.
- * Presente un builder per sostituire il costruttore default.
- * Articoletto sui builder da leggere:
+ * Classe contenitore per i dati relativi ad una sessione. Presente un builder
+ * per sostituire il costruttore default. Articoletto sui builder da leggere:
  * http://jlordiales.me/2012/12/13/the-builder-pattern-in-practice/
  */
 public class Session {
-	
-	private Date SessionBegin;
-	private String name;
-	//int basta, i millisecondi di 8 ore sono di gran lunga inferiori a Integer.MAX_VALUE
-	private int duration; 
-	//questo campo serve per distingure quale sessione è attiva
-	private boolean active;
-	//arrayList con riferimenti alle cadute, tenuto ordinato per dataora di caduta
-	private ArrayList<Fall> fallList;
-	
+
+	private Date mSessionBegin;
+	private String mName;
+	// int basta, i millisecondi di 8 ore sono di gran lunga inferiori a
+	// Integer.MAX_VALUE
+	private int mDuration;
+	// questo campo serve per distingure quale sessione è attiva
+	private boolean mActive;
+	// arrayList con riferimenti alle cadute, tenuto ordinato per dataora di
+	// caduta
+	private ArrayList<Fall> mFallList;
+
 	private Session(SessionBuilder builder) {
-		this.SessionBegin = builder.sessionBegin;
-		this.name = builder.name;
-		this.duration = builder.duration;
-		this.active = builder.active;
-		this.fallList = builder.fallList;
+		this.mSessionBegin = builder.mSessionBegin;
+		this.mName = builder.mName;
+		this.mDuration = builder.mDuration;
+		this.mActive = builder.mActive;
+		this.mFallList = builder.mFallList;
 	}
-	
+
 	public Date getSessionBegin() {
-		return SessionBegin;
+		return mSessionBegin;
 	}
-	
+
 	public void setSessionBegin(Date sessionBegin) {
-		SessionBegin = sessionBegin;
+		mSessionBegin = sessionBegin;
 	}
-	
+
 	public String getName() {
-		return name;
+		return mName;
 	}
-	
+
 	public void setName(String name) {
-		this.name = name;
+		this.mName = name;
 	}
-	
+
 	public int getDuration() {
-		return duration;
+		return mDuration;
 	}
-	
-	// restituisce il nome del dile contenente la thumbnail
+
+	// Restituisce il nome del dile contenente la thumbnail
 	public String getThumbnail() {
-		String thumbnailName = DBManager.dateToSqlDate(this.SessionBegin); 
+		String thumbnailName = DBManager.dateToSqlDate(this.mSessionBegin);
 		return thumbnailName;
 	}
-	
+
 	public void setDuration(int duration) {
-		this.duration = duration;
+		this.mDuration = duration;
 	}
-	
+
 	public boolean isActive() {
-		return active;
+		return mActive;
 	}
 
 	public void setActive(boolean active) {
-		this.active = active;
+		this.mActive = active;
 	}
-	
+
 	public ArrayList<Fall> getFallList() {
-		return fallList;
+		return mFallList;
 	}
 
 	public void setFallList(ArrayList<Fall> fallList) {
-		this.fallList = fallList;
+		this.mFallList = fallList;
 	}
-		
+
 	public int getNumberOfFalls() {
-		return fallList.size();
+		return mFallList.size();
 	}
-	
+
 	public static class SessionBuilder {
-		private Date sessionBegin;
-		private String name;
-		private int duration; 
-		private boolean active;
-		private ArrayList<Fall> fallList;
-		
+		private Date mSessionBegin;
+		private String mName;
+		private int mDuration;
+		private boolean mActive;
+		private ArrayList<Fall> mFallList;
+
 		public SessionBuilder(Date sessionBegin) {
-			this.sessionBegin = sessionBegin;
+			this.mSessionBegin = sessionBegin;
 			// Inizializzo campi facoltativi, nel senso che posso non avere da
 			// subito la lista di cadute o avere una sessione già attiva.
-			fallList = new ArrayList<Fall>();
-			active = false;
+			mFallList = new ArrayList<Fall>();
+			mActive = false;
 		}
-		
+
 		public SessionBuilder name(String name) {
-			this.name = name;
+			this.mName = name;
 			return this;
 		}
-		
+
 		public SessionBuilder duration(int duration) {
-			this.duration = duration;
+			this.mDuration = duration;
 			return this;
 		}
-		
+
 		public SessionBuilder active(boolean active) {
-			this.active = active;
+			this.mActive = active;
 			return this;
 		}
-		
+
 		public SessionBuilder fallList(ArrayList<Fall> fallList) {
-			this.fallList = fallList;
+			this.mFallList = fallList;
 			return this;
 		}
-				
+
 		public Session build() {
 			return new Session(this);
 		}
-		
+
 	}
-	
+
 }

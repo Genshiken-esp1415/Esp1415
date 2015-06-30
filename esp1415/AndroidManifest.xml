@@ -31,20 +31,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ListaSessioniActivity"
+            android:name=".SessionListActivity"
             android:label="@string/title_activity_lista_sessioni" >
         </activity>
         <activity
-            android:name=".DettaglioSessioneCorrenteActivity"
+            android:name=".CurrentSessionDetailsActivity"
             android:label="@string/title_activity_dettaglio_sessione"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
-            android:name=".DettaglioSessionePassataActivity"
+            android:name=".PastSessionDetailsActivity"
             android:label="@string/title_activity_dettaglio_sessione_passata" >
         </activity>
         <activity
-            android:name=".DettaglioCadutaActivity"
+            android:name=".FallDetailsActivity"
             android:label="@string/title_activity_dettaglio_caduta" >
         </activity>
          <service
@@ -57,7 +57,7 @@
             android:label="@string/title_activity_contactlist" >
         </activity>
         <activity
-            android:name=".OpzioniActivity"
+            android:name=".SettingsActivity"
             android:label="@string/title_activity_opzioni" 
             android:windowSoftInputMode="stateHidden" >
         </activity>

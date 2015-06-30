@@ -10,137 +10,140 @@ import android.location.LocationManager;
  * Classe contenitore per i dati relativi ad una caduta
  */
 public class Fall {
-	
-	private Date fallTimestamp;
-	// campo ridondante, mi basta sapere la data e a quale sessione appartiene,
-	// la query mi da gi� le cadute dalla piu vecchia alla piu nuova...
-	private int fallNumber;
-	//forse non servir�, intanto teniamo un riferimento alla sessione per sicurezza
-	private Date session;
-	private boolean notified; 
 
-	private double latitude;
-	private double longitude;
-	//lista contenente i dati dell'accelerometro relativi a 500 ms prima e dopo la caduta
-	private ArrayList<AccelerometerData> fallData;	
-	
-	private Fall(FallBuilder builder){
-		this.fallTimestamp = builder.fallTimestamp;
-		this.fallNumber = builder.fallNumber;
-		this.notified = builder.notified;
-		this.session = builder.session;
-		this.fallData = builder.fallData;
-		this.latitude = builder.latitude;
-		this.longitude = builder.longitude;
+	private Date mFallTimestamp;
+	// campo ridondante, mi basta sapere la data e a quale sessione appartiene,
+	// la query mi da già le cadute dalla piu vecchia alla piu nuova...
+	private int mFallNumber;
+	// forse non servirà, intanto teniamo un riferimento alla sessione per
+	// sicurezza
+	private Date mSession;
+	private boolean mNotified;
+
+	private double mLatitude;
+	private double mLongitude;
+	// lista contenente i dati dell'accelerometro relativi a 500 ms prima e dopo
+	// la caduta
+	private ArrayList<AccelerometerData> mFallData;
+
+	private Fall(FallBuilder builder) {
+		this.mFallTimestamp = builder.mFallTimestamp;
+		this.mFallNumber = builder.mFallNumber;
+		this.mNotified = builder.mNotified;
+		this.mSession = builder.mSession;
+		this.mFallData = builder.mFallData;
+		this.mLatitude = builder.mLatitude;
+		this.mLongitude = builder.mLongitude;
 	}
-	
+
 	public Date getFallTimestamp() {
-		return fallTimestamp;
+		return mFallTimestamp;
 	}
 
 	public void setFallTimestamp(Date fallTimestamp) {
-		this.fallTimestamp = fallTimestamp;
+		this.mFallTimestamp = fallTimestamp;
 	}
 
 	public int getFallNumber() {
-		return fallNumber;
+		return mFallNumber;
 	}
 
 	public void setFallNumber(int fallNumber) {
-		this.fallNumber = fallNumber;
+		this.mFallNumber = fallNumber;
 	}
 
 	public Date getSession() {
-		return session;
+		return mSession;
 	}
 
 	public void setSession(Date session) {
-		this.session = session;
+		this.mSession = session;
 	}
 
 	public boolean isNotified() {
-		return notified;
+		return mNotified;
 	}
 
 	public void setNotified() {
-		this.notified = true;
-		
+		this.mNotified = true;
+
 	}
 
 	public double getLatitude() {
-		return latitude;
+		return mLatitude;
 	}
-	
+
 	public void setLatitude(double latitude) {
-		this.latitude = latitude;
+		this.mLatitude = latitude;
 	}
-	
+
 	public double getLongitude() {
-		return longitude;
+		return mLongitude;
 	}
-	
+
 	public void setLongitude(double longitude) {
-		this.longitude=longitude;
+		this.mLongitude = longitude;
 	}
+
 	public ArrayList<AccelerometerData> getFallData() {
-		return fallData;
+		return mFallData;
 	}
 
 	public void setFallData(ArrayList<AccelerometerData> fallData) {
-		this.fallData = fallData;
+		this.mFallData = fallData;
 	}
-	
+
 	public static class FallBuilder {
-		private Date fallTimestamp;
-		private int fallNumber;
-		private Date session;
-		private boolean notified;
-		private double latitude;
-		private double longitude;
-		private ArrayList<AccelerometerData> fallData;
+		private Date mFallTimestamp;
+		private int mFallNumber;
+		private Date mSession;
+		private boolean mNotified;
+		private double mLatitude;
+		private double mLongitude;
+		private ArrayList<AccelerometerData> mFallData;
 
 		public FallBuilder(Date fallTimestamp) {
-			this.fallTimestamp = fallTimestamp;
+			this.mFallTimestamp = fallTimestamp;
 			// Inizializzo campi facoltativi, nel senso che posso non avere da
 			// subito la lista di dati dell'accelerometro o avere una caduta non
 			// ancora notificata.
-			fallData = new ArrayList<AccelerometerData>();
-			notified = false;
+			mFallData = new ArrayList<AccelerometerData>();
+			mNotified = false;
 		}
-		
+
 		public FallBuilder fallNumber(int fallNumber) {
-			this.fallNumber = fallNumber;
+			this.mFallNumber = fallNumber;
 			return this;
 		}
-		
+
 		public FallBuilder session(Date session) {
-			this.session = session;
+			this.mSession = session;
 			return this;
 		}
-		
+
 		public FallBuilder notified(Boolean notified) {
-			this.notified = notified;
+			this.mNotified = notified;
 			return this;
 		}
-		
+
 		public FallBuilder latitude(Double latitude) {
-			this.latitude = latitude;
+			this.mLatitude = latitude;
 			return this;
 		}
-		
+
 		public FallBuilder longitude(Double longitude) {
-			this.longitude = longitude;
+			this.mLongitude = longitude;
 			return this;
 		}
-		
+
 		public FallBuilder fallData(ArrayList<AccelerometerData> fallData) {
-			this.fallData = fallData;
+			this.mFallData = fallData;
 			return this;
 		}
-		
+
 		public Fall build() {
 			return new Fall(this);
 		}
-		
+
 	}
 }
