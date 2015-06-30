@@ -1,6 +1,4 @@
 package it.unipd.dei.esp1415;
-import it.unipd.dei.esp1415.*;
-
 import java.io.BufferedReader;
 
 import java.io.File;

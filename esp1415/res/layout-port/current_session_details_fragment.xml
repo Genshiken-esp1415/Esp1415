@@ -9,12 +9,12 @@
     tools:context="it.unipd.dei.esp1415.DettaglioSessionePassata$PlaceholderFragment" >
 
     <EditText
-        android:id="@+id/nomeSessione"
+        android:id="@+id/session_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:ems="10"
-        android:hint="@string/nome_sessione"
+        android:hint="@string/session_name"
         android:textSize="30sp" 
         android:imeOptions="actionDone" 
         android:singleLine="true"  />
@@ -23,9 +23,9 @@
         android:id="@+id/xLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/titoloLista"
-        android:layout_alignStart="@+id/titoloLista"
-        android:layout_below="@+id/nomeSessione"
+        android:layout_alignLeft="@+id/list_title"
+        android:layout_alignStart="@+id/list_title"
+        android:layout_below="@+id/session_name"
         android:text="@string/x_label"
         android:textSize="30sp" />
 
@@ -49,7 +49,7 @@
         android:id="@+id/xValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/nomeSessione"
+        android:layout_below="@+id/session_name"
         android:layout_toRightOf="@+id/xLabel"
         android:layout_toEndOf="@+id/xLabel"
         android:maxLength="4"
@@ -79,26 +79,26 @@
         android:textSize="30sp" />
 
     <TextView
-        android:id="@+id/titoloLista"
+        android:id="@+id/list_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/durataSessione"
+        android:layout_below="@+id/session_length"
         android:gravity="center_horizontal"
-        android:text="@string/cadute"
+        android:text="@string/falls"
         android:textSize="40sp" />
 
     <TextView
-        android:id="@+id/durataSessione"
+        android:id="@+id/session_length"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/zLabel"
-        android:text="@string/durata"
+        android:text="@string/duration"
         android:textSize="40sp" />
     
 	<ImageView
-        android:id="@+id/thumbnailSessione"
+        android:id="@+id/session_thumbnail"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_alignTop="@+id/xValue"
@@ -108,23 +108,23 @@
         android:background="@drawable/box" />
 
     <ImageButton
-        android:id="@+id/playPauseButton"
+        android:id="@+id/play_pause_button"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_above="@+id/zValue"
-        android:layout_toRightOf="@+id/titoloLista"
-        android:layout_toEndOf="@+id/titoloLista"
+        android:layout_toRightOf="@+id/list_title"
+        android:layout_toEndOf="@+id/list_title"
         android:baselineAlignBottom="false"
         android:contentDescription="@string/play_description"
         android:src="@drawable/ic_play_button_256" />
 
     <ImageButton
-        android:id="@+id/stopButton"
+        android:id="@+id/stop_button"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignTop="@+id/playPauseButton"
-        android:layout_toRightOf="@+id/playPauseButton"
-        android:layout_toEndOf="@+id/playPauseButton"
+        android:layout_alignTop="@+id/play_pause_button"
+        android:layout_toRightOf="@+id/play_pause_button"
+        android:layout_toEndOf="@+id/play_pause_button"
         android:contentDescription="@string/stop_description"
         android:src="@drawable/ic_stop_circular_button_256" />
 

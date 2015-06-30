@@ -1,7 +1,5 @@
 package it.unipd.dei.esp1415;
 
-import it.unipd.dei.esp1415.*;
-
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -42,7 +40,7 @@ public class GraphView extends View {
 		mPaintLine = new Paint();
 		mPaintLine.setStyle(Style.STROKE);
 		mPaintLine.setStrokeWidth(1);
-		mPaintLine.setColor(Color.CYAN);
+		mPaintLine.setColor(Color.BLACK);
 
 		// Cornice del grafico
 		setBackgroundResource(R.drawable.box);

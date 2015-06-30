@@ -52,7 +52,7 @@ public class SettingsActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_opzioni);
+		setContentView(R.layout.settings_activity);
 		sContext = this;
 		sPreferences = getSharedPreferences("MyPref", Context.MODE_APPEND);
 		sEditor = sPreferences.edit();
@@ -65,7 +65,7 @@ public class SettingsActivity extends ActionBarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.opzioni, menu);
+		getMenuInflater().inflate(R.menu.settings, menu);
 		return true;
 	}
 
@@ -77,7 +77,7 @@ public class SettingsActivity extends ActionBarActivity {
 	 */
 	public void onCheckboxClicked(View view) {
 		switch (view.getId()) {
-		case R.id.sveglia_checkbox:
+		case R.id.alarm_checkbox:
 			if (((CheckBox) view).isChecked()) {
 				Utilities.fireAlarm(sContext);
 			} else {
@@ -95,19 +95,19 @@ public class SettingsActivity extends ActionBarActivity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_opzioni,
+			View rootView = inflater.inflate(R.layout.settings_fragment,
 					container, false);
 
 			sEmail = (EditText) rootView.findViewById(R.id.email);
 			sPassword = (EditText) rootView.findViewById(R.id.password);
 
 			sNotification = (CheckBox) rootView
-					.findViewById(R.id.notifica_checkbox);
+					.findViewById(R.id.notification_checkbox);
 
 			// Configura le view relative alla scelta dell'orario per la
 			// visualizzazione della notifica
-			sAlarm = (CheckBox) rootView.findViewById(R.id.sveglia_checkbox);
-			sAlarmButton = (Button) rootView.findViewById(R.id.sveglia);
+			sAlarm = (CheckBox) rootView.findViewById(R.id.alarm_checkbox);
+			sAlarmButton = (Button) rootView.findViewById(R.id.alarm);
 			sAlarmButton.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					android.support.v4.app.DialogFragment newFragment = new TimePickerFragment();
@@ -118,9 +118,9 @@ public class SettingsActivity extends ActionBarActivity {
 
 			// Configura le view relative alla scelta della durata massima di
 			// una sessione
-			sMaxDuration = (TextView) rootView.findViewById(R.id.max_durata);
+			sMaxDuration = (TextView) rootView.findViewById(R.id.duration);
 			final TextView hours = (TextView) rootView
-					.findViewById(R.id.ore_label);
+					.findViewById(R.id.hours_label);
 			Button plusButton = (Button) rootView.findViewById(R.id.plus);
 			plusButton.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -154,14 +154,14 @@ public class SettingsActivity extends ActionBarActivity {
 			// contatti a cui inviare le e-mail di notifica
 			ArrayList<String> contacts = readSelectedContacts();
 			final ListView contactList = (ListView) rootView
-					.findViewById(R.id.contatti);
+					.findViewById(R.id.contacts);
 			if (contacts != null) {
 				sArrayAdapter = new ArrayAdapter<String>(getActivity(),
 						android.R.layout.simple_list_item_1, contacts);
 				contactList.setAdapter(sArrayAdapter);
 			}
 			Button contactListButton = (Button) rootView
-					.findViewById(R.id.contatti_button);
+					.findViewById(R.id.contacts_button);
 			contactListButton.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					Intent intent = new Intent(getActivity(),
@@ -174,11 +174,11 @@ public class SettingsActivity extends ActionBarActivity {
 			// Configura il pulsante relativo alla scelta della frequenza di
 			// campionamento
 			sSampleRateButton = (Button) rootView
-					.findViewById(R.id.campionamento);
+					.findViewById(R.id.sampling);
 			sSampleRateButton.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					PopupMenu popupMenu = new PopupMenu(getActivity(), v);
-					popupMenu.inflate(R.menu.opzioni);
+					popupMenu.inflate(R.menu.settings);
 					popupMenu
 							.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 								public boolean onMenuItemClick(MenuItem item) {
@@ -213,7 +213,7 @@ public class SettingsActivity extends ActionBarActivity {
 
 			// Configura il pulsante per il salvataggio delle opzioni su file di
 			// testo
-			Button salva = (Button) rootView.findViewById(R.id.salva_button);
+			Button salva = (Button) rootView.findViewById(R.id.save_button);
 			salva.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					writeSettings();

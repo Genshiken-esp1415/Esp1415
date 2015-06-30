@@ -9,7 +9,7 @@
     tools:context="it.unipd.dei.esp1415.OpzioniActivity$PlaceholderFragment" >
 
     <TextView
-        android:id="@+id/campionamento_label"
+        android:id="@+id/sampling_label"
         android:layout_width="450dp"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
@@ -21,8 +21,8 @@
         android:id="@+id/durata"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_alignLeft="@+id/sveglia_label"
-        android:layout_below="@+id/sveglia_label"
+        android:layout_alignLeft="@+id/alarm_label"
+        android:layout_below="@+id/alarm_label"
         android:ems="10"
         android:inputType="numberDecimal" />
 
@@ -30,8 +30,8 @@
         android:id="@+id/temporaneo"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_alignLeft="@+id/durata_label"
-        android:layout_below="@+id/durata_label"
+        android:layout_alignLeft="@+id/duration_label"
+        android:layout_below="@+id/duration_label"
         android:ems="10"
         android:inputType="time" >
 
@@ -39,7 +39,7 @@
     </EditText>
 
     <CheckBox
-        android:id="@+id/sveglia_checkbox"
+        android:id="@+id/alarm_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/temporaneo"
@@ -48,7 +48,7 @@
         android:text="Attiva sveglia" />
 
     <Button
-        android:id="@+id/salva_button"
+        android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -59,12 +59,12 @@
         android:id="@+id/modifica_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/contatti_label"
+        android:layout_alignBottom="@+id/contacts_label"
         android:layout_alignParentRight="true"
         android:text="Scegli contatti" />
 
     <TextView
-        android:id="@+id/durata_label"
+        android:id="@+id/duration_label"
         android:layout_width="450dp"
         android:layout_height="50dp"
         android:layout_alignLeft="@+id/durata"
@@ -74,20 +74,20 @@
         android:textSize="30dp" />
 
     <ListView
-        android:id="@+id/contatti"
+        android:id="@+id/contacts"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_above="@+id/salva_button"
-        android:layout_alignLeft="@+id/contatti_label"
+        android:layout_above="@+id/save_button"
+        android:layout_alignLeft="@+id/contacts_label"
         android:layout_marginBottom="45dp" >
     </ListView>
 
     <TextView
-        android:id="@+id/contatti_label"
+        android:id="@+id/contacts_label"
         android:layout_width="450dp"
         android:layout_height="50dp"
-        android:layout_above="@+id/contatti"
-        android:layout_alignLeft="@+id/ore_label"
+        android:layout_above="@+id/contacts"
+        android:layout_alignLeft="@+id/hours_label"
         android:text="Lista contatti per invio notifiche"
         android:textSize="30dp" />
 
@@ -95,8 +95,8 @@
         android:id="@+id/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/ore_label"
-        android:layout_below="@+id/ore_label"
+        android:layout_alignLeft="@+id/hours_label"
+        android:layout_below="@+id/hours_label"
         android:ems="10"
         android:inputType="textEmailAddress" />
 
@@ -104,13 +104,13 @@
         android:id="@+id/password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ore_label"
+        android:layout_below="@+id/hours_label"
         android:layout_toLeftOf="@+id/modifica_button"
         android:ems="10"
         android:inputType="textPassword" />
 
     <TextView
-        android:id="@+id/ore_label"
+        android:id="@+id/hours_label"
         android:layout_width="450dp"
         android:layout_height="50dp"
         android:layout_alignLeft="@+id/temporaneo"
@@ -120,11 +120,11 @@
         android:textSize="30dp" />
 
     <TextView
-        android:id="@+id/sveglia_label"
+        android:id="@+id/alarm_label"
         android:layout_width="450dp"
         android:layout_height="50dp"
-        android:layout_alignLeft="@+id/campionamento_label"
-        android:layout_below="@+id/campionamento_label"
+        android:layout_alignLeft="@+id/sampling_label"
+        android:layout_below="@+id/sampling_label"
         android:layout_marginTop="58dp"
         android:text="Massima durata sessione"
         android:textSize="30dp" />

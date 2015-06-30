@@ -40,13 +40,13 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 
 		sCurrentSession = sDb.getSession(new Date(intent.getLongExtra(
 				"IDSessione", 0L)));
-		setContentView(R.layout.activity_dettaglio_sessione_passata);
+		setContentView(R.layout.past_session_details_activity);
 		if (savedInstanceState == null) {
 			FragmentTransaction fm = getSupportFragmentManager()
 					.beginTransaction();
-			fm.add(R.id.dettaglio_sessione_passata_fragment,
+			fm.add(R.id.past_session_details_fragment,
 					new SessionDetailsFragment());
-			fm.add(R.id.lista_cadute_fragment, new MyListFragment());
+			fm.add(R.id.fall_list_fragment, new MyListFragment());
 			fm.commit();
 		}
 
@@ -55,7 +55,7 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.dettaglio_sessione_passata, menu);
+		getMenuInflater().inflate(R.menu.past_session_details, menu);
 
 		return true;
 	}
@@ -105,7 +105,7 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(
-					R.layout.fragment_dettaglio_sessione_passata, container,
+					R.layout.past_session_details_fragment, container,
 					false);
 			// solo per testing prendo tutte le sessioni dal db
 
@@ -119,12 +119,12 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 			Bitmap thumbnail = Utilities.loadImageFromStorage(thumbnailName,
 					getActivity().getApplicationContext());
 			ImageView thumbnailImageView = (ImageView) rootView
-					.findViewById(R.id.thumbnailSessione);
+					.findViewById(R.id.session_thumbnail);
 			thumbnailImageView.setImageBitmap(thumbnail);
 			TextView sessionTimestampTextView = (TextView) rootView
-					.findViewById(R.id.timestampsessione);
+					.findViewById(R.id.session_timestamp);
 			TextView sessionDurationTextView = (TextView) rootView
-					.findViewById(R.id.durataSessione);
+					.findViewById(R.id.session_length);
 			String timestamp = (String) DateFormat.format("dd/MM/yy - kk:mm",
 					sCurrentSession.getSessionBegin());
 			sessionTimestampTextView.setText(timestamp);
@@ -149,7 +149,7 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 
-			return inflater.inflate(R.layout.fragment_lista_cadute, container,
+			return inflater.inflate(R.layout.fall_list_fragment, container,
 					false);
 		}
 
@@ -201,11 +201,11 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 			View rowFallView = inflater.inflate(R.layout.row_fall, parent,
 					false);
 			TextView fallNumberTextView = (TextView) rowFallView
-					.findViewById(R.id.numeroCaduta);
+					.findViewById(R.id.fall_number);
 			TextView timestampFallTextView = (TextView) rowFallView
-					.findViewById(R.id.timestampCaduta);
+					.findViewById(R.id.fall_timestamp);
 			ImageView notifiedImageView = (ImageView) rowFallView
-					.findViewById(R.id.notificato);
+					.findViewById(R.id.notified);
 			fallNumberTextView.setText(String.valueOf(falls.get(position)
 					.getFallNumber()));
 			String timestamp = (String) DateFormat.format("dd/MM/yy - kk:mm",

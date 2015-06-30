@@ -37,7 +37,7 @@ public class FallDetailsActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_dettaglio_caduta);
+		setContentView(R.layout.fall_details_activity);
 		Intent intent = getIntent();
 		mDb = new DBManager(this);
 		mDb.open();
@@ -58,7 +58,7 @@ public class FallDetailsActivity extends ActionBarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.dettaglio_caduta, menu);
+		getMenuInflater().inflate(R.menu.fall_details, menu);
 		return true;
 	}
 
@@ -92,7 +92,7 @@ public class FallDetailsActivity extends ActionBarActivity {
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(
-					R.layout.fragment_dettaglio_caduta, container, false);
+					R.layout.fall_details_fragment, container, false);
 
 			// Configura le varie view coi dati della caduta corrispondenti
 			int fallNumber = sCurrentFall.getFallNumber();
@@ -103,14 +103,14 @@ public class FallDetailsActivity extends ActionBarActivity {
 					.setTitle(
 							"Caduta #" + fallNumber + " della sessione "
 									+ sSessionName);
-			TextView date = (TextView) rootView.findViewById(R.id.data);
-			TextView time = (TextView) rootView.findViewById(R.id.ora);
+			TextView date = (TextView) rootView.findViewById(R.id.date);
+			TextView time = (TextView) rootView.findViewById(R.id.time);
 			TextView notification = (TextView) rootView
-					.findViewById(R.id.notifica);
+					.findViewById(R.id.notification);
 			TextView latitude = (TextView) rootView
-					.findViewById(R.id.latitudine);
+					.findViewById(R.id.latitude);
 			TextView longitude = (TextView) rootView
-					.findViewById(R.id.longitudine);
+					.findViewById(R.id.longitude);
 			ImageView thumbnailImageView = (ImageView) rootView
 					.findViewById(R.id.thumbnail_label);
 			Date currentSession = sCurrentFall.getSession();
@@ -129,11 +129,11 @@ public class FallDetailsActivity extends ActionBarActivity {
 
 			// Costruisce i grafici
 			GraphView graphX = (GraphView) rootView
-					.findViewById(R.id.grafico_x);
+					.findViewById(R.id.x_graph);
 			GraphView graphY = (GraphView) rootView
-					.findViewById(R.id.grafico_y);
+					.findViewById(R.id.y_graph);
 			GraphView graphZ = (GraphView) rootView
-					.findViewById(R.id.grafico_z);
+					.findViewById(R.id.z_graph);
 			graphX.setGraphParameters(accData, accData.size(), X, Color.RED);
 			graphY.setGraphParameters(accData, accData.size(), Y, Color.BLUE);
 			graphZ.setGraphParameters(accData, accData.size(), Z, Color.GREEN);

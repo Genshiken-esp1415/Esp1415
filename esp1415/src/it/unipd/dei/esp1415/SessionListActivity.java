@@ -49,7 +49,7 @@ public class SessionListActivity extends ActionBarActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_lista_sessioni);
+		setContentView(R.layout.session_list_activity);
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new SessionListFragment()).commit();
@@ -59,7 +59,7 @@ public class SessionListActivity extends ActionBarActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inserisce il menù, aggiungendo elementi all'action bar se presenti
-		getMenuInflater().inflate(R.menu.lista_sessioni, menu);
+		getMenuInflater().inflate(R.menu.session_list, menu);
 		return true;
 	}
 
@@ -76,7 +76,7 @@ public class SessionListActivity extends ActionBarActivity implements
 			return true;
 		}
 		// Se viene premuto il pulsante nuova sessione
-		else if (id == R.id.newsession) {
+		else if (id == R.id.new_session) {
 			// Se non ci sono sessioni attive
 			if (!(sDb.hasActiveSession())) {
 				Intent newSession = new Intent(SessionListActivity.this,
@@ -87,7 +87,7 @@ public class SessionListActivity extends ActionBarActivity implements
 			}
 			// Notifica che c'è già una sessione attiva
 			else {
-				Toast.makeText(this, R.string.errore_sessione_attiva,
+				Toast.makeText(this, R.string.active_session_error,
 						Toast.LENGTH_SHORT).show();
 			}
 
@@ -126,7 +126,7 @@ public class SessionListActivity extends ActionBarActivity implements
 			sDb.open();
 			// Carico l'adapter
 			sAdapter = new MyAdapter(getActivity().getBaseContext(),
-					R.layout.adapter_lista_sessioni,
+					R.layout.session_list_adapter,
 					(ArrayList<Session>) sDb.getAllSessions());
 			setListAdapter(sAdapter);
 			ListView listView = getListView();
@@ -159,7 +159,7 @@ public class SessionListActivity extends ActionBarActivity implements
 				menu.setHeaderTitle(sSelectedSession.getName());
 				MenuInflater inflater = getActivity().getMenuInflater();
 				// Aggiunta di opzioni al menù
-				inflater.inflate(R.menu.click_lungo_lista_sessioni, menu);
+				inflater.inflate(R.menu.session_list_click, menu);
 			}
 		}
 
@@ -191,7 +191,7 @@ public class SessionListActivity extends ActionBarActivity implements
 							getActivity(),
 							sSelectedSession.getName()
 									+ getActivity().getString(
-											R.string.sessione_rimossa),
+											R.string.session_removed),
 							Toast.LENGTH_SHORT).show();
 					return true;
 				}
@@ -243,7 +243,7 @@ public class SessionListActivity extends ActionBarActivity implements
 			View rowView = convertView;
 			if (rowView == null) {
 				Holder holder = new Holder();
-				rowView = inflater.inflate(R.layout.adapter_lista_sessioni,
+				rowView = inflater.inflate(R.layout.session_list_adapter,
 						parent, false);
 				holder.secondLine = (TextView) rowView
 						.findViewById(R.id.secondLine);
@@ -263,19 +263,19 @@ public class SessionListActivity extends ActionBarActivity implements
 					session.getSessionBegin());
 			String hour = (String) DateFormat.format("kk:mm",
 					session.getSessionBegin());
-			String secondLine = getContext().getString(R.string.data_e_ora)
+			String secondLine = getContext().getString(R.string.date_and_time)
 					+ date + " " + hour;
 			holder.secondLine.setText(secondLine);
-			String thirdLine = getContext().getString(R.string.durata_2)
+			String thirdLine = getContext().getString(R.string.session_duration)
 					+ conversionFromMilliseconds(session.getDuration()) + " - "
 					+ session.getNumberOfFalls();
 
 			if (session.getNumberOfFalls() == 1) {
 				holder.thirdLine.setText(thirdLine + " "
-						+ getContext().getString(R.string.caduta));
+						+ getContext().getString(R.string.fall));
 			} else {
 				holder.thirdLine.setText(thirdLine + " "
-						+ getContext().getString(R.string.cadute_min));
+						+ getContext().getString(R.string.falls_lower_case));
 			}
 			// Per la sessione attiva cambio determinati parametri
 			boolean active = session.isActive();

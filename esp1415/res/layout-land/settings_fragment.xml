@@ -9,123 +9,123 @@
     tools:context="it.unipd.dei.esp1415.OpzioniActivity$PlaceholderFragment" >
    
 	<TextView
-        android:id="@+id/campionamento_label"
+        android:id="@+id/sampling_label"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:text="@string/campionamento"
+        android:text="@string/sampling"
         android:textSize="26sp" />
     
 	<Button
-        android:id="@+id/campionamento"
+        android:id="@+id/sampling"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:layout_alignLeft="@+id/campionamento_label"
-        android:layout_alignStart="@+id/campionamento_label"
-        android:layout_below="@+id/campionamento_label"
-        android:text="@string/normale" />
+        android:layout_alignLeft="@+id/sampling_label"
+        android:layout_alignStart="@+id/sampling_label"
+        android:layout_below="@+id/sampling_label"
+        android:text="@string/sampling_normal" />
     
 	<TextView
-        android:id="@+id/sveglia_label"
+        android:id="@+id/alarm_label"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_alignBaseline="@+id/campionamento_label"
-        android:layout_toRightOf="@+id/campionamento_label"
-        android:layout_toEndOf="@+id/campionamento_label"
+        android:layout_alignBaseline="@+id/sampling_label"
+        android:layout_toRightOf="@+id/sampling_label"
+        android:layout_toEndOf="@+id/sampling_label"
         android:layout_marginLeft="30dp"
         android:layout_marginStart="30dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:text="@string/promemoria"
+        android:text="@string/memo"
         android:textSize="26sp" />
 	
 	<Button
-        android:id="@+id/sveglia"
+        android:id="@+id/alarm"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:layout_below="@+id/sveglia_label"
-        android:layout_alignBaseline="@+id/campionamento"
-        android:layout_alignStart="@+id/sveglia_label"
-        android:layout_alignLeft="@+id/sveglia_label"
+        android:layout_below="@+id/alarm_label"
+        android:layout_alignBaseline="@+id/sampling"
+        android:layout_alignStart="@+id/alarm_label"
+        android:layout_alignLeft="@+id/alarm_label"
         android:onClick="showTimePickerDialog"
-        android:text="@string/default_sveglia" />
+        android:text="@string/default_alarm" />
 	
 	<CheckBox
-        android:id="@+id/sveglia_checkbox"
+        android:id="@+id/alarm_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/campionamento"
+        android:layout_alignBaseline="@+id/sampling"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@+id/sveglia"
-        android:layout_toEndOf="@+id/sveglia"
+        android:layout_toRightOf="@+id/alarm"
+        android:layout_toEndOf="@+id/alarm"
         android:layout_marginLeft="130dp"
         android:layout_marginStart="130dp"
         android:onClick="onCheckboxClicked"
-        android:text="@string/attiva_sveglia" />
+        android:text="@string/enable_alarm" />
 	
 	<TextView
-        android:id="@+id/durata_label"
+        android:id="@+id/duration_label"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_alignLeft="@+id/campionamento_label"
-        android:layout_alignStart="@+id/campionamento_label"
-        android:layout_below="@+id/campionamento"
+        android:layout_alignLeft="@+id/sampling_label"
+        android:layout_alignStart="@+id/sampling_label"
+        android:layout_below="@+id/sampling"
         android:layout_marginTop="30dp"
-        android:text="@string/durata_max"
+        android:text="@string/max_duration"
         android:textSize="26sp" />
 	
 	<Button
         android:id="@+id/minus"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_below="@+id/durata_label"
+        android:layout_below="@+id/duration_label"
         android:layout_alignTop="@+id/email"
-        android:layout_alignLeft="@+id/durata_label"
-        android:layout_alignStart="@+id/durata_label"
-        android:text="@string/sottrazione" />
+        android:layout_alignLeft="@+id/duration_label"
+        android:layout_alignStart="@+id/duration_label"
+        android:text="@string/minus" />
     
     <TextView
-        android:id="@+id/max_durata"
+        android:id="@+id/duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/minus"
         android:layout_toRightOf="@+id/minus"
         android:layout_toEndOf="@+id/minus"
-        android:text="@string/default_durata"
+        android:text="@string/default_duration"
         android:textSize="40sp" />
     
     <Button
         android:id="@+id/plus"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignBottom="@+id/max_durata"
-        android:layout_toRightOf="@+id/max_durata"
-        android:layout_toEndOf="@+id/max_durata"
-        android:text="@string/addizione" />
+        android:layout_alignBottom="@+id/duration"
+        android:layout_toRightOf="@+id/duration"
+        android:layout_toEndOf="@+id/duration"
+        android:text="@string/plus" />
     
     <TextView
-        android:id="@+id/ore_label"
+        android:id="@+id/hours_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/max_durata"
+        android:layout_alignBaseline="@+id/duration"
         android:layout_marginLeft="34dp"
         android:layout_marginStart="34dp"
         android:layout_toEndOf="@+id/plus"
         android:layout_toRightOf="@+id/plus"
-        android:text="@string/ore"
+        android:text="@string/hours"
         android:textSize="26sp" />
     
     <TextView
         android:id="@+id/email_label"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_alignBaseline="@+id/durata_label"
-        android:layout_below="@id/sveglia"
-        android:layout_alignLeft="@+id/sveglia_label"
-        android:layout_alignStart="@+id/sveglia_label"
+        android:layout_alignBaseline="@+id/duration_label"
+        android:layout_below="@id/alarm"
+        android:layout_alignLeft="@+id/alarm_label"
+        android:layout_alignStart="@+id/alarm_label"
         android:text="@string/email"
         android:textSize="26sp" />
     
@@ -153,14 +153,14 @@
         android:textSize="20sp" />
         
     <CheckBox
-        android:id="@+id/notifica_checkbox"
+        android:id="@+id/notification_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/sveglia_checkbox"
-        android:layout_alignStart="@+id/sveglia_checkbox"
+        android:layout_alignLeft="@+id/alarm_checkbox"
+        android:layout_alignStart="@+id/alarm_checkbox"
         android:layout_alignBottom="@+id/email"
         android:onClick="onCheckboxClicked"
-        android:text="@string/attiva_notifica" /> 
+        android:text="@string/enable_notification" /> 
     
     <EditText
         android:id="@+id/password"
@@ -174,42 +174,42 @@
         android:inputType="textPassword" />
     
     <TextView
-        android:id="@+id/contatti_label"
+        android:id="@+id/contacts_label"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_alignLeft="@+id/minus"
         android:layout_alignStart="@+id/minus"
         android:layout_below="@+id/password"
-        android:text="@string/lista_contatti"
+        android:text="@string/contact_list"
         android:textSize="26sp" />
 
     <ListView
-        android:id="@+id/contatti"
+        android:id="@+id/contacts"
         android:layout_width="700dp"
         android:layout_height="225dp"
-        android:layout_alignLeft="@+id/contatti_label"
-        android:layout_alignStart="@+id/contatti_label"
-        android:layout_below="@+id/contatti_label"
+        android:layout_alignLeft="@+id/contacts_label"
+        android:layout_alignStart="@+id/contacts_label"
+        android:layout_below="@+id/contacts_label"
         android:listSelector="@android:color/transparent" >
     </ListView>
     
 	<Button
-        android:id="@+id/contatti_button"
+        android:id="@+id/contacts_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/contatti"
+        android:layout_alignTop="@+id/contacts"
         android:layout_marginTop="70dp"
-        android:layout_alignLeft="@+id/sveglia_checkbox"
-        android:layout_alignStart="@+id/sveglia_checkbox"
-        android:text="@string/contatti" />
+        android:layout_alignLeft="@+id/alarm_checkbox"
+        android:layout_alignStart="@+id/alarm_checkbox"
+        android:text="@string/contacts" />
     
     <Button
-        android:id="@+id/salva_button"
+        android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/contatti"
+        android:layout_below="@+id/contacts"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/salva" />
+        android:text="@string/save" />
 
 </RelativeLayout>

@@ -3,8 +3,6 @@ package it.unipd.dei.esp1415;
 import java.util.ArrayList;
 import java.util.Date;
 
-import android.location.Location;
-import android.location.LocationManager;
 
 /**
  * Classe contenitore per i dati relativi ad una caduta

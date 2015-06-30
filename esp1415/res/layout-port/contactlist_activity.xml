@@ -6,7 +6,7 @@
     android:orientation="vertical" >
 
     <ListView
-        android:id="@+id/lv"
+        android:id="@+id/contact_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/done"
@@ -19,6 +19,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:text="@string/fatto"/>
+        android:text="@string/done"/>
 
 </RelativeLayout>

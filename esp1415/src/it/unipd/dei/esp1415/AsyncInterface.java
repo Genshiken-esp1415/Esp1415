@@ -1,5 +1,4 @@
 package it.unipd.dei.esp1415;
-import it.unipd.dei.esp1415.*;
 
 /**
  * Interfaccia di supporto per la stampa nell'apposita TextView del risultato di

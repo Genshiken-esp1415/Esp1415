@@ -54,13 +54,13 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_dettaglio_sessione_corrente);
+		setContentView(R.layout.current_session_details_activity);
 		if (savedInstanceState == null) {
 			FragmentTransaction fm = getSupportFragmentManager()
 					.beginTransaction();
-			fm.add(R.id.dettaglio_sessione_corrente_fragment,
+			fm.add(R.id.current_session_details_fragment,
 					new SessionDetailsFragment());
-			fm.add(R.id.lista_cadute_fragment, new MyListFragment());
+			fm.add(R.id.fall_list_fragment, new MyListFragment());
 			fm.commit();
 		}
 		sServiceRunning = isMyServiceRunning(WatcherService.class);
@@ -76,7 +76,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.dettaglio_sessione_corrente, menu);
+		getMenuInflater().inflate(R.menu.current_session_details, menu);
 		return true;
 	}
 
@@ -114,7 +114,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(
-					R.layout.fragment_dettaglio_sessione_corrente, container,
+					R.layout.current_session_details_fragment, container,
 					false);
 			// Imposto la connessione al db
 			sDb = new DBManager(getActivity().getBaseContext());
@@ -144,18 +144,18 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			// TextView timeStampSessioneTextView = (TextView)
 			// rootView.findViewById(R.id.timestampsessione);
 			EditText sessionName = (EditText) rootView
-					.findViewById(R.id.nomeSessione);
+					.findViewById(R.id.session_name);
 			mXValue = (TextView) rootView.findViewById(R.id.xValue);
 			mYValue = (TextView) rootView.findViewById(R.id.yValue);
 			mZValue = (TextView) rootView.findViewById(R.id.zValue);
 			mSessionLengthTextView = (TextView) rootView
-					.findViewById(R.id.durataSessione);
+					.findViewById(R.id.session_length);
 			mPlayPauseButton = (ImageButton) rootView
-					.findViewById(R.id.playPauseButton);
-			mStopButton = (ImageButton) rootView.findViewById(R.id.stopButton);
+					.findViewById(R.id.play_pause_button);
+			mStopButton = (ImageButton) rootView.findViewById(R.id.stop_button);
 			// Caricamento thumbnail
 			mThumbnailImageView = (ImageView) rootView
-					.findViewById(R.id.thumbnailSessione);
+					.findViewById(R.id.session_thumbnail);
 			String thumbnailName = sCurrentSession.getThumbnail();
 			Bitmap thumbnail = Utilities.loadImageFromStorage(thumbnailName,
 					getActivity().getApplicationContext());
@@ -319,7 +319,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 
-			return inflater.inflate(R.layout.fragment_lista_cadute, container,
+			return inflater.inflate(R.layout.fall_list_fragment, container,
 					false);
 		}
 
@@ -420,11 +420,11 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			mFallRowView = inflater.inflate(R.layout.row_fall, parent, false);
 			mFallNumberTextView = (TextView) mFallRowView
-					.findViewById(R.id.numeroCaduta);
+					.findViewById(R.id.fall_number);
 			mFallTimestampTextView = (TextView) mFallRowView
-					.findViewById(R.id.timestampCaduta);
+					.findViewById(R.id.fall_timestamp);
 			mNotifiedImageView = (ImageView) mFallRowView
-					.findViewById(R.id.notificato);
+					.findViewById(R.id.notified);
 			mFallNumberTextView.setText(String.valueOf(mFalls.get(position)
 					.getFallNumber()));
 			mTimestamp = (String) DateFormat.format("dd/MM/yy - kk:mm", mFalls

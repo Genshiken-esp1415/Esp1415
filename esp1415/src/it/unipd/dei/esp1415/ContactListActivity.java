@@ -48,9 +48,9 @@ public class ContactListActivity extends Activity {
 	@SuppressLint("InlinedApi")
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_contactlist);
+		setContentView(R.layout.contactlist_activity);
 
-		final ListView contactList = (ListView) findViewById(R.id.lv);
+		final ListView contactList = (ListView) findViewById(R.id.contact_list);
 		Button doneButton = (Button) findViewById(R.id.done);
 		String name;
 		String address;

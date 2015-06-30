@@ -1,8 +1,5 @@
 package it.unipd.dei.esp1415;
 
-import it.unipd.dei.esp1415.*;
-
-
 import java.util.Calendar;
 
 import android.app.NotificationManager;
