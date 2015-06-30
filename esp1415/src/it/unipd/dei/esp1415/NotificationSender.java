@@ -20,8 +20,8 @@ import android.util.Base64;
  * forniti dall'utente. Si usano socket SSL.
  */
 public class NotificationSender extends AsyncTask<String, Void, Boolean> {
-	public final static boolean SENT = true;
-	public final static boolean UNSENT = false;
+	private final static boolean SENT = true;
+	private final static boolean UNSENT = false;
 
 	private SSLSocket mSocket;
 	private String mServer;

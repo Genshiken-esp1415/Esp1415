@@ -21,7 +21,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 /**
- * descrivi sta cazzo di classe Saluti,
+ * descrivi sta cazzo di classe
+ * Saluti,
  * 
  * Marco
  *
