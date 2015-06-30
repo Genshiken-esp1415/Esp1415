@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.Intent;
@@ -207,7 +206,7 @@ public class SessionListActivity extends ActionBarActivity implements
 		 * @param filename
 		 * @param context
 		 */
-		public static void removeThumbnail(String filename, Context context){
+		private static void removeThumbnail(String filename, Context context){
 			// Genera il path del file da rimuovere
 			String path = context.getDir("Thumbnails", Context.MODE_PRIVATE)
 					+ "/" + filename;
@@ -321,7 +320,6 @@ public class SessionListActivity extends ActionBarActivity implements
 		static class Holder {
 			public TextView firstLine, secondLine, thirdLine;
 			public ImageView imageView;
-			public RelativeLayout layout;
 		}
 	}
 

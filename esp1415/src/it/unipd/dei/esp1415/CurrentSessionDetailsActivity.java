@@ -20,7 +20,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -349,8 +348,6 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					// adapter.clear();
 					// adapter.addAll((ArrayList<Fall>)
 					// db.getAllFalls(currentSession.getSessionBegin()));
-					ArrayList<AccelerometerData> acc = (ArrayList<AccelerometerData>) sDb
-							.getAccData(new Date(millis));
 					mAdapter.notifyDataSetChanged();
 				}
 
@@ -395,10 +392,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 	public static class FallAdapter extends ArrayAdapter<Fall> {
 		private final Context mContext;
 		private final ArrayList<Fall> mFalls;
-		private View mFallRowView;
-		private TextView mFallNumberTextView;
-		private TextView mFallTimestampTextView;
-		private ImageView mNotifiedImageView;
+		private View mRowView;
 		private String mTimestamp;
 
 		public FallAdapter(Context context, ArrayList<Fall> values) {
@@ -411,29 +405,37 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			LayoutInflater inflater = (LayoutInflater) mContext
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			mFallRowView = inflater.inflate(R.layout.row_fall, parent, false);
-			mFallNumberTextView = (TextView) mFallRowView
-					.findViewById(R.id.fall_number);
-			mFallTimestampTextView = (TextView) mFallRowView
-					.findViewById(R.id.fall_timestamp);
-			mNotifiedImageView = (ImageView) mFallRowView
-					.findViewById(R.id.notified);
-			mFallNumberTextView.setText(String.valueOf(mFalls.get(position)
+			mRowView = convertView;
+			if (mRowView == null) {
+				Holder holder = new Holder();
+				mRowView = inflater.inflate(R.layout.row_fall, parent, false);
+				holder.number = (TextView) mRowView
+						.findViewById(R.id.fall_number);
+				holder.timestamp = (TextView) mRowView
+						.findViewById(R.id.fall_timestamp);
+				holder.notification = (ImageView) mRowView
+						.findViewById(R.id.notified);
+				mRowView.setTag(holder);
+			}
+			Holder holder = (Holder) mRowView.getTag();
+			holder.number.setText(String.valueOf(mFalls.get(position)
 					.getFallNumber()));
-			mTimestamp = (String) DateFormat.format("dd/MM/yy - kk:mm:ss", mFalls
-					.get(position).getFallTimestamp());
-			mFallTimestampTextView.setText(mTimestamp);
+			mTimestamp = (String) DateFormat.format("dd/MM/yy - kk:mm:ss",
+					mFalls.get(position).getFallTimestamp());
+			holder.timestamp.setText(mTimestamp);
 
 			if (!mFalls.get(position).isNotified()) {
-				mNotifiedImageView.setImageResource(R.drawable.cross);
+				holder.notification.setImageResource(R.drawable.cross);
 			} else {
-				mNotifiedImageView.setImageResource(R.drawable.tick);
-			}
-
-			return mFallRowView;
-
+				holder.notification.setImageResource(R.drawable.tick);
+			}			
+			return mRowView;
 		}
-
+	}
+	
+	static class Holder {
+		public TextView number, timestamp;
+		public ImageView notification;
 	}
 
 	/**

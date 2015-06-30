@@ -1,6 +1,7 @@
 package it.unipd.dei.esp1415;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.Objects;
 
 import android.app.Service;
 import android.content.Context;
@@ -185,11 +186,12 @@ public class WatcherService extends Service implements SensorEventListener {
 				}
 				// Se sono passati almeno 5 secondi dall'ultima caduta la
 				// segnalo
-				if (mStartTask && (timestamp - mLastFallNano > 500000000)) {
+				if (mStartTask && (timestamp - mLastFallNano > 5000000000L)) {
 					// Copio i dati dell'accelerometro relativi alla caduta in
 					// una lista apposita
-					mFallSamples = (LinkedList<AccelerometerData>) mSamples
-							.clone();
+					if(mSamples instanceof LinkedList<?>) {
+								mFallSamples = (LinkedList<AccelerometerData>) mSamples.clone();
+					}
 					// Lancio la task per recuperare la posizione, mandare la
 					// mail e registrare la caduta nel db
 					new ProcessFallTask().execute("NEW FALL EVENT");

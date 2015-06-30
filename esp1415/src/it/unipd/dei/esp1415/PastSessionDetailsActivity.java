@@ -147,7 +147,6 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 	 * A placeholder fragment containing a simple view.
 	 */
 	public static class MyListFragment extends ListFragment {
-		private Fall mSelectedFall;
 		private FallAdapter mAdapter;
 
 		public MyListFragment() {
@@ -177,55 +176,61 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 		// Click su elementi della lista
 		@Override
 		public void onListItemClick(ListView l, View v, int position, long id) {// gestisce
-
 			super.onListItemClick(l, v, position, id);
-			mSelectedFall = (Fall) getListAdapter().getItem(position);
 			Intent fallDetails = new Intent(getActivity()
 					.getApplicationContext(), FallDetailsActivity.class);
-			Date idSessione = mAdapter.getItem(position).getFallTimestamp();
-			fallDetails.putExtra("IDCaduta", idSessione.getTime());
+			Date fallId = mAdapter.getItem(position).getFallTimestamp();
+			fallDetails.putExtra("IDCaduta", fallId.getTime());
 			fallDetails.putExtra("NomeSessione", sCurrentSession.getName());
 			startActivity(fallDetails);
-
 		}
 	}
 
 	public static class FallAdapter extends ArrayAdapter<Fall> {
-		private final Context context;
-		private final ArrayList<Fall> falls;
+		private final Context mContext;
+		private final ArrayList<Fall> mFalls;
 
 		public FallAdapter(Context context, ArrayList<Fall> values) {
 			super(context, R.layout.row_fall, values);
-			this.context = context;
-			this.falls = values;
+			this.mContext = context;
+			this.mFalls = values;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			LayoutInflater inflater = (LayoutInflater) context
+			LayoutInflater inflater = (LayoutInflater) mContext
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View rowFallView = inflater.inflate(R.layout.row_fall, parent,
-					false);
-			TextView fallNumberTextView = (TextView) rowFallView
-					.findViewById(R.id.fall_number);
-			TextView timestampFallTextView = (TextView) rowFallView
-					.findViewById(R.id.fall_timestamp);
-			ImageView notifiedImageView = (ImageView) rowFallView
-					.findViewById(R.id.notified);
-			fallNumberTextView.setText(String.valueOf(falls.get(position)
-					.getFallNumber()));
-			String timestamp = (String) DateFormat.format("dd/MM/yy - kk:mm:ss",
-					falls.get(position).getFallTimestamp());
-			timestampFallTextView.setText(timestamp);
-
-			if (falls.get(position).isNotified()) {
-				notifiedImageView.setImageResource(R.drawable.cross);
-			} else {
-				notifiedImageView.setImageResource(R.drawable.tick);
+			View rowView = convertView;
+			if (rowView == null) {
+				Holder holder = new Holder();
+				rowView = inflater.inflate(R.layout.row_fall, parent, false);
+				holder.number = (TextView) rowView
+						.findViewById(R.id.fall_number);
+				holder.timestamp = (TextView) rowView
+						.findViewById(R.id.fall_timestamp);
+				holder.notification = (ImageView) rowView
+						.findViewById(R.id.notified);
+				rowView.setTag(holder);
 			}
+			Holder holder = (Holder) rowView.getTag();
+			holder.number.setText(String.valueOf(mFalls.get(position)
+					.getFallNumber()));
+			String timestamp = (String) DateFormat.format(
+					"dd/MM/yy - kk:mm:ss", mFalls.get(position)
+							.getFallTimestamp());
+			holder.timestamp.setText(timestamp);
 
-			return rowFallView;
-
+			if (!mFalls.get(position).isNotified()) {
+				holder.notification.setImageResource(R.drawable.cross);
+			} else {
+				holder.notification.setImageResource(R.drawable.tick);
+			}
+			return rowView;
+		}
+		
+		static class Holder {
+			public TextView number, timestamp;
+			public ImageView notification;
 		}
 	}
 
