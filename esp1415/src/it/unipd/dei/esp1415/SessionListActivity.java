@@ -52,7 +52,15 @@ public class SessionListActivity extends ActionBarActivity implements
 		setContentView(R.layout.session_list_activity);
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new SessionListFragment()).commit();
+			.add(R.id.container, new SessionListFragment()).commit();
+		}
+		// Se sono stati scelti in passato degli indirizzi e-mail per l'invio
+		// delle notifiche, vengono letti dal corrispondente file di testo
+		if ((new File(getApplicationContext().getFilesDir().getPath()
+				+ "/contactlist.txt")).exists()) {
+			Toast.makeText(this, "Contact list trovata", Toast.LENGTH_LONG)
+			.show();
+			Utilities.setSelectedContacts(this);
 		}
 	}
 

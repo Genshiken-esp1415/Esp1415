@@ -43,14 +43,7 @@ public class MainActivity extends ActionBarActivity {
 		 */
 		db.close();
 
-		// Se sono stati scelti in passato degli indirizzi e-mail per l'invio
-		// delle notifiche, vengono letti dal corrispondente file di testo
-		if ((new File(getApplicationContext().getFilesDir().getPath()
-				+ "/contactlist.txt")).exists()) {
-			Toast.makeText(this, "Contact list trovata", Toast.LENGTH_LONG)
-					.show();
-			Utilities.setSelectedContacts(this);
-		}
+		
 
 		Intent openListaSessioni = new Intent(this, SessionListActivity.class);
 		startActivity(openListaSessioni);

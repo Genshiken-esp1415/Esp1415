@@ -33,7 +33,8 @@ public class WatcherService extends Service implements SensorEventListener {
 	// public togli la m davanti al nome
 	private final float CALIBRATION = SensorManager.STANDARD_GRAVITY;
 	private final String mTag = "AccLogger";
-	private final int HOURS8 = 8*60*60*1000;
+	private final int MAXHOURS = 8;
+	private final int MILLISPERHOUR = 60*60*1000;
 	private SensorManager mSm = null;
 	private AccelerometerData mMeasuredData;
 	private float mCurrentAcceleration;
@@ -218,7 +219,7 @@ public class WatcherService extends Service implements SensorEventListener {
 				mIntent.putExtra("duration", mDuration + mTimePassed);
 				mIntent.putExtra("maxDurationReached", false);
 				// Controlla se la durata massima è stata superata
-				if((mDuration + mTimePassed) > sPreferences.getInt("maxDuration", HOURS8)) {
+				if((mDuration + mTimePassed) > sPreferences.getInt("maxDuration", MAXHOURS)*MILLISPERHOUR) {
 					
 					Toast.makeText(getApplicationContext(), "Raggiunta durata massima per la sessione",
 							Toast.LENGTH_LONG).show();

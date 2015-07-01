@@ -2,7 +2,7 @@ package it.unipd.dei.esp1415;
 
 
 /**
- * classe contenitore per i dati registrati dall'accelerometro.
+ * Contenitore per i dati dell'accelerometro, quali i valori per ogni asse e un timestamp.
  */
 public class AccelerometerData {
 	private float mX;

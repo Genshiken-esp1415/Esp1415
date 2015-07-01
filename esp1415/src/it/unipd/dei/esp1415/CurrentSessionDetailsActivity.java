@@ -25,7 +25,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -41,14 +40,28 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 /**
- * Questa activity conterrà il dettaglio sulla sessione corrente. Descrizione di
- * come interagisce col WatcherService: 1)creo una nuova sessione e imposto la
- * sessione come attiva nel db o ripristino la sessione in corso se è già
- * presente una sessione attiva nel db; 2)controllo se il service è già attivo,
- * se è attivo mostro pausa, se non è attivo mostro il tasto play 3)premuto play
- * il service viene avviato; 4)premuto pausa uccido il service; 5)premuto stop
- * imposto la sessione come non attiva nel db e uccido il service; 6)uso un
- * broadcast receiver per tenere aggiornata l'UI mentre l'app è in foreground.
+ * Questa activity contiene il dettaglio sulla sessione corrente. Vengono
+ * visualizzati la thumbnail della sessione, creata all'avvio della activity per
+ * le nuove sessioni, data di inizio sessione, durata della sessione e la lista
+ * delle cadute rilevate.
+ * 
+ * Questa activity permette di avviare, mettere in pausa, riprendere o terminare
+ * una sessione previa azione sui relativi tasti. Vengono inoltre visualizzati i
+ * dati dell'accelerometro in tempo reale mentre la sessione sta registrando. La
+ * lista delle cadute viene anch'essa aggiornata in tempo reale.
+ * 
+ * Descrizione di come interagisce col WatcherService:
+ * 
+ * 1)creo una nuova sessione e imposto la sessione come attiva nel db o
+ * ripristino la sessione in corso se è già presente una sessione attiva nel db;
+ * 2)controllo se il service è già attivo, se è attivo mostro pausa, se non è
+ * attivo mostro il tasto play;
+ * 3)premuto play il service viene avviato;
+ * 4)premuto pausa uccido il service;
+ * 5)premuto stop imposto la sessione come non attiva nel db e uccido il
+ * service;
+ * 6)uso un broadcast receiver per tenere aggiornata l'UI mentre l'app è in
+ * foreground.
  */
 public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
@@ -65,34 +78,22 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					.beginTransaction();
 			fm.add(R.id.current_session_details_fragment,
 					new SessionDetailsFragment());
-			fm.add(R.id.fall_list_fragment, new MyListFragment());
+			fm.add(R.id.fall_list_fragment, new FallListFragment());
 			fm.commit();
 		}
+		//Chiamato per controllare se il service è attivo in background
 		sServiceRunning = isMyServiceRunning(WatcherService.class);
 	}
 
 	@Override
 	protected void onDestroy() {
-		sDb.close();
-
 		super.onDestroy();
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+		sDb.close();
 	}
 
 	/**
 	 * Questo fragment contiene la view dedicata ai dettagli della sessione,
-	 * eccetto la lista di cadute
+	 * eccetto la lista di cadute, contenuta in un altro fragment.
 	 */
 	public static class SessionDetailsFragment extends Fragment {
 
@@ -120,7 +121,6 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			sPreferences = getActivity().getBaseContext().getSharedPreferences("MyPref",
 					Context.MODE_PRIVATE);
 			sEditor = sPreferences.edit();
-			sEditor.commit();
 			// Imposto la connessione al db
 			sDb = new DBManager(getActivity().getBaseContext());
 			sDb.open();
@@ -150,6 +150,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
 			}
 			this.getActivity().setTitle("Sessione attiva");
+			//TODO: aggiungere l'inizio della sessione al layout?
 			// TextView timeStampSessioneTextView = (TextView)
 			// rootView.findViewById(R.id.timestampsessione);
 			EditText sessionName = (EditText) rootView
@@ -169,7 +170,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			Bitmap thumbnail = Utilities.loadImageFromStorage(thumbnailName,
 					getActivity().getApplicationContext());
 			mThumbnailImageView.setImageBitmap(thumbnail);
-
+			// Imposta il pulsante done sulla tastiera se l'utente tappa nel
+			// campo di testo per modificare il nome della sessione
 			sessionName.setImeOptions(EditorInfo.IME_ACTION_DONE);
 			sessionName.setOnEditorActionListener(new OnEditorActionListener() {
 				@Override
@@ -177,14 +179,14 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 						KeyEvent event) {
 					boolean handled = false;
 					if (actionId == EditorInfo.IME_ACTION_DONE) {
-						// Questa chiamata mi fa sparire la tastiera una
+						// Questa chiamata fa sparire la tastiera una
 						// volta finito di modificare il nome della
 						// sessione
 						InputMethodManager imm = (InputMethodManager) v
 								.getContext().getSystemService(
 										Context.INPUT_METHOD_SERVICE);
 						imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-						// Modifico il nome della sessione e registro il
+						// Modifica il nome della sessione e registra il
 						// cambiamento nel database
 						sCurrentSession.setName(v.getText().toString());
 						sDb.renameSession(sCurrentSession);
@@ -193,7 +195,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					return handled;
 				}
 			});
-			// Imposto i valori iniziali dei campi del layout
+			// Impostazione dei valori iniziali dei campi del layout
 			sessionName.setText(sCurrentSession.getName());
 			mSessionLengthTextView.setText(Utilities.millisToHourMinuteSecond(
 					sCurrentSession.getDuration(), true));
@@ -201,23 +203,23 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			mYValue.setText("");
 			mZValue.setText("");
 
-			// L'immagine e il comportamento del tasto play cambiano in base al
-			// servizio se sta andando o no
+			// L'immagine e il comportamento del tasto play cambiano in base
+			// alla presenza del service in background
 			mPlayPauseButton.setImageResource(R.drawable.ic_play_button_256);
 			if (sServiceRunning) {
 				mPlayPauseButton
 						.setImageResource(R.drawable.ic_pause_button_256);
 			}
+			
 			mPlayPauseButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
 					if (sServiceRunning) {
-
 						Intent i = new Intent(getActivity(),
 								WatcherService.class);
 						i.putExtra("Active", true);
 						getActivity().stopService(i);
-						// Modifico l'immagine del bottone in accordo con lo
+						// Modifica l'immagine del button in accordo con lo
 						// stato di service non attivo
 						((ImageButton) arg0)
 								.setImageResource(R.drawable.ic_play_button_256);
@@ -225,13 +227,11 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 						mYValue.setText("");
 						mZValue.setText("");
 						sServiceRunning = false;
-
-					} else {
-
-						// Avvio il service
-
+					}
+					else {
+						// Avvia il service
 						mI = new Intent(getActivity(), WatcherService.class);
-						// Passo al service le informazioni sulla sessione
+						// Passa al service le informazioni sulla sessione
 						// attiva
 						mI.putExtra("IDSessione",
 								sCurrentSession.getSessionBegin());
@@ -239,10 +239,10 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 								PendingIntent.FLAG_UPDATE_CURRENT, mI,
 								PendingIntent.FLAG_UPDATE_CURRENT);
 						getActivity().startService(mI);
-						// Modifico l'immagine del bottone in accordo con lo
+						// Modifica l'immagine del bottone in accordo con lo
 						// stato di service attivo
 						((ImageButton) arg0)
-								.setImageResource(R.drawable.ic_pause_button_256);
+						.setImageResource(R.drawable.ic_pause_button_256);
 						sServiceRunning = true;
 					}
 				}
@@ -251,13 +251,15 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				@Override
 				public void onClick(View arg0) {
 
-					// Uccido il service e gli dico di disattivare la sessione
+					// Termina il service e imposta la sessione come non attiva nel db
 					mI = new Intent(getActivity(), WatcherService.class);
 					mI.putExtra("Active", false);
 					getActivity().stopService(mI);
 					sCurrentSession.setActive(false);
 					sDb.setActiveSession(sCurrentSession);
 					sServiceRunning = false;
+					// Apre il dettaglio della sessione passata riguardo alla
+					// sessione appena conclusa
 					Intent s = new Intent(getActivity(),
 							PastSessionDetailsActivity.class);
 					s.putExtra("IDSessione", sCurrentSession.getSessionBegin()
@@ -271,9 +273,9 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		}
 		
 	    /**
-	     * Metodo che ritorna quanta memoria è disponibile nella memoria interna.
+	     * Ritorna quanta memoria è disponibile nella memoria interna.
 	     * 
-	     * @return
+	     * @return una stringa contenente il valore di memoria disponibile
 	     */
 	    public static String getAvailableInternalMemorySize() {
 	        File path = Environment.getDataDirectory();
@@ -284,10 +286,10 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 	    }
 	    
 	    /**
-	     * Metodo che formatta la memoria disponibile restituendola in MB o KB.
+	     * Ritorna una stringa formattata con la memoria disponibile in MB o KB.
 	     * 
-	     * @param availableMemory
-	     * @return
+	     * @param availableMemory la memoria da inserire nella stringa
+	     * @return una stringa contentente la memoria formattata correttamente
 	     */
 	    public static String formatSize(long availableMemory) {
 	        String unitOfMeasure = null;
@@ -323,10 +325,9 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				// Controllo per evitare scritture al layout dopo che � stato
-				// stoppato il service
+				// Controlla per evitare scritture al layout dopo che è stato
+				// terminato il service
 				if (sServiceRunning) {
-					// Extract data included in the Intent
 					Float x = intent.getFloatExtra("xValue", 0f);
 					Float y = intent.getFloatExtra("yValue", 0f);
 					Float z = intent.getFloatExtra("zValue", 0f);
@@ -336,7 +337,11 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					mZValue.setText(z.toString());
 					mSessionLengthTextView.setText(Utilities
 							.millisToHourMinuteSecond(duration, true));
-					if(intent.getBooleanExtra("maxDurationReached", false)) {
+					// Controllo sulla durata massima, se è stata raggiunta
+					// simula un clic su stop
+					// Viene chiamato solo se l'app è in foreground mentre la
+					// durata massima viene raggiunta
+					if (intent.getBooleanExtra("maxDurationReached", false)) {
 						mStopButton.callOnClick();
 					}
 				}
@@ -346,12 +351,16 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		@Override
 		public void onResume() {
 			sDb.open();
-			// Register mMessageReceiver to receive messages.
+			// Registra mMessageReceiver per il ricevimento di messaggi dal broadcast.
 			LocalBroadcastManager.getInstance(this.getActivity())
 					.registerReceiver(mMessageReceiver,
 							new IntentFilter("AccData"));
 			sEditor.putBoolean("CurrentSessionOnBackground", false);
 			sEditor.commit();
+			// Se l'app viene riportata in foreground dopo che la durata massima
+			// per la sessione è già stata raggiunta, non ho piu sessioni attive
+			// in db quindi mostro il dettaglio sessione passata riguardante la
+			// sessione appena terminata.
 			if(!sDb.hasActiveSession()){
 				sServiceRunning = false;
 				Intent s = new Intent(getActivity(),
@@ -365,7 +374,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
 		@Override
 		public void onPause() {
-			// Unregister since the activity is not visible
+			// Smette di ascoltare il broadcast poichè l'app perde il foreground
 			LocalBroadcastManager.getInstance(this.getActivity())
 					.unregisterReceiver(mMessageReceiver);
 			sDb.close();
@@ -377,13 +386,14 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 	}
 
 	/**
-	 * DA COMMENTARE
+	 * Fragment relativo alla lista di cadute registrate in questa sessione.
+	 * Viene aggiornato in real time mentre l'activity è in foreground.
 	 */
-	public static class MyListFragment extends ListFragment {
+	public static class FallListFragment extends ListFragment {
 		FallAdapter mAdapter;
 		private ArrayList<Fall> mFalls;
 
-		public MyListFragment() {
+		public FallListFragment() {
 		}
 
 		@Override
@@ -397,10 +407,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		@Override
 		public void onActivityCreated(Bundle savedInstanceState) {
 			super.onActivityCreated(savedInstanceState);
-			// Solo per testing prendo tutte le sessioni dal db
-			DBManager db = new DBManager(getActivity().getBaseContext());
-			db.open();
-			mFalls = (ArrayList<Fall>) db.getAllFalls(sCurrentSession
+			// Recupera dal db tutte le cadute passate relative alla sessione
+			mFalls = (ArrayList<Fall>) sDb.getAllFalls(sCurrentSession
 					.getSessionBegin());
 			mAdapter = new FallAdapter(getActivity().getBaseContext(), mFalls);
 			setListAdapter(mAdapter);
@@ -415,18 +423,12 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 
-				// Controllo per evitare scritture al layout dopo che è stato
-				// stoppato il service o scritture doppie
-
 				Long millis = intent.getLongExtra("IDFall", 0);
-				// && falls.get(falls.size()-1).getFallTimestamp()!=(new
-				// Date(millis))
 				if (sServiceRunning) {
+					// Aggiornamento della lista di cadute appena mi viene
+					// notificata una caduta dal service
 					Fall newFall = sDb.getFall(new Date(millis));
 					mAdapter.insert(newFall, 0);
-					// adapter.clear();
-					// adapter.addAll((ArrayList<Fall>)
-					// db.getAllFalls(currentSession.getSessionBegin()));
 					mAdapter.notifyDataSetChanged();
 				}
 
@@ -436,8 +438,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		@Override
 		public void onResume() {
 			super.onResume();
-			sDb.open();
-			// Register mMessageReceiver to receive messages.
+			// Registra mMessageReceiver per il ricevimento di messaggi dal broadcast
 			LocalBroadcastManager.getInstance(this.getActivity())
 					.registerReceiver(mMessageReceiver,
 							new IntentFilter("Fall"));
@@ -453,14 +454,13 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		@Override
 		public void onPause() {
 			sDb.close();
-			// Unregister since the activity is not visible
 			LocalBroadcastManager.getInstance(this.getActivity())
 					.unregisterReceiver(mMessageReceiver);
 			super.onPause();
 		}
 
 		/**
-		 * Gestisce click su elementi della lista
+		 * Gestisce click su elementi della lista, aprendo il relativo dettaglio caduta
 		 */
 		@Override
 		public void onListItemClick(ListView l, View v, int position, long id) {
@@ -475,6 +475,10 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		}
 	}
 
+	/**
+	 * Adapter relativo alla lista cadute.
+	 *
+	 */
 	public static class FallAdapter extends ArrayAdapter<Fall> {
 		private final Context mContext;
 		private final ArrayList<Fall> mFalls;
@@ -525,10 +529,10 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 	}
 
 	/**
-	 * Controllo se il service è giè stato avviato
+	 * Controlla se il service è giè stato avviato.
 	 * 
-	 * @param serviceClass
-	 * @return
+	 * @param serviceClass il nome della classe contente il service
+	 * @return vero se è stato avviato, falso altrimenti
 	 */
 	private boolean isMyServiceRunning(Class<?> serviceClass) {
 		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
