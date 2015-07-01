@@ -31,10 +31,10 @@ import android.widget.Toast;
 public class WatcherService extends Service implements SensorEventListener {
 	// TODO sistema le variabili con private davanti o quel che è, se le metti
 	// public togli la m davanti al nome
-	final float CALIBRATION = SensorManager.STANDARD_GRAVITY;
-	final String mTag = "AccLogger";
-	SensorManager mSm = null;
-	AccelerometerData mMeasuredData;
+	private final float CALIBRATION = SensorManager.STANDARD_GRAVITY;
+	private final String mTag = "AccLogger";
+	private SensorManager mSm = null;
+	private AccelerometerData mMeasuredData;
 	private float mCurrentAcceleration;
 	private long mDuration;
 	private Date mStartDate;
@@ -43,11 +43,11 @@ public class WatcherService extends Service implements SensorEventListener {
 	private static DBManager sDb;
 	private static SharedPreferences sPreferences;
 	private Session mCurrentSession;
-	long mTimePassed;
+	private long mTimePassed;
 	private int mSensorDelay;
 	private LinkedList<AccelerometerData> mSamples;
 	private LinkedList<AccelerometerData> mFallSamples;
-	int mSampleMaxSize;
+	private int mSampleMaxSize;
 	private Intent mIntent;
 	private boolean mTaskRunning;
 	private int mSampleRate;
@@ -56,9 +56,9 @@ public class WatcherService extends Service implements SensorEventListener {
 	private int mFallNumber;
 	private LocationManager mLocationManager;
 	private LocationListener mLocationListener;
-	protected double mLatitude;
-	protected double mLongitude;
-	protected boolean mGotLocation;
+	private double mLatitude;
+	private double mLongitude;
+	private boolean mGotLocation;
 	private boolean mStartTask;
 
 	@Override
@@ -186,7 +186,7 @@ public class WatcherService extends Service implements SensorEventListener {
 				}
 				// Se sono passati almeno 5 secondi dall'ultima caduta la
 				// segnalo
-				if (mStartTask && (timestamp - mLastFallNano > 5000000000L)) {
+				if (mStartTask && (timestamp - mLastFallNano > 500000000L)) {
 					// Copio i dati dell'accelerometro relativi alla caduta in
 					// una lista apposita
 					if(mSamples instanceof LinkedList<?>) {
@@ -216,7 +216,7 @@ public class WatcherService extends Service implements SensorEventListener {
 								+ Math.pow(mMeasuredData.getZ(), 2)));
 				mCurrentAcceleration = Math.abs(a - CALIBRATION);
 				if ((mCurrentAcceleration > 10) && (!mTaskRunning)
-						&& !mStartTask) {
+						&& !mStartTask && (timestamp - mLastFallNano > 10000000000L)) {
 					// Memorizzo il timestamp della caduta
 					mLastFallNano = timestamp;
 					mLastFall = System.currentTimeMillis();
