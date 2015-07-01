@@ -130,7 +130,6 @@ public class SessionListActivity extends ActionBarActivity implements
 			setListAdapter(sAdapter);
 			ListView listView = getListView();
 			registerForContextMenu(listView);
-
 		}
 
 		@Override

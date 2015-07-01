@@ -8,9 +8,141 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="it.unipd.dei.esp1415.DettaglioSessione$PlaceholderFragment" >
 
-    <TextView
+    <EditText
+        android:id="@+id/session_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_alignParentTop="true"
+        android:ems="10"
+        android:hint="@string/session_name"
+        android:textSize="20sp" 
+        android:imeOptions="actionDone" 
+        android:singleLine="true"
+        android:textColor="#000000" />
+	
+    <ImageButton
+        android:id="@+id/play_pause_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_toRightOf="@+id/session_name"
+        android:layout_toEndOf="@+id/session_name"
+        android:layout_alignBottom="@+id/session_name"
+        android:contentDescription="@string/play_description"
+        android:src="@drawable/ic_play_button_256" />
+    
+    <ImageButton
+        android:id="@+id/stop_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+       	android:layout_toRightOf="@+id/play_pause_button"
+        android:layout_toEndOf="@+id/play_pause_button"
+        android:layout_alignBottom="@+id/session_name"
+        android:contentDescription="@string/stop_description"
+        android:src="@drawable/ic_stop_circular_button_256" />
+    
+        <ImageView
+        android:id="@+id/session_thumbnail"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/thumbnail_description"
+        android:background="@drawable/box" />
+    
+    <TextView
+        android:id="@+id/session_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/session_name"
+        android:layout_alignStart="@+id/session_name"
+        android:layout_alignBottom="@+id/session_thumbnail"
+        android:text="@string/duration"
+        android:textSize="20sp"
+        android:textColor="#000000" />
+    
+    <TextView
+        android:id="@+id/xLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/session_length"
+        android:layout_toEndOf="@+id/session_length"
+        android:layout_alignBottom="@+id/session_thumbnail"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
+        android:text="@string/x_label"
+        android:textSize="20sp"
+        android:textColor="#000000" />
+    
+    <TextView
+        android:id="@+id/xValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/xLabel"
+        android:layout_toEndOf="@+id/xLabel"
+        android:layout_alignBottom="@+id/session_thumbnail"
+        android:maxLength="4"
+        android:text="@string/x_value"
+        android:textSize="20sp"
+        android:textColor="#000000" />
+    
+    <TextView
+        android:id="@+id/yLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/xValue"
+        android:layout_toEndOf="@+id/xValue"
+        android:layout_alignBottom="@+id/session_thumbnail"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:text="@string/y_label"
+        android:textSize="20sp"
+        android:textColor="#000000" />
+    
+    <TextView
+        android:id="@+id/yValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/yLabel"
+        android:layout_toEndOf="@+id/yLabel"
+        android:layout_alignBottom="@+id/session_length"
+        android:maxLength="4"
+        android:text="@string/y_value"
+        android:textSize="20sp"
+        android:textColor="#000000" />
 
+    <TextView
+        android:id="@+id/zLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/yValue"
+        android:layout_toEndOf="@+id/yValue"
+        android:layout_alignBottom="@+id/session_thumbnail"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:text="@string/z_label"
+        android:textSize="20sp"
+        android:textColor="#000000" />
+    
+    <TextView
+        android:id="@+id/zValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/zLabel"
+        android:layout_toEndOf="@+id/zLabel"
+        android:layout_alignBottom="@+id/session_thumbnail"
+        android:maxLength="4"
+        android:text="@string/z_value"
+        android:textSize="20sp"
+        android:textColor="#000000" />
+    
+    <TextView
+        android:id="@+id/list_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/session_thumbnail"
+        android:gravity="center_horizontal"
+        android:text="@string/falls"
+        android:textSize="30sp"
+        android:textColor="#000000" />
+    
 </RelativeLayout>

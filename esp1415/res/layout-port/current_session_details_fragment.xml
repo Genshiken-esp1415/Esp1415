@@ -81,7 +81,7 @@
         android:layout_below="@+id/yValue"
         android:layout_toRightOf="@+id/zLabel"
         android:layout_toEndOf="@+id/zLabel"
-        android:text="@string/z_label"
+        android:text="@string/z_value"
         android:textSize="30sp"
         android:textColor="#000000" />
 

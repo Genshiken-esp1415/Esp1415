@@ -53,9 +53,13 @@ public class NotificationSender extends AsyncTask<String, Void, Boolean> {
 	 * Inizializzazione parametri della caduta
 	 * 
 	 * @param date
+	 *            data della caduta
 	 * @param time
+	 *            orario della caduta
 	 * @param latitude
+	 *            latitudine del luogo della caduta
 	 * @param longitude
+	 *            longitudine del luogo della caduta
 	 */
 	public void buildMessage(String date, String time, String latitude,
 			String longitude) {
@@ -65,7 +69,10 @@ public class NotificationSender extends AsyncTask<String, Void, Boolean> {
 		this.mLongitude = longitude;
 	}
 
-	// Task eseguita in background per l'invio delle e-mail
+	/**
+	 * Task eseguita in background per l'invio delle e-mail. Restituisce un
+	 * valore booleano corrispondente all'invio (non) corretto di una e-mail.
+	 */
 	@Override
 	protected Boolean doInBackground(String... params) {
 		publishProgress();
@@ -95,8 +102,8 @@ public class NotificationSender extends AsyncTask<String, Void, Boolean> {
 			Thread.sleep(500);
 			buffer.writeBytes("AUTH LOGIN\r\n");
 			Thread.sleep(500);
-			buffer.writeBytes(Base64.encodeToString((mUsername + "@gmail.com").getBytes(),
-					Base64.CRLF));
+			buffer.writeBytes(Base64.encodeToString(
+					(mUsername + "@gmail.com").getBytes(), Base64.CRLF));
 			Thread.sleep(500);
 			buffer.writeBytes(mPassword);
 			Thread.sleep(500);
@@ -134,14 +141,11 @@ public class NotificationSender extends AsyncTask<String, Void, Boolean> {
 
 			mSocket.close();
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return UNSENT;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return UNSENT;
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return UNSENT;
 		}
 
 		// Verifica se l'invio è avvenuto
@@ -166,7 +170,8 @@ public class NotificationSender extends AsyncTask<String, Void, Boolean> {
 	 * in questa classe prevede solo codici 2xx o 3xx
 	 * 
 	 * @param response
-	 * @return
+	 *            la risposta del server
+	 * @return se ci sono stati errori o meno
 	 */
 	private boolean findErrors(String response) {
 		if (response == "") {
@@ -176,7 +181,8 @@ public class NotificationSender extends AsyncTask<String, Void, Boolean> {
 			if (response.charAt(i) == '5' || response.charAt(i) == '4') {
 				return true;
 			}
-			for (; i < response.length() && response.charAt(i) != '\n'; i++);
+			for (; i < response.length() && response.charAt(i) != '\n'; i++)
+				;
 		}
 		return false;
 	}

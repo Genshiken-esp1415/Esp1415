@@ -1,7 +1,6 @@
 package it.unipd.dei.esp1415;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.Objects;
 
 import android.app.Service;
 import android.content.Context;
