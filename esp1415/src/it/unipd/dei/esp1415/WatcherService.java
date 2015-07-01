@@ -33,6 +33,7 @@ public class WatcherService extends Service implements SensorEventListener {
 	// public togli la m davanti al nome
 	private final float CALIBRATION = SensorManager.STANDARD_GRAVITY;
 	private final String mTag = "AccLogger";
+	private final int HOURS8 = 8*60*60*1000;
 	private SensorManager mSm = null;
 	private AccelerometerData mMeasuredData;
 	private float mCurrentAcceleration;
@@ -60,6 +61,7 @@ public class WatcherService extends Service implements SensorEventListener {
 	private double mLongitude;
 	private boolean mGotLocation;
 	private boolean mStartTask;
+	private boolean maxDurationReached;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -154,6 +156,11 @@ public class WatcherService extends Service implements SensorEventListener {
 		mCurrentSession.setDuration(((Long) (mDuration + mTimePassed))
 				.intValue());
 		mCurrentSession = sDb.updateDuration(mCurrentSession);
+		if(sPreferences.getBoolean("CurrentSessionOnBackground", false)){
+			mCurrentSession.setActive(false);
+			sDb.setActiveSession(mCurrentSession);
+		}
+			
 		sDb.close();
 		super.onDestroy();
 	}
@@ -167,6 +174,8 @@ public class WatcherService extends Service implements SensorEventListener {
 			// the sensor's type, the time-stamp, accuracy and of course
 			// the sensor's data.
 			if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+				//controllo che non sia stata superata la durata massima impostata
+				
 				Long timestamp = event.timestamp;
 				// Controllo che sia rispettato il sample rate impostato
 				if (mSamples.size() > 0) {
@@ -207,6 +216,18 @@ public class WatcherService extends Service implements SensorEventListener {
 				mIntent.putExtra("yValue", mMeasuredData.getY());
 				mIntent.putExtra("zValue", mMeasuredData.getZ());
 				mIntent.putExtra("duration", mDuration + mTimePassed);
+				mIntent.putExtra("maxDurationReached", false);
+				// Controlla se la durata massima è stata superata
+				if((mDuration + mTimePassed) > sPreferences.getInt("maxDuration", HOURS8)) {
+					
+					Toast.makeText(getApplicationContext(), "Raggiunta durata massima per la sessione",
+							Toast.LENGTH_LONG).show();
+					mIntent.putExtra("maxDurationReached", true);
+					LocalBroadcastManager.getInstance(this).sendBroadcast(mIntent);
+					maxDurationReached = true;
+					stopSelf();
+					return;
+				}
 				LocalBroadcastManager.getInstance(this).sendBroadcast(mIntent);
 				// Calcolo il modulo dell'accelerazione-forza di gravit� per
 				// stimare una caduta

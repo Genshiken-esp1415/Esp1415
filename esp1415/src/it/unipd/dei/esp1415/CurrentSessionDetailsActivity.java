@@ -12,6 +12,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -104,6 +106,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		private Intent mI;
 		private ImageButton mPlayPauseButton;
 		private ImageButton mStopButton;
+		private SharedPreferences sPreferences;
+		private SharedPreferences.Editor sEditor;
 
 		public SessionDetailsFragment() {
 		}
@@ -114,6 +118,13 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			View rootView = inflater
 					.inflate(R.layout.current_session_details_fragment,
 							container, false);
+			// Apre un accesso a sharedPref
+			sPreferences = getActivity().getBaseContext().getSharedPreferences("MyPref",
+					Context.MODE_PRIVATE);
+			sEditor = sPreferences.edit();
+			//TODO: SOLO PER TESTARE LA DURATA 
+			sEditor.putInt("maxDuration", 5000);
+			sEditor.commit();
 			// Imposto la connessione al db
 			sDb = new DBManager(getActivity().getBaseContext());
 			sDb.open();
@@ -329,19 +340,31 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					mZValue.setText(z.toString());
 					mSessionLengthTextView.setText(Utilities
 							.millisToHourMinuteSecond(duration, true));
+					if(intent.getBooleanExtra("maxDurationReached", false)) {
+						mStopButton.callOnClick();
+					}
 				}
 			}
 		};
 
 		@Override
 		public void onResume() {
-			super.onResume();
-
 			sDb.open();
 			// Register mMessageReceiver to receive messages.
 			LocalBroadcastManager.getInstance(this.getActivity())
 					.registerReceiver(mMessageReceiver,
 							new IntentFilter("AccData"));
+			sEditor.putBoolean("CurrentSessionOnBackground", false);
+			sEditor.commit();
+			if(!sDb.hasActiveSession()){
+				sServiceRunning = false;
+				Intent s = new Intent(getActivity(),
+						PastSessionDetailsActivity.class);
+				s.putExtra("IDSessione", sCurrentSession.getSessionBegin()
+						.getTime());
+				startActivity(s);
+			}
+			super.onResume();
 		}
 
 		@Override
@@ -350,6 +373,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			LocalBroadcastManager.getInstance(this.getActivity())
 					.unregisterReceiver(mMessageReceiver);
 			sDb.close();
+			sEditor.putBoolean("CurrentSessionOnBackground", true);
+			sEditor.commit();
 			super.onPause();
 		}
 
