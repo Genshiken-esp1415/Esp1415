@@ -48,7 +48,6 @@ public class WatcherService extends Service implements SensorEventListener {
 	private int mSensorDelay;
 	private LinkedList<AccelerometerData> mSamples;
 	private LinkedList<AccelerometerData> mFallSamples;
-	private int mSampleMaxSize;
 	private Intent mIntent;
 	private boolean mTaskRunning;
 	private int mSampleRate;
@@ -110,7 +109,6 @@ public class WatcherService extends Service implements SensorEventListener {
 		}
 		mSamples = new LinkedList<AccelerometerData>();
 		mFallSamples = new LinkedList<AccelerometerData>();
-		mSampleMaxSize = 1000000 / ((mSensorDelay + 1) * 2);
 		// Registro la classe come listener dell'accelerometro
 		mSm.registerListener((SensorEventListener) this, Accel, mSensorDelay);
 		// Acquire a reference to the system Location Manager
@@ -156,7 +154,7 @@ public class WatcherService extends Service implements SensorEventListener {
 		mCurrentSession.setDuration(((Long) (mDuration + mTimePassed))
 				.intValue());
 		mCurrentSession = sDb.updateDuration(mCurrentSession);
-		if(sPreferences.getBoolean("CurrentSessionOnBackground", false)){
+		if(sPreferences.getBoolean("CurrentSessionOnBackground", false)&& maxDurationReached){
 			mCurrentSession.setActive(false);
 			sDb.setActiveSession(mCurrentSession);
 		}
@@ -165,6 +163,7 @@ public class WatcherService extends Service implements SensorEventListener {
 		super.onDestroy();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void onSensorChanged(SensorEvent event) {
 		// Java's synchronized keyword is used to ensure mutually exclusive
 		// access to the sensor. See also
@@ -198,8 +197,9 @@ public class WatcherService extends Service implements SensorEventListener {
 				if (mStartTask && (timestamp - mLastFallNano > 500000000L)) {
 					// Copio i dati dell'accelerometro relativi alla caduta in
 					// una lista apposita
-					if(mSamples instanceof LinkedList<?>) {
-								mFallSamples = (LinkedList<AccelerometerData>) mSamples.clone();
+					Object tempSamples = mSamples.clone();
+					if(tempSamples instanceof LinkedList<?>) {
+								mFallSamples = (LinkedList<AccelerometerData>)tempSamples ;
 					}
 					// Lancio la task per recuperare la posizione, mandare la
 					// mail e registrare la caduta nel db

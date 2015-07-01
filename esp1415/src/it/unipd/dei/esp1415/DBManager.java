@@ -501,57 +501,57 @@ public class DBManager {
 		return sqlDate;
 	}
 
-	/**
-	 * Metodo usato per popolare il db con dati casuali, only for testing
-	 */
-	public void dummyInsert() {
-		ArrayList<Session> sessions = new ArrayList<Session>();
-		sessions = Randomizer.randomSession(10);
-		// metto una sessione attiva per test
-		sessions.get(0).setActive(true);
-		ContentValues values = new ContentValues();
-		for (int i = 0; i < sessions.size(); i++) {
-			values.clear();
-			values.put(DBOpenHelper.COLUMN_TIMESTAMP_S, dateToSqlDate(sessions
-					.get(i).getSessionBegin()));
-			values.put(DBOpenHelper.COLUMN_NAME, sessions.get(i).getName());
-			values.put(DBOpenHelper.COLUMN_DURATION, sessions.get(i)
-					.getDuration());
-			values.put(DBOpenHelper.COLUMN_ACTIVE, sessions.get(i).isActive());
-			mDatabase.insert(DBOpenHelper.TABLE_SESSION, null, values);
-			for (int j = 0; j < sessions.get(i).getFallList().size(); j++) {
-				values.clear();
-				values.put(DBOpenHelper.COLUMN_TIMESTAMP_F,
-						dateToSqlDate(sessions.get(i).getFallList().get(j)
-								.getFallTimestamp()));
-				values.put(DBOpenHelper.COLUMN_NUMBER, sessions.get(i)
-						.getFallList().get(j).getFallNumber());
-				values.put(DBOpenHelper.COLUMN_LATITUDE, sessions.get(i)
-						.getFallList().get(j).getLatitude());
-				values.put(DBOpenHelper.COLUMN_LONGITUDE, sessions.get(i)
-						.getFallList().get(j).getLongitude());
-				values.put(DBOpenHelper.COLUMN_SESSION, dateToSqlDate(sessions
-						.get(i).getFallList().get(j).getSession()));
-				values.put(DBOpenHelper.COLUMN_NOTIFIED, sessions.get(i)
-						.getFallList().get(j).isNotified());
-				mDatabase.insert(DBOpenHelper.TABLE_FALL, null, values);
-				for (int z = 0; z < sessions.get(i).getFallList().get(j)
-						.getFallData().size(); z++) {
-					values.clear();
-					values.put(DBOpenHelper.COLUMN_FALL, dateToSqlDate(sessions
-							.get(i).getFallList().get(j).getFallTimestamp()));
-					values.put(DBOpenHelper.COLUMN_TIMESTAMP_A, z);
-					values.put(DBOpenHelper.COLUMN_X, sessions.get(i)
-							.getFallList().get(j).getFallData().get(z).getX());
-					values.put(DBOpenHelper.COLUMN_Y, sessions.get(i)
-							.getFallList().get(j).getFallData().get(z).getY());
-					values.put(DBOpenHelper.COLUMN_Z, sessions.get(i)
-							.getFallList().get(j).getFallData().get(z).getZ());
-					mDatabase.insert(DBOpenHelper.TABLE_ACCELEROMETER, null,
-							values);
-				}
-			}
-		}
-	}
+//	/**
+//	 * Metodo usato per popolare il db con dati casuali, only for testing
+//	 */
+//	public void dummyInsert() {
+//		ArrayList<Session> sessions = new ArrayList<Session>();
+//		sessions = Randomizer.randomSession(10);
+//		// metto una sessione attiva per test
+//		sessions.get(0).setActive(true);
+//		ContentValues values = new ContentValues();
+//		for (int i = 0; i < sessions.size(); i++) {
+//			values.clear();
+//			values.put(DBOpenHelper.COLUMN_TIMESTAMP_S, dateToSqlDate(sessions
+//					.get(i).getSessionBegin()));
+//			values.put(DBOpenHelper.COLUMN_NAME, sessions.get(i).getName());
+//			values.put(DBOpenHelper.COLUMN_DURATION, sessions.get(i)
+//					.getDuration());
+//			values.put(DBOpenHelper.COLUMN_ACTIVE, sessions.get(i).isActive());
+//			mDatabase.insert(DBOpenHelper.TABLE_SESSION, null, values);
+//			for (int j = 0; j < sessions.get(i).getFallList().size(); j++) {
+//				values.clear();
+//				values.put(DBOpenHelper.COLUMN_TIMESTAMP_F,
+//						dateToSqlDate(sessions.get(i).getFallList().get(j)
+//								.getFallTimestamp()));
+//				values.put(DBOpenHelper.COLUMN_NUMBER, sessions.get(i)
+//						.getFallList().get(j).getFallNumber());
+//				values.put(DBOpenHelper.COLUMN_LATITUDE, sessions.get(i)
+//						.getFallList().get(j).getLatitude());
+//				values.put(DBOpenHelper.COLUMN_LONGITUDE, sessions.get(i)
+//						.getFallList().get(j).getLongitude());
+//				values.put(DBOpenHelper.COLUMN_SESSION, dateToSqlDate(sessions
+//						.get(i).getFallList().get(j).getSession()));
+//				values.put(DBOpenHelper.COLUMN_NOTIFIED, sessions.get(i)
+//						.getFallList().get(j).isNotified());
+//				mDatabase.insert(DBOpenHelper.TABLE_FALL, null, values);
+//				for (int z = 0; z < sessions.get(i).getFallList().get(j)
+//						.getFallData().size(); z++) {
+//					values.clear();
+//					values.put(DBOpenHelper.COLUMN_FALL, dateToSqlDate(sessions
+//							.get(i).getFallList().get(j).getFallTimestamp()));
+//					values.put(DBOpenHelper.COLUMN_TIMESTAMP_A, z);
+//					values.put(DBOpenHelper.COLUMN_X, sessions.get(i)
+//							.getFallList().get(j).getFallData().get(z).getX());
+//					values.put(DBOpenHelper.COLUMN_Y, sessions.get(i)
+//							.getFallList().get(j).getFallData().get(z).getY());
+//					values.put(DBOpenHelper.COLUMN_Z, sessions.get(i)
+//							.getFallList().get(j).getFallData().get(z).getZ());
+//					mDatabase.insert(DBOpenHelper.TABLE_ACCELEROMETER, null,
+//							values);
+//				}
+//			}
+//		}
+//	}
 
 }

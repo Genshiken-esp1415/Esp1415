@@ -13,8 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
@@ -39,8 +37,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 
 /**
  * Questa activity conterrà il dettaglio sulla sessione corrente. Descrizione di
@@ -122,8 +120,6 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			sPreferences = getActivity().getBaseContext().getSharedPreferences("MyPref",
 					Context.MODE_PRIVATE);
 			sEditor = sPreferences.edit();
-			//TODO: SOLO PER TESTARE LA DURATA 
-			sEditor.putInt("maxDuration", 5000);
 			sEditor.commit();
 			// Imposto la connessione al db
 			sDb = new DBManager(getActivity().getBaseContext());
