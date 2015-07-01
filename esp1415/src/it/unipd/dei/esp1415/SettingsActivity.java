@@ -53,7 +53,7 @@ public class SettingsActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings_activity);
 		sContext = this;
-		sPreferences = getSharedPreferences("MyPref", Context.MODE_APPEND);
+		sPreferences = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
 		sEditor = sPreferences.edit();
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()

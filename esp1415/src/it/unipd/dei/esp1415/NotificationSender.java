@@ -95,7 +95,7 @@ public class NotificationSender extends AsyncTask<String, Void, Boolean> {
 			Thread.sleep(500);
 			buffer.writeBytes("AUTH LOGIN\r\n");
 			Thread.sleep(500);
-			buffer.writeBytes(Base64.encodeToString(mUsername.getBytes(),
+			buffer.writeBytes(Base64.encodeToString((mUsername + "@gmail.com").getBytes(),
 					Base64.CRLF));
 			Thread.sleep(500);
 			buffer.writeBytes(mPassword);

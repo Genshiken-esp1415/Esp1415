@@ -305,12 +305,12 @@ public class WatcherService extends Service implements SensorEventListener {
 			// posizione
 			// Registro la nuova caduta nel db
 			mFallNumber++;
-			if (sPreferences.getBoolean("NotificationCheck", false)) {
+			if (sPreferences.getBoolean("notificationCheck", false)) {
 				if (!sPreferences.getString("email", "").equals("")
 						&& !sPreferences.getString("password", "").equals("")
 						&& !Utilities.sDest.isEmpty()) {
 					NotificationSender sender = new NotificationSender(
-							sPreferences.getString("email", "") + "gmail.com",
+							sPreferences.getString("email", ""),
 							sPreferences.getString("password", ""),
 							Utilities.sDest, this);
 					sender.buildMessage(
