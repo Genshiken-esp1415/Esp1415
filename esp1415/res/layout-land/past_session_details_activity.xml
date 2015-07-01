@@ -1,8 +1,16 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="it.unipd.dei.esp1415.PastSessionDetailsActivity"
-    tools:ignore="MergeRootFrame" />
+    android:layout_height="match_parent" >
 
+    <FrameLayout
+        android:id="@+id/past_session_details_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:id="@+id/fall_list_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/past_session_details_fragment" />
+
+</RelativeLayout>

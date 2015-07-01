@@ -165,8 +165,7 @@ public class SettingsActivity extends ActionBarActivity {
 
 			// Configura il pulsante relativo alla scelta della frequenza di
 			// campionamento
-			sSampleRateButton = (Button) rootView
-					.findViewById(R.id.sampling);
+			sSampleRateButton = (Button) rootView.findViewById(R.id.sampling);
 			sSampleRateButton.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					PopupMenu popupMenu = new PopupMenu(getActivity(), v);
@@ -264,7 +263,7 @@ public class SettingsActivity extends ActionBarActivity {
 	 * Legge la lista di contatti precedentemente scelti per l'invio delle
 	 * e-mail di notification
 	 * 
-	 * @return
+	 * @return la lista dei contatti precedentemente scelti
 	 */
 	private static ArrayList<String> readSelectedContacts() {
 		ArrayList<String> selectedContacts = new ArrayList<String>();
@@ -285,7 +284,7 @@ public class SettingsActivity extends ActionBarActivity {
 		for (int i = 0; i < Utilities.sDest.size(); i++) {
 			sArrayAdapter.add(Utilities.sName.get(i) + ": "
 					+ Utilities.sDest.get(i));
-			
+
 		}
 		sArrayAdapter.notifyDataSetChanged();
 	}

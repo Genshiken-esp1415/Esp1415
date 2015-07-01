@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Activity per la scelta degli indirizzi e-mail, tra quelli memorizzati nella
@@ -137,6 +138,7 @@ public class ContactListActivity extends Activity {
 	 * del bottone "Fatto"
 	 *
 	 * @param dest
+	 *            lista dei destinatari delle e-mail di notifica
 	 */
 	private void writeSelectedContacts(ArrayList<ContactData> dest) {
 		try {
@@ -159,9 +161,13 @@ public class ContactListActivity extends Activity {
 			}
 			bw.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			Toast.makeText(getApplicationContext(),
+					"File contatti scelti non trovato", Toast.LENGTH_LONG)
+					.show();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Toast.makeText(getApplicationContext(),
+					"Errore scrittura file contatti scelti", Toast.LENGTH_LONG)
+					.show();
 		}
 	}
 

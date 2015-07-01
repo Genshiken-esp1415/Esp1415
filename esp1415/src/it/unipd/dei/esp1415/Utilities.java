@@ -1,4 +1,5 @@
 package it.unipd.dei.esp1415;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,7 +49,7 @@ public class Utilities {
 	 * a cui inviare le notifiche.
 	 * 
 	 * @param context
-	 * @return
+	 * @return la lista degli indirizzi e-mail a cui inviare le notifiche
 	 */
 	public static ArrayList<String> setSelectedContacts(Context context) {
 		try {
@@ -65,9 +66,11 @@ public class Utilities {
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			Toast.makeText(context, "File contatti scelti non trovato",
+					Toast.LENGTH_LONG).show();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Toast.makeText(context, "Errore lettura file contatti scelti",
+					Toast.LENGTH_LONG).show();
 		}
 		return sDest;
 	}
@@ -85,10 +88,10 @@ public class Utilities {
 	}
 
 	/**
-	 * Configura ed imposta una notification di sistema all'orario specificato
+	 * Configura ed imposta una notifica di sistema all'orario specificato
 	 * dall'utente.
 	 * 
-	 * @param time
+	 * @param context
 	 */
 	public static void fireAlarm(Context context) {
 
@@ -190,16 +193,19 @@ public class Utilities {
 			out.close();
 			return true;
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			Toast.makeText(context, "Thumbnail non trovata", Toast.LENGTH_LONG)
+					.show();
 			return false;
 		} catch (IOException e) {
-			e.printStackTrace();
+			Toast.makeText(context, "Errore scrittura della thumbnail",
+					Toast.LENGTH_LONG).show();
 			return false;
 		}
 	}
 
 	/**
-	 * Recupera dalla memoria interna il file col nome passatogli come parametro.
+	 * Recupera dalla memoria interna il file col nome passatogli come
+	 * parametro.
 	 * 
 	 * @param filename
 	 * @param context
@@ -219,9 +225,11 @@ public class Utilities {
 			thumbnail = BitmapFactory.decodeStream(stream);
 			stream.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			Toast.makeText(context, "Thumbnail non trovata", Toast.LENGTH_LONG)
+					.show();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Toast.makeText(context, "Errore caricamento della thumbail",
+					Toast.LENGTH_LONG).show();
 		}
 		return thumbnail;
 	}
@@ -235,19 +243,23 @@ public class Utilities {
 	public static Bitmap createThumbnail(Date sessionBegin) {
 		long timestamp = sessionBegin.getTime();
 		Random random = new Random();
-		// Prende i quattro byte a sinistra del timestamp e ci aggiunge un numero casuale
+		// Prende i quattro byte a sinistra del timestamp e ci aggiunge un
+		// numero casuale
 		int a = (int) (timestamp >> 32) + random.nextInt();
 		// Prende i quattro byte a destra del timestamp
 		long rightDigits = timestamp & 0xffffffff;
 		int b = (int) rightDigits;
 		Bitmap.Config configuration = Bitmap.Config.ARGB_4444;
-		// Crea un'immagine e la colora usando l'intero generato prima coi byte sinistri del timestamp
+		// Crea un'immagine e la colora usando l'intero generato prima coi byte
+		// sinistri del timestamp
 		Bitmap left = Bitmap.createBitmap(35, 70, configuration);
 		left.eraseColor(a);
-		// Crea un'immagine e la colora usando l'intero generato prima coi byte destri del timestamp
+		// Crea un'immagine e la colora usando l'intero generato prima coi byte
+		// destri del timestamp
 		Bitmap right = Bitmap.createBitmap(35, 70, configuration);
 		right.eraseColor(b);
-		// Crea un'immagine che sarà la fusione delle due immagini create precedentemente
+		// Crea un'immagine che sarà la fusione delle due immagini create
+		// precedentemente
 		Bitmap thumbnail = Bitmap.createBitmap(70, 70, configuration);
 		Canvas canvas = new Canvas(thumbnail);
 		canvas.drawBitmap(left, null, new Rect(0, 0, canvas.getWidth() / 2,
@@ -256,7 +268,7 @@ public class Utilities {
 				canvas.getWidth(), canvas.getHeight()), null);
 		return thumbnail;
 	}
-	
+
 	/**
 	 * Converte da millisecondi a ore, minuti e secondi.
 	 * 
@@ -264,7 +276,8 @@ public class Utilities {
 	 * @param returnSeconds
 	 * @return
 	 */
-	public static String millisToHourMinuteSecond(long millis, boolean returnSeconds) {
+	public static String millisToHourMinuteSecond(long millis,
+			boolean returnSeconds) {
 		String time = "";
 		long seconds = millis / 1000;
 		long minutes = seconds / 60;
@@ -274,10 +287,9 @@ public class Utilities {
 		if (returnSeconds == true) {
 			time = hours + " h " + minutes + " m " + seconds + " s ";
 			return time;
-			}
-		else{
+		} else {
 			time = hours + " h " + minutes + " m ";
 			return time;
-			}
+		}
 	}
 }

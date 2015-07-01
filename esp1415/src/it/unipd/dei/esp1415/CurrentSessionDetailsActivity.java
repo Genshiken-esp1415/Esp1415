@@ -12,6 +12,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
@@ -110,9 +111,9 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(
-					R.layout.current_session_details_fragment, container,
-					false);
+			View rootView = inflater
+					.inflate(R.layout.current_session_details_fragment,
+							container, false);
 			// Imposto la connessione al db
 			sDb = new DBManager(getActivity().getBaseContext());
 			sDb.open();
@@ -187,9 +188,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			});
 			// Imposto i valori iniziali dei campi del layout
 			sessionName.setText(sCurrentSession.getName());
-			mSessionLengthTextView
-					.setText(Utilities.millisToHourMinuteSecond(sCurrentSession
-							.getDuration(), true));
+			mSessionLengthTextView.setText(Utilities.millisToHourMinuteSecond(
+					sCurrentSession.getDuration(), true));
 			mXValue.setText("");
 			mYValue.setText("");
 			mZValue.setText("");
@@ -205,8 +205,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				@Override
 				public void onClick(View arg0) {
 					if (sServiceRunning) {
-						// Uccido il service però gli dico di non disattivare la
-						// sessione
+
 						Intent i = new Intent(getActivity(),
 								WatcherService.class);
 						i.putExtra("Active", true);
@@ -221,7 +220,9 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 						sServiceRunning = false;
 
 					} else {
+
 						// Avvio il service
+
 						mI = new Intent(getActivity(), WatcherService.class);
 						// Passo al service le informazioni sulla sessione
 						// attiva
@@ -326,8 +327,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					mXValue.setText(x.toString());
 					mYValue.setText(y.toString());
 					mZValue.setText(z.toString());
-					mSessionLengthTextView
-							.setText(Utilities.millisToHourMinuteSecond(duration, true));
+					mSessionLengthTextView.setText(Utilities
+							.millisToHourMinuteSecond(duration, true));
 				}
 			}
 		};
@@ -335,6 +336,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		@Override
 		public void onResume() {
 			super.onResume();
+
 			sDb.open();
 			// Register mMessageReceiver to receive messages.
 			LocalBroadcastManager.getInstance(this.getActivity())
@@ -491,11 +493,11 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				holder.notification.setImageResource(R.drawable.cross);
 			} else {
 				holder.notification.setImageResource(R.drawable.tick);
-			}			
+			}
 			return mRowView;
 		}
 	}
-	
+
 	static class Holder {
 		public TextView number, timestamp;
 		public ImageView notification;
