@@ -1,7 +1,9 @@
 package it.unipd.dei.esp1415;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -12,6 +14,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StatFs;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
@@ -32,6 +36,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
 
 /**
@@ -118,6 +123,10 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				// sessione attiva
 				sCurrentSession = sDb.getActiveSession();
 			} else {
+				//TODO: fare un check prima di creare una nuova sessione, per vedere se la memoria disponibile è maggiore di un certo numero che è da decidere
+				String memory = getAvailableInternalMemorySize();
+				Toast.makeText(getActivity(), memory,
+						Toast.LENGTH_SHORT).show();
 				sCurrentSession = sDb.createSession("Nuova Sessione");
 				sCurrentSession.setActive(true);
 				// Generazione e impostazione della thumbnail
@@ -252,6 +261,53 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
 			return rootView;
 		}
+		
+	    /**
+	     * Metodo che ritorna quanta memoria è disponibile nella memoria interna.
+	     * 
+	     * @return
+	     */
+	    public static String getAvailableInternalMemorySize() {
+	        File path = Environment.getDataDirectory();
+	        StatFs stat = new StatFs(path.getPath());
+	        long blockSize = stat.getBlockSizeLong();
+	        long availableBlocks = stat.getAvailableBlocksLong();
+	        return formatSize(availableBlocks * blockSize);
+	    }
+	    
+	    /**
+	     * Metodo che formatta la memoria disponibile restituendola in MB o KB.
+	     * 
+	     * @param availableMemory
+	     * @return
+	     */
+	    public static String formatSize(long availableMemory) {
+	        String unitOfMeasure = null;
+
+	        if (availableMemory >= 1024) {
+	            unitOfMeasure = "KB";
+	            availableMemory /= 1024;
+	            if (availableMemory >= 1024) {
+	                unitOfMeasure = "MB";
+	                availableMemory /= 1024;
+	            }
+	            if (availableMemory >= 1024) {
+	                unitOfMeasure = "GB";
+	                availableMemory /= 1024;
+	            }
+	        }
+
+	        StringBuilder resultBuffer = new StringBuilder(Long.toString(availableMemory));
+
+	        int commaOffset = resultBuffer.length() - 3;
+	        while (commaOffset > 0) {
+	            resultBuffer.insert(commaOffset, ',');
+	            commaOffset -= 3;
+	        }
+
+	        if (unitOfMeasure != null) resultBuffer.append(unitOfMeasure);
+	        return resultBuffer.toString();
+	    }
 
 		/**
 		 * Handler per gli intent ricevuti dall'evento "AccData"
@@ -362,6 +418,13 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			LocalBroadcastManager.getInstance(this.getActivity())
 					.registerReceiver(mMessageReceiver,
 							new IntentFilter("Fall"));
+			mAdapter.clear();
+			// Riprende tutte le cadute dal database
+			List<Fall> falls = sDb.getAllFalls(sCurrentSession.getSessionBegin() );
+			for (int i = 0; i < falls.size(); i++) {
+				mAdapter.add(falls.get(i));
+			}
+			mAdapter.notifyDataSetChanged();
 		}
 
 		@Override
@@ -382,10 +445,10 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
 			Intent fallDetail = new Intent(getActivity()
 					.getApplicationContext(), FallDetailsActivity.class);
-			Date sessionId = mAdapter.getItem(position).getFallTimestamp();
-			fallDetail.putExtra("IDCaduta", sessionId.getTime());
+			Date fallId = mAdapter.getItem(position).getFallTimestamp();
+			fallDetail.putExtra("IDCaduta", fallId.getTime());
+			fallDetail.putExtra("NomeSessione", sCurrentSession.getName());
 			startActivity(fallDetail);
-
 		}
 	}
 

@@ -130,7 +130,6 @@ public class SessionListActivity extends ActionBarActivity implements
 			setListAdapter(sAdapter);
 			ListView listView = getListView();
 			registerForContextMenu(listView);
-
 		}
 
 		@Override
@@ -239,8 +238,8 @@ public class SessionListActivity extends ActionBarActivity implements
 	}
 
 	public static class MyAdapter extends ArrayAdapter<Session> {
-		ArrayList<Session> mSessions;
-		static Context sContext;
+		private ArrayList<Session> mSessions;
+		private static Context sContext;
 
 		public MyAdapter(Context context, int textVewResourceId,
 				ArrayList<Session> sessions) {

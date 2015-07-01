@@ -18,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -313,10 +314,25 @@ public class WatcherService extends Service implements SensorEventListener {
 							sPreferences.getString("email", ""),
 							sPreferences.getString("password", ""),
 							Utilities.sDest, this);
-					sender.buildMessage(
-							DBManager.dateToSqlDate(new Date(mLastFall)),
-							"14:45:05", Double.toString(mLatitude),
-							Double.toString(mLongitude));
+					String date = (String) DateFormat.format("dd/MM/yy",
+							new Date(mLastFall));
+					String hours = (String) DateFormat.format("kk:mm:ss",
+							new Date(mLastFall));
+					String latitude;
+					String longitude;
+					// Gli if controllano se latitudine e longitudine sono
+					// uguali a zero, in tal caso li impostano come N/A
+					if (mLatitude == 0) {
+						latitude = "N/A";
+					} else {
+						latitude = Double.toString(mLatitude);
+					}
+					if (mLongitude == 0) {
+						longitude = "N/A";
+					} else {
+						longitude = Double.toString(mLongitude);
+					}
+					sender.buildMessage(date, hours, latitude, longitude);
 					sender.execute();
 				}
 			} else {
@@ -331,8 +347,6 @@ public class WatcherService extends Service implements SensorEventListener {
 				mNewFall = sDb.createFall(new Date(mLastFall), mFallNumber,
 						null, null, mFallSamples,
 						mCurrentSession.getSessionBegin());
-				// TODO cercare di sostituire 0,0 in lat e long con n/a nei vari
-				// oggetti
 			} else {
 				mNewFall = sDb.createFall(new Date(mLastFall), mFallNumber,
 						mLatitude, mLongitude, mFallSamples,
