@@ -200,12 +200,9 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			// Impostazione dei valori iniziali dei campi del layout
 			String sessionTimestamp = (String) DateFormat.format(
 					"dd/MM/yy kk:mm", sCurrentSession.getSessionBegin());
-			timeStampSessioneTextView.setText(getActivity().getBaseContext()
-					.getString(R.string.date_and_time) + sessionTimestamp);
+			timeStampSessioneTextView.setText(sessionTimestamp);
 			sessionName.setText(sCurrentSession.getName());
-			mSessionLengthTextView.setText(getActivity().getBaseContext()
-					.getString(R.string.session_duration)
-					+ Utilities.millisToHourMinuteSecond(
+			mSessionLengthTextView.setText(Utilities.millisToHourMinuteSecond(
 							sCurrentSession.getDuration(), true));
 			mXValue.setText("");
 			mYValue.setText("");
@@ -344,10 +341,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					mXValue.setText(x.toString());
 					mYValue.setText(y.toString());
 					mZValue.setText(z.toString());
-					mSessionLengthTextView.setText(getActivity()
-							.getBaseContext().getString(
-									R.string.session_duration)
-							+ Utilities
+					mSessionLengthTextView.setText(Utilities
 									.millisToHourMinuteSecond(duration, true));
 					// Controllo sulla durata massima, se è stata raggiunta
 					// simula un clic su stop
