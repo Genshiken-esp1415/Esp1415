@@ -86,9 +86,9 @@ public class Utilities {
 		} else if (sampleRate.equals("Alta")) {
 			return SensorManager.SENSOR_DELAY_GAME;
 		} else if (sampleRate.equals("Normale")) {
-			return SensorManager.SENSOR_DELAY_NORMAL;
-		} else {
 			return SensorManager.SENSOR_DELAY_UI;
+		} else {
+			return SensorManager.SENSOR_DELAY_NORMAL;
 		}
 	}
 

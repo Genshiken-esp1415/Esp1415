@@ -29,8 +29,10 @@ import android.widget.Toast;
  *
  */
 public class WatcherService extends Service implements SensorEventListener {
-	// TODO sistema le variabili con private davanti o quel che è, se le metti
-	// public togli la m davanti al nome
+	private static final int FASTEST = 0;
+	private static final int FAST = 20000000;
+	private static final int NORMAL = 60000000;
+	private static final int LOW = 200000000;
 	private final float CALIBRATION = SensorManager.STANDARD_GRAVITY;
 	private final String mTag = "AccLogger";
 	private final int MAXHOURS = 8;
@@ -96,16 +98,16 @@ public class WatcherService extends Service implements SensorEventListener {
 		// Imposto il samplerate a seguito del sensor delay scelto
 		switch (mSensorDelay) {
 		case 0:
-			mSampleRate = 0;
+			mSampleRate = FASTEST;
 			break;
 		case 1:
-			mSampleRate = 20000000;
+			mSampleRate = FAST; //20000000
 			break;
 		case 2:
-			mSampleRate = 60000000;
+			mSampleRate = NORMAL; //60000000
 			break;
 		case 3:
-			mSampleRate = 200000000;
+			mSampleRate = LOW; //60000000
 			break;
 		}
 		mSamples = new LinkedList<AccelerometerData>();

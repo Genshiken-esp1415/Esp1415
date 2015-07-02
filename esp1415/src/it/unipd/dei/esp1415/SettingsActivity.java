@@ -79,7 +79,7 @@ public class SettingsActivity extends ActionBarActivity {
 			break;
 		}
 	}
-	
+
 	public static class SettingsFragment extends Fragment {
 
 		public SettingsFragment() {
@@ -216,19 +216,21 @@ public class SettingsActivity extends ActionBarActivity {
 			return rootView;
 		}
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
-		sArrayAdapter.clear();
-		// Riprende tutte le sessioni dal database
-		ArrayList<String> contacts = readSelectedContacts();
-		for (int i = 0; i < contacts.size(); i++) {
-			sArrayAdapter.add(contacts.get(i));
+		if (sArrayAdapter != null) {
+			sArrayAdapter.clear();
+			// Riprende tutte le sessioni dal database
+			ArrayList<String> contacts = readSelectedContacts();
+			for (int i = 0; i < contacts.size(); i++) {
+				sArrayAdapter.add(contacts.get(i));
+			}
+			sArrayAdapter.notifyDataSetChanged();
 		}
-		sArrayAdapter.notifyDataSetChanged();
 	}
-	
+
 	/**
 	 * Classe per la gestione del timepicker usato dall'utente per scegliere
 	 * quando visualizzare la notification
@@ -352,11 +354,11 @@ public class SettingsActivity extends ActionBarActivity {
 			sSampleRateButton.setText("Alta");
 			break;
 
-		case SensorManager.SENSOR_DELAY_NORMAL:
+		case SensorManager.SENSOR_DELAY_UI:
 			sSampleRateButton.setText("Normale");
 			break;
 
-		case SensorManager.SENSOR_DELAY_UI:
+		case SensorManager.SENSOR_DELAY_NORMAL:
 			sSampleRateButton.setText("Bassa");
 			break;
 
