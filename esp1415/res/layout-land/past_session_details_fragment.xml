@@ -5,8 +5,21 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="it.unipd.dei.esp1415.DettaglioSessionePassata$PlaceholderFragment" >
+    android:paddingTop="@dimen/activity_vertical_margin" >
+
+    <EditText
+        android:id="@+id/session_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/session_thumbnail"
+        android:layout_alignStart="@+id/session_thumbnail"
+        android:layout_below="@+id/session_thumbnail"
+        android:ems="10"
+        android:hint="@string/session_name"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
+        android:textColor="#000000"
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/session_thumbnail"
@@ -14,43 +27,52 @@
         android:layout_height="75dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:background="@drawable/box"
         android:contentDescription="@string/thumbnail_description" />
 
     <TextView
-        android:id="@+id/session_timestamp"
+        android:id="@+id/session_length_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/session_thumbnail"
-        android:layout_toEndOf="@+id/session_thumbnail"
-        android:layout_toRightOf="@+id/session_thumbnail"
+        android:layout_alignLeft="@+id/session_thumbnail"
+        android:layout_alignStart="@+id/session_thumbnail"
+        android:layout_below="@+id/session_timestamp"
+        android:text="@string/session_duration"
         android:textColor="#000000"
-        android:textSize="24sp" />
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/session_length"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/session_thumbnail"
-        android:layout_toEndOf="@+id/session_timestamp"
-        android:layout_toRightOf="@+id/session_timestamp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginStart="60dp"
+        android:layout_alignBaseline="@+id/session_length_label"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/session_length_label"
+        android:layout_toRightOf="@+id/session_length_label"
+        android:text="@string/duration"
         android:textColor="#000000"
-        android:textSize="24sp" />
+        android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/list_title"
-        android:layout_width="match_parent"
+        android:id="@+id/session_timestamp_label"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/session_timestamp"
-        android:layout_alignBottom="@+id/session_thumbnail"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:gravity="center_horizontal"
-        android:text="@string/falls"
+        android:layout_alignLeft="@+id/session_thumbnail"
+        android:layout_alignStart="@+id/session_thumbnail"
+        android:layout_below="@+id/session_name"
+        android:text="@string/date_and_time"
         android:textColor="#000000"
-        android:textSize="24sp" />
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/session_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/session_timestamp_label"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="#000000"
+        android:textSize="30sp" />
 
 </RelativeLayout>

@@ -135,7 +135,7 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 			String timestamp = this.getString(R.string.date_and_time) + DateFormat.format("dd/MM/yy kk:mm",
 					sCurrentSession.getSessionBegin());
 			sessionTimestampTextView.setText(timestamp);
-			String duration = this.getString(R.string.session_duration) + Utilities.millisToHourMinuteSecond(sCurrentSession
+			String duration = Utilities.millisToHourMinuteSecond(sCurrentSession
 					.getDuration(), false);
 			sessionDurationTextView.setText(duration);
 			this.getActivity().setTitle(sCurrentSession.getName());
