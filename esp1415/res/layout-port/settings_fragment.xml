@@ -16,7 +16,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:text="@string/sampling"
-        android:textSize="26sp"
+        android:textSize="20sp"
         android:textColor="#000000"  />
 
     <Button
@@ -38,7 +38,7 @@
 
     <Button
         android:id="@+id/sampling"
-        android:layout_width="250dp"
+        android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_alignLeft="@+id/sampling_label"
         android:layout_alignStart="@+id/sampling_label"
@@ -47,7 +47,7 @@
 
     <Button
         android:id="@+id/alarm"
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/sampling_label"
         android:layout_alignStart="@+id/sampling_label"
@@ -57,14 +57,14 @@
 
     <TextView
         android:id="@+id/alarm_label"
-        android:layout_width="450dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/sampling_label"
         android:layout_alignStart="@+id/sampling_label"
         android:layout_below="@+id/sampling"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="22dp"
         android:text="@string/memo"
-        android:textSize="26sp"
+        android:textSize="20sp"
         android:textColor="#000000" />
 
     <Button
@@ -84,31 +84,31 @@
         android:layout_toRightOf="@+id/minus"
         android:layout_toEndOf="@+id/minus"
         android:text="@string/default_duration"
-        android:textSize="40sp"
+        android:textSize="34sp"
         android:textColor="#000000" />
 
     <TextView
         android:id="@+id/duration_label"
-        android:layout_width="450dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/sampling_label"
         android:layout_alignStart="@+id/sampling_label"
         android:layout_below="@+id/alarm"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="22dp"
         android:text="@string/max_duration"
-        android:textSize="26sp"
+        android:textSize="20sp"
         android:textColor="#000000" />
 
     <TextView
         android:id="@+id/email_label"
-        android:layout_width="450dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/minus"
         android:layout_alignLeft="@+id/sampling_label"
         android:layout_alignStart="@+id/sampling_label"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="22dp"
         android:text="@string/email_sender"
-        android:textSize="26sp"
+        android:textSize="20sp"
         android:textColor="#000000"  />
 
     <EditText
@@ -134,7 +134,7 @@
         android:layout_toRightOf="@+id/email"
         android:layout_toEndOf="@+id/email"
         android:text="@string/gmail"
-        android:textSize="20sp"
+        android:textSize="14sp"
         android:textColor="#000000" />
 
     <CheckBox
@@ -186,19 +186,19 @@
         android:layout_toEndOf="@+id/plus"
         android:layout_toRightOf="@+id/plus"
         android:text="@string/hours"
-        android:textSize="26sp"
+        android:textSize="20sp"
         android:textColor="#000000" />
 
     <TextView
         android:id="@+id/contacts_label"
-        android:layout_width="450dp"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/password"
         android:layout_alignLeft="@+id/sampling_label"
         android:layout_alignStart="@+id/sampling_label"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="16dp"
         android:text="@string/contact_list"
-        android:textSize="26sp"
+        android:textSize="20sp"
         android:textColor="#000000" />
 
     <EditText
@@ -216,7 +216,7 @@
     <ListView
         android:id="@+id/contacts"
         android:layout_width="match_parent"
-        android:layout_height="275dp"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/save_button"
         android:layout_alignLeft="@+id/sampling_label"
         android:layout_alignStart="@+id/sampling_label"

@@ -2,6 +2,7 @@ package it.unipd.dei.esp1415;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -78,7 +79,7 @@ public class SettingsActivity extends ActionBarActivity {
 			break;
 		}
 	}
-
+	
 	public static class SettingsFragment extends Fragment {
 
 		public SettingsFragment() {
@@ -147,7 +148,7 @@ public class SettingsActivity extends ActionBarActivity {
 			ArrayList<String> contacts = readSelectedContacts();
 			final ListView contactList = (ListView) rootView
 					.findViewById(R.id.contacts);
-			if (contacts != null) {
+			if (!contacts.isEmpty()) {
 				sArrayAdapter = new ArrayAdapter<String>(getActivity(),
 						R.layout.selected_contacts_view, contacts);
 				contactList.setAdapter(sArrayAdapter);
@@ -215,7 +216,19 @@ public class SettingsActivity extends ActionBarActivity {
 			return rootView;
 		}
 	}
-
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		sArrayAdapter.clear();
+		// Riprende tutte le sessioni dal database
+		ArrayList<String> contacts = readSelectedContacts();
+		for (int i = 0; i < contacts.size(); i++) {
+			sArrayAdapter.add(contacts.get(i));
+		}
+		sArrayAdapter.notifyDataSetChanged();
+	}
+	
 	/**
 	 * Classe per la gestione del timepicker usato dall'utente per scegliere
 	 * quando visualizzare la notification

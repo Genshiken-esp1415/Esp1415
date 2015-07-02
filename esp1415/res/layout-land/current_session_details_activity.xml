@@ -11,6 +11,7 @@
         android:id="@+id/fall_list_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/current_session_details_fragment" />
+        android:layout_toLeftOf="@+id/current_session_details_fragment"
+        android:layout_toStartOf="@+id/current_session_details_fragment" />
 
 </RelativeLayout>

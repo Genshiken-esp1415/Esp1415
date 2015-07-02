@@ -280,8 +280,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 	    public static String getAvailableInternalMemorySize() {
 	        File path = Environment.getDataDirectory();
 	        StatFs stat = new StatFs(path.getPath());
-	        long blockSize = stat.getBlockSizeLong();
-	        long availableBlocks = stat.getAvailableBlocksLong();
+	        long blockSize = stat.getBlockSize();
+	        long availableBlocks = stat.getAvailableBlocks();
 	        return formatSize(availableBlocks * blockSize);
 	    }
 	    

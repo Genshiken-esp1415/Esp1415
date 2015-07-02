@@ -56,6 +56,11 @@ public class Utilities {
 			FileInputStream input = context.openFileInput("contactlist.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(input));
 
+			// Si svuotano gli ArrayList assicurarsi che non si presentino
+			// duplicati di alcun tipo
+			Utilities.sDest.clear();
+			Utilities.sName.clear();
+			
 			String line;
 			int i;
 			while ((line = br.readLine()) != null) {
