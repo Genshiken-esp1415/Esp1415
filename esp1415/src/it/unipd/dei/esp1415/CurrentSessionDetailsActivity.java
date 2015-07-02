@@ -131,7 +131,10 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				// sessione attiva
 				sCurrentSession = sDb.getActiveSession();
 			} else {
-				//TODO: fare un check prima di creare una nuova sessione, per vedere se la memoria disponibile è maggiore di un certo numero che è da decidere
+				// TODO: fare un check prima di creare una nuova sessione, per
+				// vedere se la memoria disponibile è maggiore di un certo
+				// numero che è da decidere
+				//if (getAvailableInternalMemorySize() >= numeroX) {
 				String memory = getAvailableInternalMemorySize();
 				Toast.makeText(getActivity(), memory,
 						Toast.LENGTH_SHORT).show();
@@ -150,9 +153,6 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
 			}
 			this.getActivity().setTitle("Sessione attiva");
-			//TODO: aggiungere l'inizio della sessione al layout?
-			// TextView timeStampSessioneTextView = (TextView)
-			// rootView.findViewById(R.id.timestampsessione);
 			EditText sessionName = (EditText) rootView
 					.findViewById(R.id.session_name);
 			mXValue = (TextView) rootView.findViewById(R.id.xValue);
@@ -170,6 +170,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			Bitmap thumbnail = Utilities.loadImageFromStorage(thumbnailName,
 					getActivity().getApplicationContext());
 			mThumbnailImageView.setImageBitmap(thumbnail);
+			TextView timeStampSessioneTextView = (TextView) rootView
+					.findViewById(R.id.session_timestamp);
 			// Imposta il pulsante done sulla tastiera se l'utente tappa nel
 			// campo di testo per modificare il nome della sessione
 			sessionName.setImeOptions(EditorInfo.IME_ACTION_DONE);
@@ -196,9 +198,15 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				}
 			});
 			// Impostazione dei valori iniziali dei campi del layout
+			String sessionTimestamp = (String) DateFormat.format(
+					"dd/MM/yy kk:mm", sCurrentSession.getSessionBegin());
+			timeStampSessioneTextView.setText(getActivity().getBaseContext()
+					.getString(R.string.date_and_time) + sessionTimestamp);
 			sessionName.setText(sCurrentSession.getName());
-			mSessionLengthTextView.setText(Utilities.millisToHourMinuteSecond(
-					sCurrentSession.getDuration(), true));
+			mSessionLengthTextView.setText(getActivity().getBaseContext()
+					.getString(R.string.session_duration)
+					+ Utilities.millisToHourMinuteSecond(
+							sCurrentSession.getDuration(), true));
 			mXValue.setText("");
 			mYValue.setText("");
 			mZValue.setText("");
@@ -272,25 +280,26 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			return rootView;
 		}
 		
-	    /**
-	     * Ritorna quanta memoria è disponibile nella memoria interna.
-	     * 
-	     * @return una stringa contenente il valore di memoria disponibile
-	     */
+		/**
+		 * Ritorna quanta memoria è disponibile nella memoria interna.
+		 * 
+		 * @return una stringa contenente il valore di memoria disponibile
+		 */
 	    public static String getAvailableInternalMemorySize() {
 	        File path = Environment.getDataDirectory();
 	        StatFs stat = new StatFs(path.getPath());
-	        long blockSize = stat.getBlockSizeLong();
-	        long availableBlocks = stat.getAvailableBlocksLong();
+	        long blockSize = stat.getBlockSize();
+	        long availableBlocks = stat.getAvailableBlocks();
 	        return formatSize(availableBlocks * blockSize);
 	    }
 	    
-	    /**
-	     * Ritorna una stringa formattata con la memoria disponibile in MB o KB.
-	     * 
-	     * @param availableMemory la memoria da inserire nella stringa
-	     * @return una stringa contentente la memoria formattata correttamente
-	     */
+		/**
+		 * Ritorna una stringa formattata con la memoria disponibile in MB o KB.
+		 * 
+		 * @param availableMemory
+		 *            la memoria da inserire nella stringa
+		 * @return una stringa contentente la memoria formattata correttamente
+		 */
 	    public static String formatSize(long availableMemory) {
 	        String unitOfMeasure = null;
 
@@ -335,8 +344,11 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					mXValue.setText(x.toString());
 					mYValue.setText(y.toString());
 					mZValue.setText(z.toString());
-					mSessionLengthTextView.setText(Utilities
-							.millisToHourMinuteSecond(duration, true));
+					mSessionLengthTextView.setText(getActivity()
+							.getBaseContext().getString(
+									R.string.session_duration)
+							+ Utilities
+									.millisToHourMinuteSecond(duration, true));
 					// Controllo sulla durata massima, se è stata raggiunta
 					// simula un clic su stop
 					// Viene chiamato solo se l'app è in foreground mentre la

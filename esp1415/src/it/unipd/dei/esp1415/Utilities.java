@@ -28,7 +28,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 
 /**
- * Classe contentenente varie variabili statiche e metodi di utilità utilizzati
+ * Classe contenente varie variabili statiche e metodi di utilità utilizzati
  * dalle altre classi e activity.
  */
 public class Utilities {
@@ -175,9 +175,12 @@ public class Utilities {
 	 * Salva nella memoria interna l'immagine data, associandole il nome scelto.
 	 * 
 	 * @param image
+	 *            l'immagine della thumbnail da salvare
 	 * @param name
+	 *            il nome da associare all'immagine
 	 * @param context
-	 * @return
+	 *            il contesto dell'activity chiamante
+	 * @return vero se il salvataggio è andato a buon fine, falso altrimenti
 	 */
 	public static boolean saveToInternalStorage(Bitmap image, String name,
 			Context context) {
@@ -208,8 +211,10 @@ public class Utilities {
 	 * parametro.
 	 * 
 	 * @param filename
+	 *            il nome della thumbnail da recuperare
 	 * @param context
-	 * @return
+	 *            il contesto dell'activity chiamante
+	 * @return l'immagine della thumbnail
 	 */
 	public static Bitmap loadImageFromStorage(String filename, Context context) {
 		Bitmap thumbnail = null;
@@ -238,7 +243,8 @@ public class Utilities {
 	 * Dato il timestamp della sessione crea una thumbnail associata.
 	 * 
 	 * @param sessionBegin
-	 * @return
+	 *            il timestamp della sessione per cui creare la thumbnail
+	 * @return l'immagine della thumbnail creata
 	 */
 	public static Bitmap createThumbnail(Date sessionBegin) {
 		long timestamp = sessionBegin.getTime();
@@ -270,11 +276,30 @@ public class Utilities {
 	}
 
 	/**
+	 * Rimuove la thumbnail col nome passatogli come parametro.
+	 * 
+	 * @param filename
+	 *            il nome della thumbnail da eliminare
+	 * @param context
+	 *            il contesto dell'activity chiamante
+	 */
+	public static void removeThumbnail(String filename, Context context){
+		// Genera il path del file da rimuovere
+		String path = context.getDir("Thumbnails", Context.MODE_PRIVATE)
+				+ "/" + filename;
+		File file = new File(path);
+		file.delete();
+	}
+	
+	/**
 	 * Converte da millisecondi a ore, minuti e secondi.
 	 * 
 	 * @param millis
+	 *            i millisecondi da convertire
 	 * @param returnSeconds
-	 * @return
+	 *            vero se si vogliono anche i secondi, falso altrimenti
+	 * @return la stringa contenente ore, minuti ed eventualmente i secondi nel
+	 *         formato kk h mm m ss s
 	 */
 	public static String millisToHourMinuteSecond(long millis,
 			boolean returnSeconds) {

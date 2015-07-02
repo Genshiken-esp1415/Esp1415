@@ -11,6 +11,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:gravity="center_vertical"
+        android:ellipsize="marquee"
         android:textColor="#000000"
         android:textSize="18sp" />
 
@@ -21,6 +22,7 @@
         android:layout_below="@id/firstLine"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
+        android:gravity="center_vertical"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:textColor="#000000"
@@ -34,6 +36,7 @@
         android:layout_below="@id/secondLine"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
+        android:gravity="center_vertical"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:textColor="#000000"
