@@ -41,8 +41,8 @@ import android.widget.Toast;
 
 /**
  * Questa activity contiene il dettaglio sulla sessione corrente. Vengono
- * visualizzati la thumbnail della sessione, creata all'avvio della activity per
- * le nuove sessioni, data di inizio sessione, durata della sessione e la lista
+ * visualizzati la thumbnail della sessione, creata all'avvio dell'activity per
+ * la nuova sessione, data di inizio sessione, durata della sessione e lista
  * delle cadute rilevate.
  * 
  * Questa activity permette di avviare, mettere in pausa, riprendere o terminare
@@ -52,15 +52,15 @@ import android.widget.Toast;
  * 
  * Descrizione di come interagisce col WatcherService:
  * 
- * 1)creo una nuova sessione e imposto la sessione come attiva nel db o
- * ripristino la sessione in corso se è già presente una sessione attiva nel db;
- * 2)controllo se il service è già attivo, se è attivo mostro pausa, se non è
- * attivo mostro il tasto play;
- * 3)premuto play il service viene avviato;
- * 4)premuto pausa uccido il service;
- * 5)premuto stop imposto la sessione come non attiva nel db e uccido il
+ * 1) crea una nuova sessione e imposta la sessione come attiva nel db o
+ * ripristina la sessione in corso se è già presente una sessione attiva nel db;
+ * 2) controlla se il service è già attivo, se è attivo mostra pausa, se non è
+ * attivo mostra il tasto play;
+ * 3) premuto play il service viene avviato;
+ * 4) premuto pausa termina il service;
+ * 5) premuto stop imposta la sessione come non attiva nel db e termina il
  * service;
- * 6)uso un broadcast receiver per tenere aggiornata l'UI mentre l'app è in
+ * 6) usa un broadcast receiver per tenere aggiornata l'UI mentre l'app è in
  * foreground.
  */
 public class CurrentSessionDetailsActivity extends ActionBarActivity {
