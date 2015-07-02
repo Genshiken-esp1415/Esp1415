@@ -143,9 +143,6 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 		}
 	}
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
 	public static class MyListFragment extends ListFragment {
 		private FallAdapter mAdapter;
 
