@@ -2,6 +2,8 @@ package it.unipd.dei.esp1415;
 import java.util.Date;
 import java.util.LinkedList;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +18,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -138,9 +141,25 @@ public class WatcherService extends Service implements SensorEventListener {
 			public void onProviderDisabled(String provider) {
 			}
 		};
+		
+		runAsForeground();
 		return Service.START_STICKY;
 	}
 
+	private void runAsForeground(){
+	    Intent notificationIntent = new Intent(this, WatcherService.class);
+	    PendingIntent pendingIntent=PendingIntent.getActivity(this, 0,
+	            notificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
+
+	    Notification notification=new NotificationCompat.Builder(this)
+	                                .setSmallIcon(R.drawable.ic_launcher)
+	                                .setContentText("registrando")
+	                                .setContentIntent(pendingIntent).build();
+
+	    startForeground(1, notification);
+
+	}
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -150,6 +169,7 @@ public class WatcherService extends Service implements SensorEventListener {
 	public void onDestroy() {
 		Toast.makeText(getApplicationContext(), "service ucciso",
 				Toast.LENGTH_LONG).show();
+		stopForeground(true);
 		// Rimuovo i listener
 		mSm.unregisterListener(this);
 		// Registro la durata finale nel db

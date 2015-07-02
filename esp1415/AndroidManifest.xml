@@ -47,7 +47,9 @@
             android:label="@string/title_fall_details_activity" >
         </activity>
 
-        <service android:name="WatcherService" >
+        <service android:name="WatcherService" 
+            android:enabled="true"
+            >
         </service>
 
         <activity
