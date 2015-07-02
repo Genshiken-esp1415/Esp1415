@@ -2,7 +2,6 @@ package it.unipd.dei.esp1415;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
