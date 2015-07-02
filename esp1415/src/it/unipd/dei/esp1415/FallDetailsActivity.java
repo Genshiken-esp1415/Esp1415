@@ -115,8 +115,22 @@ public class FallDetailsActivity extends ActionBarActivity {
 			thumbnailImageView.setImageBitmap(thumbnail);
 			date.setText(DateFormat.format("dd/MM/yy", fallDate));
 			time.setText(DateFormat.format("kk:mm:ss", fallDate));
-			latitude.setText(Double.toString(sCurrentFall.getLatitude()));
-			longitude.setText(Double.toString(sCurrentFall.getLongitude()));
+			Double latitudeValue = sCurrentFall.getLatitude();
+			Double longitudeValue = sCurrentFall.getLongitude();
+			String latitudeString;
+			String longitudeString;
+			if (latitudeValue == 0) {
+				latitudeString = "N/A";
+			} else {
+				latitudeString = Double.toString(latitudeValue);
+			}
+			if (longitudeValue == 0) {
+				longitudeString = "N/A";
+			} else {
+				longitudeString = Double.toString(longitudeValue);
+			}
+			latitude.setText(latitudeString);
+			longitude.setText(longitudeString);
 			if (sCurrentFall.isNotified())
 				notification.setText("inviata");
 			else

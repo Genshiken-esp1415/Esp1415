@@ -295,13 +295,15 @@ public class SettingsActivity extends ActionBarActivity {
 	 */
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		sArrayAdapter.clear();
-		for (int i = 0; i < Utilities.sDest.size(); i++) {
-			sArrayAdapter.add(Utilities.sName.get(i) + ": "
-					+ Utilities.sDest.get(i));
+		if (sArrayAdapter != null) {
+			sArrayAdapter.clear();
+			for (int i = 0; i < Utilities.sDest.size(); i++) {
+				sArrayAdapter.add(Utilities.sName.get(i) + ": "
+						+ Utilities.sDest.get(i));
 
+			}
+			sArrayAdapter.notifyDataSetChanged();
 		}
-		sArrayAdapter.notifyDataSetChanged();
 	}
 
 	/**

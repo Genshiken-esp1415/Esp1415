@@ -17,10 +17,10 @@
         android:layout_toStartOf="@+id/session_thumbnail"
         android:ems="10"
         android:hint="@string/session_name"
-        android:textSize="30sp" 
-        android:imeOptions="actionDone" 
+        android:imeOptions="actionDone"
         android:singleLine="true"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/xLabel"
@@ -29,9 +29,10 @@
         android:layout_alignLeft="@+id/list_title"
         android:layout_alignStart="@+id/list_title"
         android:layout_below="@+id/session_name"
+        android:layout_marginTop="20dp"
         android:text="@string/x_label"
-        android:textSize="30sp"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/yLabel"
@@ -39,8 +40,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/xLabel"
         android:text="@string/y_label"
-        android:textSize="30sp"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/zLabel"
@@ -48,83 +49,123 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/yLabel"
         android:text="@string/z_label"
-        android:textSize="30sp"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/xValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/session_name"
-        android:layout_toRightOf="@+id/xLabel"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
         android:layout_toEndOf="@+id/xLabel"
+        android:layout_toRightOf="@+id/xLabel"
         android:maxLength="4"
         android:text="@string/x_value"
-        android:textSize="30sp"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/yValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/xValue"
-        android:layout_toRightOf="@+id/yLabel"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:layout_toEndOf="@+id/yLabel"
+        android:layout_toRightOf="@+id/yLabel"
         android:maxLength="4"
         android:text="@string/y_value"
-        android:textSize="30sp"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/zValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLength="4"
         android:layout_below="@+id/yValue"
-        android:layout_toRightOf="@+id/zLabel"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:layout_toEndOf="@+id/zLabel"
+        android:layout_toRightOf="@+id/zLabel"
+        android:maxLength="4"
         android:text="@string/z_value"
-        android:textSize="30sp"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/list_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/session_length"
+        android:layout_below="@+id/session_length_label"
         android:gravity="center_horizontal"
         android:text="@string/falls"
-        android:textSize="40sp"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/session_timestamp_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/zLabel"
+        android:layout_marginTop="35dp"
+        android:text="@string/date_and_time"
+        android:textColor="#000000"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/session_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/session_timestamp_label"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="#000000"
+        android:textSize="40sp" />
+
+    <TextView
+        android:id="@+id/session_length_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/session_timestamp"
+        android:text="@string/session_duration"
+        android:textColor="#000000"
+        android:textSize="40sp" />
 
     <TextView
         android:id="@+id/session_length"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/zLabel"
-        android:text="@string/duration"
-        android:textSize="40sp"
-        android:textColor="#000000" />
-    
-	<ImageView
+        android:layout_alignBaseline="@+id/session_length_label"
+        android:layout_toRightOf="@+id/session_length_label"
+        android:layout_toEndOf="@+id/session_length_label"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textColor="#000000"
+        android:textSize="40sp" />
+
+    <ImageView
         android:id="@+id/session_thumbnail"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="10dp"
-        android:layout_alignTop="@+id/xValue"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:contentDescription="@string/thumbnail_description"
-        android:background="@drawable/box" />
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/xValue"
+        android:background="@drawable/box"
+        android:contentDescription="@string/thumbnail_description" />
 
     <ImageButton
         android:id="@+id/play_pause_button"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_toRightOf="@+id/session_name"
-        android:layout_toEndOf="@+id/session_name"
         android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
+        android:layout_toEndOf="@+id/session_name"
+        android:layout_toRightOf="@+id/session_name"
         android:baselineAlignBottom="false"
         android:contentDescription="@string/play_description"
         android:src="@drawable/ic_play_button_256" />
@@ -134,8 +175,8 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignTop="@+id/play_pause_button"
-		android:layout_toRightOf="@+id/play_pause_button"
         android:layout_toEndOf="@+id/play_pause_button"
+        android:layout_toRightOf="@+id/play_pause_button"
         android:contentDescription="@string/stop_description"
         android:src="@drawable/ic_stop_circular_button_256" />
 
