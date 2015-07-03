@@ -69,7 +69,6 @@ public class RenameDialog extends DialogFragment {
 		mOldName = mCurrentSession.getName();
 		
 		//create done, advancedview and cancel buttons
-		//TODO: clear the redundation of the check and position
 		builder.setView(layout)
 		.setMessage(mOldName)
 		.setPositiveButton(R.string.rename, new DialogInterface.OnClickListener() {
@@ -82,7 +81,6 @@ public class RenameDialog extends DialogFragment {
 		.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				mListener.onDialogNegativeClick(RenameDialog.this);
-
 			}
 		})
 		;
