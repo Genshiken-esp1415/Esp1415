@@ -33,7 +33,6 @@ import android.widget.TimePicker;
  */
 public class SettingsActivity extends ActionBarActivity {
 
-	
 	// Dichiarazione variabili delle view dell'activity, i nomi sono
 	// autoesplicativi
 	private static Button sAlarmButton;
@@ -43,7 +42,7 @@ public class SettingsActivity extends ActionBarActivity {
 	private static CheckBox sNotification;
 	private static EditText sEmail;
 	private static EditText sPassword;
-	
+
 	private static Context sContext;
 	private static ArrayAdapter<String> sArrayAdapter;
 
@@ -320,11 +319,8 @@ public class SettingsActivity extends ActionBarActivity {
 				Integer.parseInt((String) sMaxDuration.getText()));
 		sEditor.putBoolean("alarmCheck", sAlarm.isChecked());
 		sEditor.putBoolean("notificationCheck", sNotification.isChecked());
-		if ((!sEmail.getText().toString().equals("") && !sPassword.getText()
-				.toString().equals(""))) {
-			sEditor.putString("email", sEmail.getText().toString());
-			sEditor.putString("password", sPassword.getText().toString());
-		}
+		sEditor.putString("email", sEmail.getText().toString());
+		sEditor.putString("password", sPassword.getText().toString());
 		sEditor.commit();
 	}
 

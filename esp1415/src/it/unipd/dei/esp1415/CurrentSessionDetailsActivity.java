@@ -200,6 +200,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					}
 					return handled;
 				}
+				
 			});
 			// Impostazione dei valori iniziali dei campi del layout
 			String sessionTimestamp = (String) DateFormat.format(
