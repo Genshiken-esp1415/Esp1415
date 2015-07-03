@@ -363,7 +363,6 @@ public class SettingsActivity extends ActionBarActivity {
 		case SensorManager.SENSOR_DELAY_NORMAL:
 			sSampleRateButton.setText("Bassa");
 			break;
-
 		}
 	}
 }
