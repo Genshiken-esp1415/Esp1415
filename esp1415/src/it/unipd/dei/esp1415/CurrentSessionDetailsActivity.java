@@ -522,7 +522,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 	 * Controlla se il service è già stato avviato.
 	 * 
 	 * @param serviceClass
-	 *            il nome della classe contente il service
+	 *            il nome della classe contenente il service
 	 * @return vero se è stato avviato, falso altrimenti
 	 */
 	private boolean isMyServiceRunning(Class<?> serviceClass) {
