@@ -195,7 +195,7 @@ public class WatcherService extends Service implements SensorEventListener {
 			Intent notificationIntent = new Intent(this,
 					PastSessionDetailsActivity.class);
 			notificationIntent.putExtra("IDSessione",
-					mCurrentSession.getSessionBegin());
+					mCurrentSession.getSessionBegin().getTime());
 			PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 					notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -279,7 +279,7 @@ public class WatcherService extends Service implements SensorEventListener {
 				// Controlla se la durata massima è stata superata
 				if ((mDuration + mTimePassed) > sPreferences.getInt(
 						"maxDuration", MAXHOURS) * MILLISPERHOUR) {
-
+				
 					Toast.makeText(getApplicationContext(),
 							"Raggiunta durata massima per la sessione",
 							Toast.LENGTH_LONG).show();
