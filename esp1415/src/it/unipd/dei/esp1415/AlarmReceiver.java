@@ -41,7 +41,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 			Utilities.fireAlarm(context);
 		} else {
 			Intent notificationIntent = new Intent(context,
-					SettingsActivity.class);
+					SessionListActivity.class);
 			PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 					notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 			    
