@@ -18,16 +18,6 @@
         android:layout_alignEnd="@+id/z_graph"
         android:layout_marginTop="35dp"
         android:background="@drawable/box" />
-
-    <!-- <ImageView
-        android:id="@+id/grafico_label"
-        android:layout_width="480dp"
-        android:layout_height="150dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/box"
-        android:src="@drawable/graph_placeholder" /> -->
       
     <TextView
         android:id="@+id/date"
@@ -71,8 +61,8 @@
         android:id="@+id/date_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/time_label"
-        android:layout_alignStart="@+id/time_label"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignTop="@+id/thumbnail_label"
         android:text="@string/date"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -102,38 +92,69 @@
 	    android:textAppearance="?android:attr/textAppearanceLarge"
 	    android:textSize="40sp" />
 
+	<TextView
+        android:id="@+id/xLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/notification_label"
+        android:layout_marginTop="25dp"
+        android:text="@string/x_label"
+        android:textColor="#000000"
+        android:textSize="30sp" />
+	
 	<it.unipd.dei.esp1415.GraphView
 	    android:id="@+id/x_graph"
-	    android:layout_width="448dp"
+	    android:layout_width="400dp"
 	    android:layout_height="76dp"
-	    android:layout_above="@+id/y_graph"
-	    android:layout_alignRight="@+id/y_graph"
-	    android:layout_alignEnd="@+id/y_graph"
-	    android:layout_alignLeft="@+id/y_graph"
-	    android:layout_alignStart="@+id/y_graph" />
+	    android:layout_marginLeft="20dp"
+	    android:layout_marginStart="20dp"
+	    android:layout_marginTop="10dp"
+	    android:layout_below="@+id/notification_label"
+	    android:layout_toRightOf="@+id/xLabel"
+	    android:layout_toEndOf="@+id/xLabel" />
 
 	<it.unipd.dei.esp1415.GraphView
 	    android:id="@+id/z_graph"
-	    android:layout_width="448dp"
+	    android:layout_width="400dp"
 	    android:layout_height="76dp"
-	    android:layout_alignParentBottom="true"
-	    android:layout_centerHorizontal="true"
+	    android:layout_alignLeft="@+id/y_graph"
+	    android:layout_alignStart="@+id/y_graph"
+	    android:layout_below="@+id/y_graph"
 	    android:background="@drawable/box" />
 
+	<TextView
+        android:id="@+id/zLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/yLabel"
+        android:layout_marginTop="35dp"
+        android:text="@string/z_label"
+        android:textColor="#000000"
+        android:textSize="30sp" />
+	<TextView
+        android:id="@+id/yLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/xLabel"
+        android:layout_marginTop="35dp"
+        android:text="@string/y_label"
+        android:textColor="#000000"
+        android:textSize="30sp" />
+	
 	<it.unipd.dei.esp1415.GraphView
 	    android:id="@+id/y_graph"
-	    android:layout_width="448dp"
+	    android:layout_width="400dp"
 	    android:layout_height="76dp"
-	    android:layout_above="@+id/z_graph"
-	    android:layout_alignLeft="@+id/z_graph"
-	    android:layout_alignStart="@+id/z_graph" />
+	    android:layout_below="@+id/x_graph"
+	    android:layout_alignLeft="@+id/x_graph"
+	    android:layout_alignStart="@+id/x_graph" />
 
 	<TextView
 	    android:id="@+id/time_label"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/latitude_label"
-	    android:layout_alignStart="@+id/latitude_label"
+	    android:layout_alignLeft="@+id/date_label"
+	    android:layout_alignStart="@+id/date_label"
 	    android:layout_below="@+id/date"
 	    android:layout_marginTop="30dp"
 	    android:text="@string/time"
@@ -144,8 +165,8 @@
 	    android:id="@+id/longitude_label"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/x_graph"
-	    android:layout_alignStart="@+id/x_graph"
+	    android:layout_alignLeft="@+id/date_label"
+	    android:layout_alignStart="@+id/date_label"
 	    android:layout_below="@+id/latitude_label"
 	    android:text="@string/longitude"
 	    android:textAppearance="?android:attr/textAppearanceLarge"
@@ -155,8 +176,8 @@
 	    android:id="@+id/notification_label"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/longitude_label"
-	    android:layout_alignStart="@+id/longitude_label"
+	    android:layout_alignLeft="@+id/date_label"
+	    android:layout_alignStart="@+id/date_label"
 	    android:layout_below="@+id/longitude"
 	    android:layout_marginTop="33dp"
 	    android:text="@string/notification"
@@ -167,8 +188,8 @@
 	    android:id="@+id/latitude_label"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/longitude_label"
-	    android:layout_alignStart="@+id/longitude_label"
+	    android:layout_alignLeft="@+id/date_label"
+	    android:layout_alignStart="@+id/date_label"
 	    android:layout_below="@+id/time"
 	    android:layout_marginTop="33dp"
 	    android:layout_toLeftOf="@+id/latitude"

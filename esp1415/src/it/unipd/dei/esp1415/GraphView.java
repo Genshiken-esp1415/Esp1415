@@ -18,7 +18,7 @@ public class GraphView extends View {
 
 	// Variabili per la dimensione del grafico e la posizione centrale in
 	// larghezza ed altezza
-	private final int GRAPH_WIDTH = 448;
+	private final int GRAPH_WIDTH = 400;
 	private final int GRAPH_HEIGHT = 76;
 	private final int GRAPH_HEIGHT_CENTER = GRAPH_HEIGHT / 2;
 	private final int GRAPH_WIDTH_CENTER = GRAPH_WIDTH / 2;
