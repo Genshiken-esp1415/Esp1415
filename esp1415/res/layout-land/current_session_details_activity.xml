@@ -4,12 +4,12 @@
 
     <FrameLayout
         android:id="@+id/current_session_details_fragment"
-        android:layout_width="400dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content" />
 
     <FrameLayout
         android:id="@+id/fall_list_fragment"
-        android:layout_width="400dp"
+        android:layout_width="500dp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/current_session_details_fragment"
         android:layout_toEndOf="@+id/current_session_details_fragment" />

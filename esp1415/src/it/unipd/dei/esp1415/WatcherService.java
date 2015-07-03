@@ -159,7 +159,7 @@ public class WatcherService extends Service implements SensorEventListener {
 				.setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle("Esp1415")
 				.setContentText(
-						"Il service è in esecuzione e controllando i dati dell'accelerometro per la rilevazione di cadute.")
+						"Il service è in esecuzione e sta controllando i dati dell'accelerometro per la rilevazione di cadute.")
 				.setContentIntent(pendingIntent).build();
 
 		startForeground(Utilities.PERSISTENT_NOTIFICATION_ID,
@@ -184,14 +184,18 @@ public class WatcherService extends Service implements SensorEventListener {
 		mCurrentSession.setDuration(((Long) (mDuration + mTimePassed))
 				.intValue());
 		mCurrentSession = sDb.updateDuration(mCurrentSession);
-		// Caso in cui l'applicazione sia in background, o che l'utente abbia cambiato activity
+		// Caso in cui l'applicazione sia in background, o che l'utente abbia
+		// cambiato activity
 		if (sPreferences.getBoolean("CurrentSessionOnBackground", false)
 				&& maxDurationReached) {
 			mCurrentSession.setActive(false);
 			sDb.setActiveSession(mCurrentSession);
-			// Lancia una notifica per comunicare all'utente che la sessione ha raggiunto la durata massima.
-			Intent notificationIntent = new Intent(this, PastSessionDetailsActivity.class);
-			notificationIntent.putExtra("IDSessione", mCurrentSession.getSessionBegin());
+			// Lancia una notifica per comunicare all'utente che la sessione ha
+			// raggiunto la durata massima.
+			Intent notificationIntent = new Intent(this,
+					PastSessionDetailsActivity.class);
+			notificationIntent.putExtra("IDSessione",
+					mCurrentSession.getSessionBegin());
 			PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 					notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -207,7 +211,8 @@ public class WatcherService extends Service implements SensorEventListener {
 			// La notifica viene lanciata
 			NotificationManager mNotificationManager = (NotificationManager) this
 					.getSystemService(Context.NOTIFICATION_SERVICE);
-			mNotificationManager.notify(Utilities.MAX_DURATION_REACHED_NOTIFICATION_ID,
+			mNotificationManager.notify(
+					Utilities.MAX_DURATION_REACHED_NOTIFICATION_ID,
 					mBuilder.build());
 		}
 

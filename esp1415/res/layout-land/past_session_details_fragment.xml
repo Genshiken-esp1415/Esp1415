@@ -14,6 +14,7 @@
         android:layout_alignLeft="@+id/session_thumbnail"
         android:layout_alignStart="@+id/session_thumbnail"
         android:layout_below="@+id/session_thumbnail"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="@string/session_name"
         android:imeOptions="actionDone"
@@ -37,6 +38,7 @@
         android:layout_alignLeft="@+id/session_thumbnail"
         android:layout_alignStart="@+id/session_thumbnail"
         android:layout_below="@+id/session_timestamp"
+        android:layout_marginTop="20dp"
         android:text="@string/session_duration"
         android:textColor="#000000"
         android:textSize="30sp" />
@@ -61,6 +63,7 @@
         android:layout_alignLeft="@+id/session_thumbnail"
         android:layout_alignStart="@+id/session_thumbnail"
         android:layout_below="@+id/session_name"
+        android:layout_marginTop="20dp"
         android:text="@string/date_and_time"
         android:textColor="#000000"
         android:textSize="30sp" />

@@ -52,14 +52,12 @@ public class SessionListActivity extends ActionBarActivity implements
 		setContentView(R.layout.session_list_activity);
 		if (savedInstanceState == null) {
 			getSupportFragmentManager().beginTransaction()
-			.add(R.id.container, new SessionListFragment()).commit();
+					.add(R.id.container, new SessionListFragment()).commit();
 		}
 		// Se sono stati scelti in passato degli indirizzi e-mail per l'invio
 		// delle notifiche, vengono letti dal corrispondente file di testo
 		if ((new File(getApplicationContext().getFilesDir().getPath()
 				+ "/contactlist.txt")).exists()) {
-			Toast.makeText(this, "Contact list trovata", Toast.LENGTH_LONG)
-			.show();
 			Utilities.setSelectedContacts(this);
 		}
 	}
@@ -191,7 +189,8 @@ public class SessionListActivity extends ActionBarActivity implements
 					sAdapter.remove(sSelectedSession);
 					// Rimozione della thumbnail
 					String name = sSelectedSession.getThumbnail();
-					Utilities.removeThumbnail(name, getActivity().getBaseContext());
+					Utilities.removeThumbnail(name, getActivity()
+							.getBaseContext());
 					// Notifica all'adapter i cambiamenti
 					sAdapter.notifyDataSetChanged();
 					// Notifica di avvenuta cancellazione
@@ -270,9 +269,10 @@ public class SessionListActivity extends ActionBarActivity implements
 			String secondLine = getContext().getString(R.string.date_and_time)
 					+ date;
 			holder.secondLine.setText(secondLine);
-			String thirdLine = getContext().getString(R.string.session_duration)
-					+ Utilities.millisToHourMinuteSecond(session.getDuration(), false) + " - "
-					+ session.getNumberOfFalls();
+			String thirdLine = getContext()
+					.getString(R.string.session_duration)
+					+ Utilities.millisToHourMinuteSecond(session.getDuration(),
+							false) + " - " + session.getNumberOfFalls();
 
 			if (session.getNumberOfFalls() == 1) {
 				holder.thirdLine.setText(thirdLine + " "

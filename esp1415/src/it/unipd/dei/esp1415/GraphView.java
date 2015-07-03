@@ -121,10 +121,13 @@ public class GraphView extends View {
 				}
 			}
 
-			// Ridisegna il bordo destro della cornice per eliminare il
-			// trasbordo della funzione graficata sulla cornice
+			// Ridisegna i bordi destro, inferiore e superiore della cornice per
+			// eliminare il trasbordo della funzione graficata sulla cornice
 			c.drawLine(GRAPH_WIDTH - 1, 0, GRAPH_WIDTH - 1, GRAPH_HEIGHT,
 					mPaintLine);
+			c.drawLine(0, GRAPH_HEIGHT - 1, GRAPH_WIDTH, GRAPH_HEIGHT - 1,
+					mPaintLine);
+			c.drawLine(0, 0, GRAPH_WIDTH, 0, mPaintLine);
 		}
 	}
 }
