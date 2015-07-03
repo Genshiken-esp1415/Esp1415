@@ -9,17 +9,16 @@ import android.util.Log;
  * Utilizzato per creare il database all'installazione dell'app o aggiornarlo
  * quando l'app viene modificata.
  * 
- * modifica
  */
 public class DBOpenHelper extends SQLiteOpenHelper {
-	// variabili per la tabella SESSIONE
+	// Variabili per la tabella SESSIONE
 	public static final String TABLE_SESSION = "SESSION";
 	public static final String COLUMN_TIMESTAMP_S = "timestamp_start";
 	public static final String COLUMN_NAME = "name";
 	public static final String COLUMN_DURATION = "duration";
 	public static final String COLUMN_ACTIVE = "active";
 	public static final String COLUMN_ID_S = "ID";
-	// variabili per la tabella CADUTA
+	// Variabili per la tabella CADUTA
 	public static final String TABLE_FALL = "FALL";
 	public static final String COLUMN_NUMBER = "number";
 	public static final String COLUMN_TIMESTAMP_F = "timestamp";
@@ -28,7 +27,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_LONGITUDE = "longitude";
 	public static final String COLUMN_SESSION = "timestamp_start";
 	public static final String COLUMN_ID_F = "ID";
-	// variabili per la tabella ACCELEROMETRO
+	// Variabili per la tabella ACCELEROMETRO
 	public static final String TABLE_ACCELEROMETER = "ACCELEROMETER";
 	public static final String COLUMN_TIMESTAMP_A = "timestamp_accelerometer";
 	public static final String COLUMN_X = "x";
@@ -40,7 +39,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "fallDetection.db";
 	private static final int DATABASE_VERSION = 1;
 
-	// Create table necessari, guardare in disegni per lo schema E-R
+	// Create table necessari
 	private static final String DATABASE_CREATE_SESSION = "" + "CREATE TABLE "
 			+ TABLE_SESSION + " ( " + COLUMN_TIMESTAMP_S
 			+ " TEXT PRIMARY KEY DEFAULT(datetime('now','localtime')), "
@@ -84,7 +83,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
 	/**
 	 * Chiamato da android quando si fa per la prima volta l'accesso al db e
-	 * questi non esiste
+	 * questi non esiste.
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase database) {
@@ -95,7 +94,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
 	/**
 	 * Chiamato da android quando il db viene aggiornato, cioè quando
-	 * installiamo l'app aggiornata e sono successe modifiche alla struttura del
+	 * si installa l'app aggiornata e sono successe modifiche alla struttura del
 	 * db.
 	 */
 	@Override

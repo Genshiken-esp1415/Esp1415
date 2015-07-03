@@ -3,24 +3,21 @@ package it.unipd.dei.esp1415;
 import java.util.ArrayList;
 import java.util.Date;
 
-
 /**
- * Classe contenitore per i dati relativi ad una caduta
+ * Classe contenitore per i dati relativi ad una caduta.
  */
 public class Fall {
 
 	private Date mFallTimestamp;
-	// campo ridondante, mi basta sapere la data e a quale sessione appartiene,
-	// la query mi da già le cadute dalla piu vecchia alla piu nuova...
+	// Campo ridondante, basta sapere la data e a quale sessione appartiene,
+	// la query dà già le cadute dalla più vecchia alla più nuova
 	private int mFallNumber;
-	// forse non servirà, intanto teniamo un riferimento alla sessione per
-	// sicurezza
 	private Date mSession;
 	private boolean mNotified;
 
 	private double mLatitude;
 	private double mLongitude;
-	// lista contenente i dati dell'accelerometro relativi a 500 ms prima e dopo
+	// Lista contenente i dati dell'accelerometro relativi a 500 ms prima e dopo
 	// la caduta
 	private ArrayList<AccelerometerData> mFallData;
 
@@ -102,9 +99,9 @@ public class Fall {
 
 		public FallBuilder(Date fallTimestamp) {
 			this.mFallTimestamp = fallTimestamp;
-			// Inizializzo campi facoltativi, nel senso che posso non avere da
-			// subito la lista di dati dell'accelerometro o avere una caduta non
-			// ancora notificata.
+			// Inizializza i campi facoltativi, nel senso che si potrebbe non
+			// avere da subito la lista di dati dell'accelerometro o avere una
+			// caduta non ancora notificata
 			mFallData = new ArrayList<AccelerometerData>();
 			mNotified = false;
 		}

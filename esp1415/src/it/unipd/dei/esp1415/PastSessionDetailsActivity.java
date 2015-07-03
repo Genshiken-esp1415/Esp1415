@@ -24,7 +24,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 /**
- * Questa activity conterrà il dettaglio su una sessione passata
+ * Questa activity conterrà il dettaglio su una sessione passata.
  */
 public class PastSessionDetailsActivity extends ActionBarActivity implements
 		RenameDialog.renameDialogListener {
@@ -77,17 +77,12 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.past_session_details, menu);
-
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_rename) {
 			showRenameDialog();
@@ -97,7 +92,6 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 	}
 
 	public void showRenameDialog() {
-		// Create an instance of the dialog fragment and show it
 		RenameDialog newFragment = new RenameDialog();
 		Bundle args = new Bundle();
 		args.putLong("id", sCurrentSession.getSessionBegin().getTime());
@@ -116,9 +110,6 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 
 	}
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
 	public static class SessionDetailsFragment extends Fragment {
 
 		public SessionDetailsFragment() {
@@ -130,11 +121,6 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 			View rootView = inflater.inflate(
 					R.layout.past_session_details_fragment, container,
 					false);
-			// solo per testing prendo tutte le sessioni dal db
-
-			// ArrayList<Session> sessions =
-			// (ArrayList<Session>)db.getAllSessions();
-			// currentSession = sessions.get(2);
 			sCurrentSession.setFallList((ArrayList<Fall>) sDb
 					.getAllFalls(sCurrentSession.getSessionBegin()));
 			// Caricamento thumbnail
@@ -188,7 +174,7 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 		
 		// Click su elementi della lista
 		@Override
-		public void onListItemClick(ListView l, View v, int position, long id) {// gestisce
+		public void onListItemClick(ListView l, View v, int position, long id) {
 			super.onListItemClick(l, v, position, id);
 			Intent fallDetails = new Intent(getActivity()
 					.getApplicationContext(), FallDetailsActivity.class);

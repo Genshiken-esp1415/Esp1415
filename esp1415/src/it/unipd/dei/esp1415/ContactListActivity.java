@@ -57,10 +57,6 @@ public class ContactListActivity extends Activity {
 		String address;
 		ArrayList<ContactData> contacts = new ArrayList<ContactData>();
 
-		// Carica da file di testo i contatti già selezionati, se
-		// presenti
-		// ArrayList<String> SettingValues.sDest = readSelectedContacts();
-
 		// Cursore che punta alla lista di contatti in rubrica a cui è anche
 		// associata una e-mail
 		Cursor cursor = this.getContentResolver().query(Email.CONTENT_URI,
@@ -118,7 +114,7 @@ public class ContactListActivity extends Activity {
 	}
 
 	/*
-	 * Premendo il pulsante indietro del dispositivi vengono scritti i contatti
+	 * Premendo il pulsante indietro del dispositivo vengono scritti i contatti
 	 * scelti su un file di testo e si torna all'activity chiamante
 	 */
 	@Override
@@ -135,7 +131,7 @@ public class ContactListActivity extends Activity {
 	 * 
 	 * Scrive su file di testo gli indirizzi scelti e i nomi associati, nel
 	 * formato nome: indirizzo, uno per riga. Viene utilizzato alla pressione
-	 * del bottone "Fatto"
+	 * del bottone "Fatto".
 	 *
 	 * @param dest
 	 *            lista dei destinatari delle e-mail di notifica
@@ -147,7 +143,7 @@ public class ContactListActivity extends Activity {
 			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
 					output));
 
-			// Si svuotano gli ArrayList assicurarsi che non si presentino
+			// Si svuotano gli ArrayList per assicurarsi che non si presentino
 			// duplicati di alcun tipo
 			Utilities.sDest.clear();
 			Utilities.sName.clear();
@@ -247,7 +243,7 @@ public class ContactListActivity extends Activity {
 	}
 
 	/**
-	 * Classe usata per implementare il design pattern view holder
+	 * Classe usata per implementare il design pattern view holder.
 	 */
 	private static class Holder {
 		public TextView row;

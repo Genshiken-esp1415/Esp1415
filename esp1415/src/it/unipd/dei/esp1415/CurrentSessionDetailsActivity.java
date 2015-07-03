@@ -56,13 +56,10 @@ import android.widget.Toast;
  * 1) crea una nuova sessione e imposta la sessione come attiva nel db o
  * ripristina la sessione in corso se è già presente una sessione attiva nel db;
  * 2) controlla se il service è già attivo, se è attivo mostra pausa, se non è
- * attivo mostra il tasto play;
- * 3) premuto play il service viene avviato;
- * 4) premuto pausa termina il service;
- * 5) premuto stop imposta la sessione come non attiva nel db e termina il
- * service;
- * 6) usa un broadcast receiver per tenere aggiornata l'UI mentre l'app è in
- * foreground.
+ * attivo mostra il tasto play; 3) premuto play il service viene avviato; 4)
+ * premuto pausa termina il service; 5) premuto stop imposta la sessione come
+ * non attiva nel db e termina il service; 6) usa un broadcast receiver per
+ * tenere aggiornata l'UI mentre l'app è in foreground.
  */
 public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
@@ -96,12 +93,12 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 	}
 
 	@Override
-	public void onBackPressed () {
+	public void onBackPressed() {
 		Intent sessionList = new Intent(this, SessionListActivity.class);
 		sessionList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(sessionList);
 	}
-	
+
 	/**
 	 * Questo fragment contiene la view dedicata ai dettagli della sessione,
 	 * eccetto la lista di cadute, contenuta in un altro fragment.
@@ -129,30 +126,32 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					.inflate(R.layout.current_session_details_fragment,
 							container, false);
 			// Apre un accesso a sharedPref
-			sPreferences = getActivity().getBaseContext().getSharedPreferences("MyPref",
-					Context.MODE_PRIVATE);
+			sPreferences = getActivity().getBaseContext().getSharedPreferences(
+					"MyPref", Context.MODE_PRIVATE);
 			sEditor = sPreferences.edit();
 			// Imposto la connessione al db
 			sDb = new DBManager(getActivity().getBaseContext());
 			sDb.open();
-			// Se non sono presenti sessioni attive creo una nuova sessione e
-			// avvio il service
+			// Se non sono presenti sessioni attive crea una nuova sessione e
+			// avvia il service
 			if (sDb.hasActiveSession()) {
 				// è presente se l'app è andata in background mentre c'era una
 				// sessione attiva
 				sCurrentSession = sDb.getActiveSession();
 			} else {
-				
-				if (getAvailableInternalMemorySize() < 10485760L) {//minore di 10 mega
-					Toast.makeText(getActivity(), "Spazio disponibile insufficiente, liberare spazio.",
+
+				if (getAvailableInternalMemorySize() < 10485760L) {// minore di
+																	// 10 mega
+					Toast.makeText(
+							getActivity(),
+							"Spazio disponibile insufficiente, liberare spazio.",
 							Toast.LENGTH_SHORT).show();
-					Intent sessionList = new Intent(this.getActivity(), SessionListActivity.class);
+					Intent sessionList = new Intent(this.getActivity(),
+							SessionListActivity.class);
 					sessionList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(sessionList);
-					
+
 				}
-//				String memory = getAvailableInternalMemorySize();
-//				
 				sCurrentSession = sDb.createSession("Nuova Sessione");
 				sCurrentSession.setActive(true);
 				// Generazione e impostazione della thumbnail
@@ -211,16 +210,16 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					}
 					return handled;
 				}
-				
+
 			});
-			
+
 			// Impostazione dei valori iniziali dei campi del layout
 			String sessionTimestamp = (String) DateFormat.format(
 					"dd/MM/yy kk:mm", sCurrentSession.getSessionBegin());
 			timeStampSessioneTextView.setText(sessionTimestamp);
 			sessionName.setText(sCurrentSession.getName());
 			mSessionLengthTextView.setText(Utilities.millisToHourMinuteSecond(
-							sCurrentSession.getDuration(), true));
+					sCurrentSession.getDuration(), true));
 			mXValue.setText("");
 			mYValue.setText("");
 			mZValue.setText("");
@@ -232,7 +231,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				mPlayPauseButton
 						.setImageResource(R.drawable.ic_pause_button_256);
 			}
-			
+
 			mPlayPauseButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
@@ -249,8 +248,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 						mYValue.setText("");
 						mZValue.setText("");
 						sServiceRunning = false;
-					}
-					else {
+					} else {
 						// Avvia il service
 						mI = new Intent(getActivity(), WatcherService.class);
 						// Passa al service le informazioni sulla sessione
@@ -264,7 +262,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 						// Modifica l'immagine del bottone in accordo con lo
 						// stato di service attivo
 						((ImageButton) arg0)
-						.setImageResource(R.drawable.ic_pause_button_256);
+								.setImageResource(R.drawable.ic_pause_button_256);
 						sServiceRunning = true;
 					}
 				}
@@ -273,7 +271,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				@Override
 				public void onClick(View arg0) {
 
-					// Termina il service e imposta la sessione come non attiva nel db
+					// Termina il service e imposta la sessione come non attiva
+					// nel db
 					mI = new Intent(getActivity(), WatcherService.class);
 					mI.putExtra("Active", false);
 					getActivity().stopService(mI);
@@ -293,54 +292,23 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
 			return rootView;
 		}
-		
+
 		/**
 		 * Ritorna quanta memoria è disponibile nella memoria interna.
 		 * 
-		 * @return una stringa contenente il valore di memoria disponibile
+		 * @return il valore della memoria disponibile
 		 */
-	    public static long getAvailableInternalMemorySize() {
-	        File path = Environment.getDataDirectory();
-	        StatFs stat = new StatFs(path.getPath());
-	        long blockSize = stat.getBlockSize();
-	        long availableBlocks = stat.getAvailableBlocks();
-	        return (availableBlocks * blockSize);
-	    }
-	    
-		/**
-		 * Ritorna una stringa formattata con la memoria disponibile in MB o KB.
-		 * 
-		 * @param availableMemory
-		 *            la memoria da inserire nella stringa
-		 * @return una stringa contentente la memoria formattata correttamente
-		 */
-	    public static String formatSize(long availableMemory) {
-	        String unitOfMeasure = null;
-
-	        if (availableMemory >= 1024) {
-	            unitOfMeasure = "KB";
-	            availableMemory /= 1024;
-	            if (availableMemory >= 1024) {
-	                unitOfMeasure = "MB";
-	                availableMemory /= 1024;
-	            }
-	            if (availableMemory >= 1024) {
-	                unitOfMeasure = "GB";
-	                availableMemory /= 1024;
-	            }
-	        }
-
-	        StringBuilder resultBuffer = new StringBuilder(Long.toString(availableMemory));
-
-	        int commaOffset = resultBuffer.length() - 3;
-	        while (commaOffset > 0) {
-	            resultBuffer.insert(commaOffset, ',');
-	            commaOffset -= 3;
-	        }
-
-	        if (unitOfMeasure != null) resultBuffer.append(unitOfMeasure);
-	        return resultBuffer.toString();
-	    }
+		// Il SuppressWarnings è stato aggiunto in quanto i metodi getBlockSize
+		// e getAvailableBlocks sono stati deprecati nelle API livello 18, ma
+		// l'Archos utilizza API livello 8
+		@SuppressWarnings("deprecation")
+		public static long getAvailableInternalMemorySize() {
+			File path = Environment.getDataDirectory();
+			StatFs stat = new StatFs(path.getPath());
+			long blockSize = stat.getBlockSize();
+			long availableBlocks = stat.getAvailableBlocks();
+			return (availableBlocks * blockSize);
+		}
 
 		/**
 		 * Handler per gli intent ricevuti dall'evento "AccData"
@@ -359,9 +327,9 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					mYValue.setText(y.toString());
 					mZValue.setText(z.toString());
 					mSessionLengthTextView.setText(Utilities
-									.millisToHourMinuteSecond(duration, true));
+							.millisToHourMinuteSecond(duration, true));
 					// Controllo sulla durata massima, se è stata raggiunta
-					// simula un clic su stop
+					// simula un click su stop
 					// Viene chiamato solo se l'app è in foreground mentre la
 					// durata massima viene raggiunta
 					if (intent.getBooleanExtra("maxDurationReached", false)) {
@@ -374,7 +342,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		@Override
 		public void onResume() {
 			sDb.open();
-			// Registra mMessageReceiver per il ricevimento di messaggi dal broadcast.
+			// Registra mMessageReceiver per la ricezione di messaggi dal
+			// broadcast.
 			LocalBroadcastManager.getInstance(this.getActivity())
 					.registerReceiver(mMessageReceiver,
 							new IntentFilter("AccData"));
@@ -383,8 +352,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			// Se l'app viene riportata in foreground dopo che la durata massima
 			// per la sessione è già stata raggiunta, non ho piu sessioni attive
 			// in db quindi mostro il dettaglio sessione passata riguardante la
-			// sessione appena terminata.
-			if(!sDb.hasActiveSession()){
+			// sessione appena terminata
+			if (!sDb.hasActiveSession()) {
 				sServiceRunning = false;
 				Intent s = new Intent(getActivity(),
 						PastSessionDetailsActivity.class);
@@ -397,7 +366,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
 		@Override
 		public void onPause() {
-			// Smette di ascoltare il broadcast poichè l'app perde il foreground
+			// Smette di ascoltare il broadcast poiché l'app perde il foreground
 			LocalBroadcastManager.getInstance(this.getActivity())
 					.unregisterReceiver(mMessageReceiver);
 			sDb.close();
@@ -435,10 +404,6 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					.getSessionBegin());
 			mAdapter = new FallAdapter(getActivity().getBaseContext(), mFalls);
 			setListAdapter(mAdapter);
-			// LocalBroadcastManager.getInstance(this.getActivity())
-			// .registerReceiver(mMessageReceiver,
-			// new IntentFilter("Fall"));
-
 		}
 
 		// Handler per gli intent ricevuti dall'evento "Fall"
@@ -448,7 +413,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
 				Long millis = intent.getLongExtra("IDFall", 0);
 				if (sServiceRunning) {
-					// Aggiornamento della lista di cadute appena mi viene
+					// Aggiornamento della lista di cadute appena viene
 					// notificata una caduta dal service
 					Fall newFall = sDb.getFall(new Date(millis));
 					mAdapter.insert(newFall, 0);
@@ -458,18 +423,18 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			}
 		};
 
-		
-		
 		@Override
 		public void onResume() {
 			super.onResume();
-			// Registra mMessageReceiver per il ricevimento di messaggi dal broadcast
+			// Registra mMessageReceiver per la ricezione di messaggi dal
+			// broadcast
 			LocalBroadcastManager.getInstance(this.getActivity())
 					.registerReceiver(mMessageReceiver,
 							new IntentFilter("Fall"));
 			mAdapter.clear();
 			// Riprende tutte le cadute dal database
-			List<Fall> falls = sDb.getAllFalls(sCurrentSession.getSessionBegin() );
+			List<Fall> falls = sDb.getAllFalls(sCurrentSession
+					.getSessionBegin());
 			for (int i = 0; i < falls.size(); i++) {
 				mAdapter.add(falls.get(i));
 			}
@@ -485,7 +450,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		}
 
 		/**
-		 * Gestisce click su elementi della lista, aprendo il relativo dettaglio caduta
+		 * Gestisce click su elementi della lista, aprendo il relativo dettaglio
+		 * caduta.
 		 */
 		@Override
 		public void onListItemClick(ListView l, View v, int position, long id) {
@@ -554,9 +520,10 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 	}
 
 	/**
-	 * Controlla se il service è giè stato avviato.
+	 * Controlla se il service è già stato avviato.
 	 * 
-	 * @param serviceClass il nome della classe contente il service
+	 * @param serviceClass
+	 *            il nome della classe contente il service
 	 * @return vero se è stato avviato, falso altrimenti
 	 */
 	private boolean isMyServiceRunning(Class<?> serviceClass) {

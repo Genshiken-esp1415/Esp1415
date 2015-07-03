@@ -50,7 +50,7 @@ public class NotificationSender extends AsyncTask<String, Void, Boolean> {
 	}
 
 	/**
-	 * Inizializzazione parametri della caduta
+	 * Inizializzazione parametri della caduta.
 	 * 
 	 * @param date
 	 *            data della caduta
@@ -157,7 +157,7 @@ public class NotificationSender extends AsyncTask<String, Void, Boolean> {
 
 	/**
 	 * Ritorna il risultato dell'invio delle e-mail di notifica (inviato o non
-	 * inviato)
+	 * inviato).
 	 */
 	protected void onPostExecute(Boolean result) {
 		delegate.notificationUpdate(result);
@@ -167,7 +167,7 @@ public class NotificationSender extends AsyncTask<String, Void, Boolean> {
 	 * Parser delle risposte del server SMTP per rilevare eventuali errori in
 	 * trasmissione Codici di risposta 4xx o 5xx indicano solitamente errori di
 	 * qualche tipo (cfr. RFC821) L'invio corretto di e-mail così come previsto
-	 * in questa classe prevede solo codici 2xx o 3xx
+	 * in questa classe prevede solo codici 2xx o 3xx.
 	 * 
 	 * @param response
 	 *            la risposta del server

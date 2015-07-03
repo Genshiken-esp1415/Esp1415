@@ -29,46 +29,38 @@ public class RenameDialog extends DialogFragment {
         public void onDialogNegativeClick(RenameDialog dialog);
     }
     
-    // Use this instance of the interface to deliver action events
 	renameDialogListener mListener;
 
-	 // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        // Verify that the host activity implements the callback interface
+        // Verifica che l'activity chiamante implementi i metodi dell'interfaccia
         try {
-            // Instantiate the NoticeDialogListener so we can send events to the host
             mListener = (renameDialogListener) activity;
         } catch (ClassCastException e) {
-            // The activity doesn't implement the interface, throw exception
+            // Se l'activity non implementa i metodi dell'interfaccia lancia un'eccezione
             throw new ClassCastException(activity.toString()
-                    + " must implement NoticeDialogListener");
+                    + " deve implementare NoticeDialogListener");
         }
     }
     
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-		//setting the db
+		// Imposta il database
 		mMyDbmanager = new DBManager(getActivity());
 		mMyDbmanager.open();
-		//Importing the bundle of task info
 		Bundle args;
 		args = this.getArguments();
 		mSessionId=new Date(args.getLong("id"));
-
-
-		// Use the Builder class for convenient dialog construction
+		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		LayoutInflater inflater = getActivity().getLayoutInflater();
-		View layout = inflater.inflate(R.layout.dialog_rename,null);
+		View layout = inflater.inflate(R.layout.dialog_rename, null);
 
 		mSessionName=(EditText)layout.findViewById(R.id.renameField);
 		mCurrentSession = mMyDbmanager.getSession(mSessionId);
 		mOldName = mCurrentSession.getName();
-		
-		//create done, advancedview and cancel buttons
+	
 		builder.setView(layout)
 		.setMessage(mOldName)
 		.setPositiveButton(R.string.rename, new DialogInterface.OnClickListener() {
@@ -84,8 +76,6 @@ public class RenameDialog extends DialogFragment {
 			}
 		})
 		;
-		
-		// Create the AlertDialog object and return it
 		return builder.create();
 	}
 	

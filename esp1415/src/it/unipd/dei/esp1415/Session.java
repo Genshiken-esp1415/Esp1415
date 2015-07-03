@@ -5,19 +5,18 @@ import java.util.Date;
 
 /**
  * Classe contenitore per i dati relativi ad una sessione. Presente un builder
- * per sostituire il costruttore default. Articoletto sui builder da leggere:
- * http://jlordiales.me/2012/12/13/the-builder-pattern-in-practice/
+ * per sostituire il costruttore default.
  */
 public class Session {
 
 	private Date mSessionBegin;
 	private String mName;
-	// int basta, i millisecondi di 8 ore sono di gran lunga inferiori a
-	// Integer.MAX_VALUE
+	// I millisecondi di 8 ore sono di gran lunga inferiori a
+	// Integer.MAX_VALUE, dunque basta una variabile di tipo int
 	private int mDuration;
-	// questo campo serve per distingure quale sessione è attiva
+	// Questo campo serve per distingure quale sessione è attiva
 	private boolean mActive;
-	// arrayList con riferimenti alle cadute, tenuto ordinato per dataora di
+	// ArrayList con riferimenti alle cadute, tenuto ordinato per dataora di
 	// caduta
 	private ArrayList<Fall> mFallList;
 
@@ -49,7 +48,7 @@ public class Session {
 		return mDuration;
 	}
 
-	// Restituisce il nome del dile contenente la thumbnail
+	// Restituisce il nome del file contenente la thumbnail
 	public String getThumbnail() {
 		String thumbnailName = DBManager.dateToSqlDate(this.mSessionBegin);
 		return thumbnailName;
@@ -88,7 +87,7 @@ public class Session {
 
 		public SessionBuilder(Date sessionBegin) {
 			this.mSessionBegin = sessionBegin;
-			// Inizializzo campi facoltativi, nel senso che posso non avere da
+			// Inizializzo campi facoltativi, nel senso che è possibile non avere da
 			// subito la lista di cadute o avere una sessione già attiva.
 			mFallList = new ArrayList<Fall>();
 			mActive = false;

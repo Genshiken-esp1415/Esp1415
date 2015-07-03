@@ -40,13 +40,11 @@ public class FallDetailsActivity extends ActionBarActivity {
 		super.onPause();
 	}
 
-
 	@Override
 	protected void onResume() {
 		mDb.open();
 		super.onResume();
 	}
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +54,7 @@ public class FallDetailsActivity extends ActionBarActivity {
 		mDb = new DBManager(this);
 		mDb.open();
 
-		// Recupera i dati di una caduta ed il nome delal sessione relativa
+		// Recupera i dati di una caduta ed il nome della sessione relativa
 		sCurrentFall = mDb.getFall((Date) new Date(intent.getLongExtra(
 				"IDCaduta", 0L)));
 		sCurrentFall.setFallData((ArrayList<AccelerometerData>) mDb
@@ -92,7 +90,7 @@ public class FallDetailsActivity extends ActionBarActivity {
 	}
 
 	/**
-	 * Fragment per la visualizzazione del layout dell'activity
+	 * Fragment per la visualizzazione del layout dell'activity.
 	 */
 	public static class FallDetailsFragment extends Fragment {
 

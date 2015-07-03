@@ -155,7 +155,6 @@ public class SessionListActivity extends ActionBarActivity implements
 		@Override
 		public void onPause() {
 			sDb.close();
-			// TODO Auto-generated method stub
 			super.onPause();
 		}
 
@@ -239,6 +238,7 @@ public class SessionListActivity extends ActionBarActivity implements
 
 	}
 
+	// Adapter personalizzato
 	public static class MyAdapter extends ArrayAdapter<Session> {
 		private ArrayList<Session> mSessions;
 		private static Context sContext;

@@ -29,7 +29,7 @@ import android.widget.TimePicker;
 
 /**
  * Activity per la scelta delle opzioni e dei contatti a cui spedire le
- * notifiche
+ * notifiche.
  */
 public class SettingsActivity extends ActionBarActivity {
 
@@ -225,7 +225,7 @@ public class SettingsActivity extends ActionBarActivity {
 		super.onResume();
 		if (sArrayAdapter != null) {
 			sArrayAdapter.clear();
-			// Riprende tutte le sessioni dal database
+			// Riprende tutti i contatti dal database
 			ArrayList<String> contacts = readSelectedContacts();
 			for (int i = 0; i < contacts.size(); i++) {
 				sArrayAdapter.add(contacts.get(i));
@@ -236,7 +236,7 @@ public class SettingsActivity extends ActionBarActivity {
 
 	/**
 	 * Classe per la gestione del timepicker usato dall'utente per scegliere
-	 * quando visualizzare la notification
+	 * quando visualizzare la notification.
 	 */
 	private static class TimePickerFragment extends
 			android.support.v4.app.DialogFragment implements
@@ -279,7 +279,7 @@ public class SettingsActivity extends ActionBarActivity {
 
 	/**
 	 * Legge la lista di contatti precedentemente scelti per l'invio delle
-	 * e-mail di notification
+	 * e-mail di notification.
 	 * 
 	 * @return la lista dei contatti precedentemente scelti
 	 */
@@ -294,7 +294,7 @@ public class SettingsActivity extends ActionBarActivity {
 
 	/**
 	 * Aggiorna la listView dei contatti scelti per l'invio delle e-mail di
-	 * notification
+	 * notification.
 	 */
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -310,7 +310,7 @@ public class SettingsActivity extends ActionBarActivity {
 	}
 
 	/**
-	 * Memorizza le impostazioni
+	 * Memorizza le impostazioni.
 	 */
 	private static void writeSettings() {
 		sEditor.putInt("sensorDelay", Utilities
@@ -326,7 +326,7 @@ public class SettingsActivity extends ActionBarActivity {
 
 	/**
 	 * Imposta il testo delle varie view in base alle impostazioni scelte (o di
-	 * default)
+	 * default).
 	 */
 	private static void setText() {
 		String hour = Integer.toString(sPreferences.getInt("hour", 8));
@@ -363,7 +363,6 @@ public class SettingsActivity extends ActionBarActivity {
 		case SensorManager.SENSOR_DELAY_NORMAL:
 			sSampleRateButton.setText("Bassa");
 			break;
-
 		}
 	}
 }

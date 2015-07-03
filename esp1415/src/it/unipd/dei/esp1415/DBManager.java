@@ -22,7 +22,7 @@ import android.database.sqlite.SQLiteDatabase;
  *
  */
 public class DBManager {
-	// Database fields
+	// Campi del database
 	private SQLiteDatabase mDatabase;
 	private DBOpenHelper mDbHelper;
 	private String[] mSessionColumns = { DBOpenHelper.COLUMN_TIMESTAMP_S,
@@ -51,7 +51,7 @@ public class DBManager {
 
 	// METODI CREATE
 	/**
-	 * Utilizzato quando per creare una nuova sessione. La sessione viene
+	 * Utilizzato per creare una nuova sessione. La sessione viene
 	 * creata, inserita nel db e restituita al chiamante.
 	 * 
 	 * @param sessionName
@@ -71,47 +71,6 @@ public class DBManager {
 		return newSession;
 	}
 
-//	/**
-//	 * Crea una nuova caduta nel db e la restituisce al chiamante. 
-//	 * Non 
-//	 * @param fallNumber il numero progressivo della caduta
-//	 * @param latitude
-//	 * @param longitude
-//	 * @param accData
-//	 * @param session
-//	 * @return
-//	 */
-//	public Fall createFall(int fallNumber, double latitude, double longitude,
-//			ArrayList<AccelerometerData> accData, Date session) {
-//		ContentValues values = new ContentValues();
-//		values.put(DBOpenHelper.COLUMN_NUMBER, fallNumber);
-//		values.put(DBOpenHelper.COLUMN_LATITUDE, latitude);
-//		values.put(DBOpenHelper.COLUMN_LONGITUDE, longitude);
-//		values.put(DBOpenHelper.COLUMN_SESSION, dateToSqlDate(session));
-//		mDatabase.insert(DBOpenHelper.TABLE_FALL, null, values);
-//		Cursor cursor = mDatabase.query(DBOpenHelper.TABLE_FALL, mFallColumns,
-//				null, null, null, null, DBOpenHelper.COLUMN_TIMESTAMP_F
-//						+ " DESC");
-//		cursor.moveToFirst();
-//		Fall newFall = cursorToFall(cursor);
-//		// Inserisco i dati dell'accelerometro relativi alla caduta
-//		values.clear();
-//		values.put(DBOpenHelper.COLUMN_FALL,
-//				dateToSqlDate(newFall.getFallTimestamp()));
-//		for (int accIndex = 0; accIndex < accData.size(); accIndex++) {
-//			values.put(DBOpenHelper.COLUMN_TIMESTAMP_A, accData.get(accIndex)
-//					.getTimestamp());
-//			values.put(DBOpenHelper.COLUMN_X, accData.get(accIndex).getX());
-//			values.put(DBOpenHelper.COLUMN_Y, accData.get(accIndex).getY());
-//			values.put(DBOpenHelper.COLUMN_Z, accData.get(accIndex).getZ());
-//			mDatabase.insert(DBOpenHelper.TABLE_ACCELEROMETER, null, values);
-//		}
-//		newFall.setFallData(accData);
-//
-//		cursor.close();
-//		return newFall;
-//	}
-
 	/**
 	 * Crea una nuova caduta, relativa ad una certa sessione, nel db e la restituisce al chiamante.
 	 * 
@@ -121,7 +80,7 @@ public class DBManager {
 	 * @param longitude  longitudine della posizione nella quale si stima sia avvenuta la caduta
 	 * @param accData una lista di dati dell'accelerometro, relativi a 500ms prima e dopo la caduta.
 	 * @param session il timestamp della sessione a cui fa riferimento la caduta
-	 * @return
+	 * @return	la caduta creata
 	 */
 	public Fall createFall(Date fallTimestamp, int fallNumber, Double latitude,
 			Double longitude, LinkedList<AccelerometerData> accData,
@@ -155,8 +114,6 @@ public class DBManager {
 			values.put(DBOpenHelper.COLUMN_Z, accData.get(accIndex).getZ());
 			mDatabase.insert(DBOpenHelper.TABLE_ACCELEROMETER, null, values);
 		}
-		// newFall.setFallData(accData);
-
 		cursor.close();
 		return newFall;
 	}
@@ -165,7 +122,7 @@ public class DBManager {
 	
 	/**
 	 * Rinomina la sessione. Passare come parametro
-	 * la sessione con già il campo name già aggiornato.
+	 * la sessione con il campo name già aggiornato.
 	 * 
 	 * @param session
 	 *            la sessione che si vuole rinominare nel db
@@ -189,7 +146,7 @@ public class DBManager {
 
 	/**
 	 * Chiamare questo metodo per aggiornare la durata della sessione. 
-	 * Passare come parametro la sessione con già il campo durata aggiornato.
+	 * Passare come parametro la sessione con il campo durata già aggiornato.
 	 * 
 	 * @param session
 	 *            la sessione di cui si vuole aggiornare la durata
@@ -214,7 +171,7 @@ public class DBManager {
 	
 	/**
 	 * Setta la sessione come attiva o non attiva.
-	 * Passare come parametro la sessione con già il campo active aggiornato.
+	 * Passare come parametro la sessione con il campo active già aggiornato.
 	 * 
 	 * @param session
 	 *            la sessione di cui si vuole modificare il flag active.
@@ -241,7 +198,7 @@ public class DBManager {
 	}
 
 	/**
-	 * Cancella una sessione presente nel db, data la sessione da cancellare
+	 * Cancella una sessione presente nel db, data la sessione da cancellare.
 	 * 
 	 * @param session la sessione che si vuole cancellare.
 	 */
@@ -259,7 +216,7 @@ public class DBManager {
 	 * Restituisce una lista contenente tutte le sessioni presenti nella tabella
 	 * SESSIONE.
 	 * 
-	 * @return una lista con tutte le sessioni in db.
+	 * @return una lista con tutte le sessioni nel db.
 	 */
 	public List<Session> getAllSessions() {
 		List<Session> sessions = new ArrayList<Session>();
@@ -283,7 +240,6 @@ public class DBManager {
 		cursor.close();
 		return sessions;
 	}
-
 	
 	/**
 	 * Restituisce una lista contenente tutte le cadute relative ad una certa
@@ -304,26 +260,21 @@ public class DBManager {
 				DBOpenHelper.COLUMN_SESSION + " = ?", whereArgs, null, null,
 				DBOpenHelper.COLUMN_TIMESTAMP_F + " DESC");
 		cursor.moveToFirst();
-		// if(cursor.getCount()<1){
-		// cursor.close();
-		// return falls;
-		// }
 		while (!cursor.isAfterLast()) {
 			Fall fall = cursorToFall(cursor);
 			falls.add(fall);
 			cursor.moveToNext();
 		}
-		// Make sure to close the cursor
 		cursor.close();
 		return falls;
 	}
 
 	/**
-	 * Restituisce una lista contenente tutte i dati dell'accelerometro relativi ad una certa
+	 * Restituisce una lista contenente tutti i dati dell'accelerometro relativi ad una certa
 	 * caduta.
 	 * 
 	 * @param fallTimestamp il timestamp della caduta di cui si vogliono recuperare i
-	 *            dati dell'accelerometro.
+	 *            dati dell'accelerometro
 	 * @return una lista di tutti i dati dell'accelerometro relativa alla caduta di interesse
 	 */
 	public List<AccelerometerData> getAccData(Date fallTimestamp) {
@@ -344,8 +295,6 @@ public class DBManager {
 		cursor.close();
 		return accDataList;
 	}
-
-
 	 
 	/**
 	 * Restituisce i dati di una sessione dato il timestamp.
@@ -363,8 +312,6 @@ public class DBManager {
 
 		cursor.moveToFirst();
 		Session session = cursorToSession(cursor);
-
-		// Make sure to close the cursor
 		cursor.close();
 		return session;
 	}
@@ -386,8 +333,8 @@ public class DBManager {
 
 	/**
 	 *  Restituisce una caduta dato il timestamp.
-	 * @param fallTimestamp timestamp della caduta di interesse.
-	 * @return i dati della caduta.
+	 * @param fallTimestamp timestamp della caduta di interesse
+	 * @return i dati della caduta
 	 */
 	public Fall getFall(Date fallTimestamp) {
 
@@ -444,13 +391,12 @@ public class DBManager {
 
 	}
 
-
 	/**
 	 * Restituisce una sessione Session a partire da un cursor contenente dati
 	 * di una riga di risposta ad una query sql.
 	 * 
-	 * @param cursor I dati di una riga di una risposta ad una query.
-	 * @return i dati della sessione.
+	 * @param cursor i dati di una riga di una risposta ad una query
+	 * @return i dati della sessione
 	 */
 	private Session cursorToSession(Cursor cursor) {
 		Session session = new Session.SessionBuilder(
@@ -464,8 +410,8 @@ public class DBManager {
 	 * Restituisce una caduta Fall a partire da un cursor contenente dati
 	 * di una riga di risposta ad una query sql.
 	 * 
-	 * @param cursor I dati di una riga di una risposta ad una query.
-	 * @return i dati della caduta.
+	 * @param cursor i dati di una riga di una risposta ad una query
+	 * @return i dati della caduta
 	 */
 	private Fall cursorToFall(Cursor cursor) {
 		Fall fall = new Fall.FallBuilder(sqlDateToDate(cursor.getString(0)))
@@ -479,8 +425,8 @@ public class DBManager {
 	 * Restituisce dati dell'accelerometro AccelerometerData a partire da un cursor contenente dati
 	 * di una riga di risposta ad una query sql.
 	 * 
-	 * @param cursor I dati di una riga di una risposta ad una query.
-	 * @return i dati dell'accelerometro.
+	 * @param cursor i dati di una riga di una risposta ad una query
+	 * @return i dati dell'accelerometro
 	 */
 	private AccelerometerData cursorToAccData(Cursor cursor) {
 		AccelerometerData accData = new AccelerometerData(cursor.getLong(0),
@@ -491,8 +437,8 @@ public class DBManager {
 	/**
 	 * Usato per convertire una stringa sql contenente una data in una data Date.
 	 * 
-	 * @param sqlDate stringa in formato data di sql.
-	 * @return una data.
+	 * @param sqlDate stringa in formato data di sql
+	 * @return una data
 	 */
 	private Date sqlDateToDate(String sqlDate) {
 		Date date = null;
@@ -509,8 +455,8 @@ public class DBManager {
 	 * Usato per convertire una data Date in una stringa contenente una data
 	 * riconoscibile da sql.
 	 * 
-	 * @param date una data java.
-	 * @return una stringa formattata come da data di sql.
+	 * @param date una data java
+	 * @return una stringa formattata come da data di sql
 	 */
 	public static String dateToSqlDate(Date date) {
 		SimpleDateFormat sqlDateFormat = new SimpleDateFormat(

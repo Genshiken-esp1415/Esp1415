@@ -12,7 +12,7 @@ import android.view.View;
 
 /**
  * Classe per la stampa del grafico di una funzione basata sui dati ricevuti
- * dall'accelerometro
+ * dall'accelerometro.
  */
 public class GraphView extends View {
 

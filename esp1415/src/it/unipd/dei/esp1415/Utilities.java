@@ -40,7 +40,7 @@ public class Utilities {
 	protected static final long[] VIBRATION_PATTERN = {200,100,200};
 	protected static final boolean ENABLED = true;
 	protected static final boolean DISABLED = false;
-	// Strutture dati per la memorizzazione dei destinari della notifica di
+	// Strutture dati per la memorizzazione dei destinatari della notifica di
 	// caduta via mail
 	public static ArrayList<String> sDest = new ArrayList<String>();
 	public static ArrayList<String> sName = new ArrayList<String>();
@@ -63,7 +63,7 @@ public class Utilities {
 			FileInputStream input = context.openFileInput("contactlist.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(input));
 
-			// Si svuotano gli ArrayList assicurarsi che non si presentino
+			// Si svuotano gli ArrayList per assicurarsi che non si presentino
 			// duplicati di alcun tipo
 			Utilities.sDest.clear();
 			Utilities.sName.clear();
@@ -133,7 +133,7 @@ public class Utilities {
 		/*
 		 * Se l'orario scelto è successivo all'orario attuale all'interno della
 		 * giornata, si incrementa il giorno di uno per impedire che la notifica
-		 * venga lanciata immediatamente.
+		 * venga lanciata immediatamente
 		 */
 		if (System.currentTimeMillis() - sCalendar.getTimeInMillis() > 0) {
 			Toast.makeText(context, "fanculo", Toast.LENGTH_SHORT).show();
@@ -199,7 +199,7 @@ public class Utilities {
 		try {
 			// Crea la directory nell'archivio interno
 			File myDir = context.getDir("Thumbnails", Context.MODE_PRIVATE);
-			// Mette il file nella directory
+			// Crea il file nella directory
 			File fileWithinMyDir = new File(myDir, name);
 			// Crea uno stream per scrivere nel file
 			FileOutputStream out = new FileOutputStream(fileWithinMyDir);
