@@ -206,7 +206,8 @@ public class WatcherService extends Service implements SensorEventListener {
 					.setContentTitle("Esp1415")
 					.setContentText(
 							"La sessione ha raggiunto la durata massima ed è stata terminata automaticamente.")
-					.setContentIntent(contentIntent).setAutoCancel(true);
+					.setContentIntent(contentIntent).setAutoCancel(true)
+					.setVibrate(Utilities.VIBRATION_PATTERN);
 
 			// La notifica viene lanciata
 			NotificationManager mNotificationManager = (NotificationManager) this
