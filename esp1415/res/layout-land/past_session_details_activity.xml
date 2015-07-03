@@ -4,13 +4,13 @@
 
     <FrameLayout
         android:id="@+id/past_session_details_fragment"
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="wrap_content" />
 
     <FrameLayout
         android:id="@+id/fall_list_fragment"
-        android:layout_width="match_parent"
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/past_session_details_fragment" />
-
+        android:layout_toRightOf="@+id/past_session_details_fragment"
+        android:layout_toEndOf="@+id/past_session_details_fragment" />
 </RelativeLayout>
