@@ -32,18 +32,24 @@ import android.graphics.Rect;
  * dalle altre classi e activity.
  */
 public class Utilities {
-
+	// Costanti contenenti gli id univoci per le notifiche dell'applicazione
+	protected static final int ALARM_NOTIFICATION_ID = 0;
+	protected static final int PERSISTENT_NOTIFICATION_ID = 1;
+	protected static final int MAX_DURATION_REACHED_NOTIFICATION_ID = 2;
+	
 	protected static final boolean ENABLED = true;
 	protected static final boolean DISABLED = false;
-
+	// Strutture dati per la memorizzazione dei destinari della notifica di
+	// caduta via mail
 	public static ArrayList<String> sDest = new ArrayList<String>();
 	public static ArrayList<String> sName = new ArrayList<String>();
-
+	
 	protected static AlarmManager sAlarmMgr;
 	protected static PendingIntent sAlarmIntent;
 	protected static Calendar sCalendar;
 	protected static SharedPreferences sPreferences;
 
+	
 	/**
 	 * Restituisce l'array con gli indirizzi e-mail, letti da un file di testo,
 	 * a cui inviare le notifiche.
@@ -60,7 +66,7 @@ public class Utilities {
 			// duplicati di alcun tipo
 			Utilities.sDest.clear();
 			Utilities.sName.clear();
-			
+
 			String line;
 			int i;
 			while ((line = br.readLine()) != null) {
@@ -288,14 +294,14 @@ public class Utilities {
 	 * @param context
 	 *            il contesto dell'activity chiamante
 	 */
-	public static void removeThumbnail(String filename, Context context){
+	public static void removeThumbnail(String filename, Context context) {
 		// Genera il path del file da rimuovere
-		String path = context.getDir("Thumbnails", Context.MODE_PRIVATE)
-				+ "/" + filename;
+		String path = context.getDir("Thumbnails", Context.MODE_PRIVATE) + "/"
+				+ filename;
 		File file = new File(path);
 		file.delete();
 	}
-	
+
 	/**
 	 * Converte da millisecondi a ore, minuti e secondi.
 	 * 

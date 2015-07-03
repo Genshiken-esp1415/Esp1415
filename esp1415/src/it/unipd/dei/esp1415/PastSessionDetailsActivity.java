@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -49,6 +50,9 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 			fm.add(R.id.fall_list_fragment, new MyListFragment());
 			fm.commit();
 		}
+		// Aggiunge il pulsante per tornare alla lista sessioni
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 	}
 	

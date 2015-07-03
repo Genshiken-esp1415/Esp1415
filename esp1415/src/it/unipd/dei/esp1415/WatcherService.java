@@ -1,8 +1,11 @@
 package it.unipd.dei.esp1415;
+
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -25,8 +28,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 /**
- * descrivi sta cazzo di classe
- * Saluti,
+ * descrivi sta cazzo di classe Saluti,
  * 
  * Marco
  *
@@ -39,7 +41,7 @@ public class WatcherService extends Service implements SensorEventListener {
 	private final float CALIBRATION = SensorManager.STANDARD_GRAVITY;
 	private final String mTag = "AccLogger";
 	private final int MAXHOURS = 8;
-	private final int MILLISPERHOUR = 60*60*1000;
+	private final int MILLISPERHOUR = 60 * 60 * 1000;
 	private SensorManager mSm = null;
 	private AccelerometerData mMeasuredData;
 	private float mCurrentAcceleration;
@@ -104,13 +106,13 @@ public class WatcherService extends Service implements SensorEventListener {
 			mSampleRate = FASTEST;
 			break;
 		case 1:
-			mSampleRate = FAST; //20000000
+			mSampleRate = FAST; // 20000000
 			break;
 		case 2:
-			mSampleRate = NORMAL; //60000000
+			mSampleRate = NORMAL; // 60000000
 			break;
 		case 3:
-			mSampleRate = LOW; //60000000
+			mSampleRate = LOW; // 60000000
 			break;
 		}
 		mSamples = new LinkedList<AccelerometerData>();
@@ -141,25 +143,30 @@ public class WatcherService extends Service implements SensorEventListener {
 			public void onProviderDisabled(String provider) {
 			}
 		};
-		
+
 		runAsForeground();
 		return Service.START_STICKY;
 	}
 
-	private void runAsForeground(){
-	    Intent notificationIntent = new Intent(this, WatcherService.class);
-	    PendingIntent pendingIntent=PendingIntent.getActivity(this, 0,
-	            notificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
+	private void runAsForeground() {
+		Intent notificationIntent = new Intent(this,
+				CurrentSessionDetailsActivity.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+				notificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
 
-	    Notification notification=new NotificationCompat.Builder(this)
-	                                .setSmallIcon(R.drawable.ic_launcher)
-	                                .setContentText("registrando")
-	                                .setContentIntent(pendingIntent).build();
+		Notification persistentNotification = new NotificationCompat.Builder(
+				this)
+				.setSmallIcon(R.drawable.ic_launcher)
+				.setContentTitle("Esp1415")
+				.setContentText(
+						"Il service è in esecuzione e controllando i dati dell'accelerometro per la rilevazione di cadute.")
+				.setContentIntent(pendingIntent).build();
 
-	    startForeground(1, notification);
+		startForeground(Utilities.PERSISTENT_NOTIFICATION_ID,
+				persistentNotification);
 
 	}
-	
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -177,11 +184,33 @@ public class WatcherService extends Service implements SensorEventListener {
 		mCurrentSession.setDuration(((Long) (mDuration + mTimePassed))
 				.intValue());
 		mCurrentSession = sDb.updateDuration(mCurrentSession);
-		if(sPreferences.getBoolean("CurrentSessionOnBackground", false)&& maxDurationReached){
+		// Caso in cui l'applicazione sia in background, o che l'utente abbia cambiato activity
+		if (sPreferences.getBoolean("CurrentSessionOnBackground", false)
+				&& maxDurationReached) {
 			mCurrentSession.setActive(false);
 			sDb.setActiveSession(mCurrentSession);
+			// Lancia una notifica per comunicare all'utente che la sessione ha raggiunto la durata massima.
+			Intent notificationIntent = new Intent(this, PastSessionDetailsActivity.class);
+			notificationIntent.putExtra("IDSessione", mCurrentSession.getSessionBegin());
+			PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+					notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+			// Si configura la notifica con un messaggio di avviso all'utente
+			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+					this)
+					.setSmallIcon(R.drawable.ic_launcher)
+					.setContentTitle("Esp1415")
+					.setContentText(
+							"La sessione ha raggiunto la durata massima ed è stata terminata automaticamente.")
+					.setContentIntent(contentIntent).setAutoCancel(true);
+
+			// La notifica viene lanciata
+			NotificationManager mNotificationManager = (NotificationManager) this
+					.getSystemService(Context.NOTIFICATION_SERVICE);
+			mNotificationManager.notify(Utilities.MAX_DURATION_REACHED_NOTIFICATION_ID,
+					mBuilder.build());
 		}
-			
+
 		sDb.close();
 		super.onDestroy();
 	}
@@ -196,8 +225,9 @@ public class WatcherService extends Service implements SensorEventListener {
 			// the sensor's type, the time-stamp, accuracy and of course
 			// the sensor's data.
 			if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-				//controllo che non sia stata superata la durata massima impostata
-				
+				// controllo che non sia stata superata la durata massima
+				// impostata
+
 				Long timestamp = event.timestamp;
 				// Controllo che sia rispettato il sample rate impostato
 				if (mSamples.size() > 0) {
@@ -221,8 +251,8 @@ public class WatcherService extends Service implements SensorEventListener {
 					// Copio i dati dell'accelerometro relativi alla caduta in
 					// una lista apposita
 					Object tempSamples = mSamples.clone();
-					if(tempSamples instanceof LinkedList<?>) {
-								mFallSamples = (LinkedList<AccelerometerData>)tempSamples ;
+					if (tempSamples instanceof LinkedList<?>) {
+						mFallSamples = (LinkedList<AccelerometerData>) tempSamples;
 					}
 					// Lancio la task per recuperare la posizione, mandare la
 					// mail e registrare la caduta nel db
@@ -241,12 +271,15 @@ public class WatcherService extends Service implements SensorEventListener {
 				mIntent.putExtra("duration", mDuration + mTimePassed);
 				mIntent.putExtra("maxDurationReached", false);
 				// Controlla se la durata massima è stata superata
-				if((mDuration + mTimePassed) > sPreferences.getInt("maxDuration", MAXHOURS)*MILLISPERHOUR) {
-					
-					Toast.makeText(getApplicationContext(), "Raggiunta durata massima per la sessione",
+				if ((mDuration + mTimePassed) > sPreferences.getInt(
+						"maxDuration", MAXHOURS) * MILLISPERHOUR) {
+
+					Toast.makeText(getApplicationContext(),
+							"Raggiunta durata massima per la sessione",
 							Toast.LENGTH_LONG).show();
 					mIntent.putExtra("maxDurationReached", true);
-					LocalBroadcastManager.getInstance(this).sendBroadcast(mIntent);
+					LocalBroadcastManager.getInstance(this).sendBroadcast(
+							mIntent);
 					maxDurationReached = true;
 					stopSelf();
 					return;
@@ -260,7 +293,8 @@ public class WatcherService extends Service implements SensorEventListener {
 								+ Math.pow(mMeasuredData.getZ(), 2)));
 				mCurrentAcceleration = Math.abs(a - CALIBRATION);
 				if ((mCurrentAcceleration > 10) && (!mTaskRunning)
-						&& !mStartTask && (timestamp - mLastFallNano > 10000000000L)) {
+						&& !mStartTask
+						&& (timestamp - mLastFallNano > 10000000000L)) {
 					// Memorizzo il timestamp della caduta
 					mLastFallNano = timestamp;
 					mLastFall = System.currentTimeMillis();

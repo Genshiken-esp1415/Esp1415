@@ -44,12 +44,12 @@ public class AlarmReceiver extends BroadcastReceiver {
 					SettingsActivity.class);
 			PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 					notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
+			    
 			// Si configura la notifica con un messaggio di avviso all'utente
 			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 					context).setSmallIcon(R.drawable.ic_launcher)
 					.setContentTitle("Esp1415")
-					.setContentText("Ricordati di iniziare la registrazione")
+					.setContentText("Ricordati di creare una nuova sessione.")
 					.setContentIntent(contentIntent).setAutoCancel(true);
 
 			SharedPreferences.Editor editor = preferences.edit();
@@ -59,7 +59,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 			// La notifica viene lanciata
 			NotificationManager mNotificationManager = (NotificationManager) context
 					.getSystemService(Context.NOTIFICATION_SERVICE);
-			mNotificationManager.notify(0, mBuilder.build());
+			mNotificationManager.notify(Utilities.ALARM_NOTIFICATION_ID, mBuilder.build());
 		}
 		db.close();
 	}

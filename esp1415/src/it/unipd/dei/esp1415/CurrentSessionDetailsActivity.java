@@ -21,6 +21,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
 import android.view.KeyEvent;
@@ -81,8 +82,11 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			fm.add(R.id.fall_list_fragment, new FallListFragment());
 			fm.commit();
 		}
-		//Chiamato per controllare se il service è attivo in background
+		// Chiamato per controllare se il service è attivo in background
 		sServiceRunning = isMyServiceRunning(WatcherService.class);
+		// Aggiunge il pulsante per tornare alla lista sessioni
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override

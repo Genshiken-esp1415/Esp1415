@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.PopupMenu;
 import android.text.format.DateFormat;
@@ -32,6 +33,7 @@ import android.widget.TimePicker;
  */
 public class SettingsActivity extends ActionBarActivity {
 
+	
 	// Dichiarazione variabili delle view dell'activity, i nomi sono
 	// autoesplicativi
 	private static Button sAlarmButton;
@@ -41,7 +43,7 @@ public class SettingsActivity extends ActionBarActivity {
 	private static CheckBox sNotification;
 	private static EditText sEmail;
 	private static EditText sPassword;
-
+	
 	private static Context sContext;
 	private static ArrayAdapter<String> sArrayAdapter;
 
@@ -59,6 +61,9 @@ public class SettingsActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new SettingsFragment()).commit();
 		}
+		// Aggiunge il pulsante per tornare alla lista sessioni
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 	}
 
 	/**
