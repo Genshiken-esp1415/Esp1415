@@ -57,6 +57,18 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 	}
 	
 	@Override
+	protected void onPause() {
+		sDb.close();
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		sDb.open();
+		super.onResume();
+	}
+
+	@Override
 	public void onBackPressed () {
 		Intent sessionList = new Intent(this, SessionListActivity.class);
 		sessionList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -165,9 +177,9 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 		public void onActivityCreated(Bundle savedInstanceState) {
 			super.onActivityCreated(savedInstanceState);
 			// Solo per testing prendo tutte le sessioni dal db
-			DBManager db = new DBManager(getActivity().getBaseContext());
-			db.open();
-			sCurrentSession.setFallList((ArrayList<Fall>) db
+			sDb = new DBManager(getActivity().getBaseContext());
+			sDb.open();
+			sCurrentSession.setFallList((ArrayList<Fall>) sDb
 					.getAllFalls(sCurrentSession.getSessionBegin()));
 			mAdapter = new FallAdapter(getActivity().getBaseContext(),
 					sCurrentSession.getFallList());

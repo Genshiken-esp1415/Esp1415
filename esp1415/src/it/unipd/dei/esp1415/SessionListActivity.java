@@ -141,6 +141,7 @@ public class SessionListActivity extends ActionBarActivity implements
 		@Override
 		public void onResume() {
 			super.onResume();
+			sDb.open();
 			sAdapter.clear();
 			// Riprende tutte le sessioni dal database
 			List<Session> dbSessions = sDb.getAllSessions();
@@ -148,6 +149,14 @@ public class SessionListActivity extends ActionBarActivity implements
 				sAdapter.add(dbSessions.get(i));
 			}
 			sAdapter.notifyDataSetChanged();
+		}
+
+		
+		@Override
+		public void onPause() {
+			sDb.close();
+			// TODO Auto-generated method stub
+			super.onPause();
 		}
 
 		@Override

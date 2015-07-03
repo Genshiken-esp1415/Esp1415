@@ -35,6 +35,20 @@ public class FallDetailsActivity extends ActionBarActivity {
 	private static String sSessionName;
 
 	@Override
+	protected void onPause() {
+		mDb.close();
+		super.onPause();
+	}
+
+
+	@Override
+	protected void onResume() {
+		mDb.open();
+		super.onResume();
+	}
+
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fall_details_activity);

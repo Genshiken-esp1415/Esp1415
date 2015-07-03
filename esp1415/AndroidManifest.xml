@@ -34,9 +34,9 @@
         <activity
             android:name=".CurrentSessionDetailsActivity"
             android:label="@string/title_session_details_activity"
-            android:windowSoftInputMode="stateHidden" 
+            android:windowSoftInputMode="stateHidden|adjustPan" 
             android:parentActivityName="it.unipd.dei.esp1415.SessionListActivity" >
-
+	
             <!-- Parent activity meta-data to support API level 7+ -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -71,7 +71,7 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_settings_activity"
-            android:windowSoftInputMode="stateHidden" 
+            android:windowSoftInputMode="stateHidden|adjustPan" 
             android:parentActivityName="it.unipd.dei.esp1415.SessionListActivity" >
         <!-- Parent activity meta-data to support API level 7+ -->
         <meta-data

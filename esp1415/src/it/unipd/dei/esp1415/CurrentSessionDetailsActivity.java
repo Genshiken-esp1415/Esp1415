@@ -95,6 +95,13 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		sDb.close();
 	}
 
+	@Override
+	public void onBackPressed () {
+		Intent sessionList = new Intent(this, SessionListActivity.class);
+		sessionList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(sessionList);
+	}
+	
 	/**
 	 * Questo fragment contiene la view dedicata ai dettagli della sessione,
 	 * eccetto la lista di cadute, contenuta in un altro fragment.
@@ -135,13 +142,17 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				// sessione attiva
 				sCurrentSession = sDb.getActiveSession();
 			} else {
-				// TODO: fare un check prima di creare una nuova sessione, per
-				// vedere se la memoria disponibile è maggiore di un certo
-				// numero che è da decidere
-				//if (getAvailableInternalMemorySize() >= numeroX) {
-				String memory = getAvailableInternalMemorySize();
-				Toast.makeText(getActivity(), memory,
-						Toast.LENGTH_SHORT).show();
+				
+				if (getAvailableInternalMemorySize() < 10485760L) {//minore di 10 mega
+					Toast.makeText(getActivity(), "Spazio disponibile insufficiente, liberare spazio.",
+							Toast.LENGTH_SHORT).show();
+					Intent sessionList = new Intent(this.getActivity(), SessionListActivity.class);
+					sessionList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(sessionList);
+					
+				}
+//				String memory = getAvailableInternalMemorySize();
+//				
 				sCurrentSession = sDb.createSession("Nuova Sessione");
 				sCurrentSession.setActive(true);
 				// Generazione e impostazione della thumbnail
@@ -202,6 +213,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				}
 				
 			});
+			
 			// Impostazione dei valori iniziali dei campi del layout
 			String sessionTimestamp = (String) DateFormat.format(
 					"dd/MM/yy kk:mm", sCurrentSession.getSessionBegin());
@@ -287,12 +299,12 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		 * 
 		 * @return una stringa contenente il valore di memoria disponibile
 		 */
-	    public static String getAvailableInternalMemorySize() {
+	    public static long getAvailableInternalMemorySize() {
 	        File path = Environment.getDataDirectory();
 	        StatFs stat = new StatFs(path.getPath());
 	        long blockSize = stat.getBlockSize();
 	        long availableBlocks = stat.getAvailableBlocks();
-	        return formatSize(availableBlocks * blockSize);
+	        return (availableBlocks * blockSize);
 	    }
 	    
 		/**
@@ -446,6 +458,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			}
 		};
 
+		
+		
 		@Override
 		public void onResume() {
 			super.onResume();
