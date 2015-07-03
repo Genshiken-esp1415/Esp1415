@@ -140,8 +140,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				sCurrentSession = sDb.getActiveSession();
 			} else {
 
-				if (getAvailableInternalMemorySize() < 10485760L) {// minore di
-																	// 10 mega
+				if (getAvailableInternalMemorySize() < 10485760L) {// minore di 10 mega
 					Toast.makeText(
 							getActivity(),
 							"Spazio disponibile insufficiente, liberare spazio.",
