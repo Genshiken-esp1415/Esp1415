@@ -2,6 +2,7 @@ package it.unipd.dei.esp1415;
 
 import java.util.Calendar;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -50,7 +51,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 					context).setSmallIcon(R.drawable.ic_launcher)
 					.setContentTitle("Esp1415")
 					.setContentText("Ricordati di creare una nuova sessione.")
-					.setContentIntent(contentIntent).setAutoCancel(true);
+					.setContentIntent(contentIntent).setAutoCancel(true)
+					.setVibrate(Utilities.VIBRATION_PATTERN);
 
 			SharedPreferences.Editor editor = preferences.edit();
 			editor.putInt("day", Utilities.sCalendar.get(Calendar.DAY_OF_MONTH));

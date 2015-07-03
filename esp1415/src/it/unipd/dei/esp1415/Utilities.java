@@ -36,7 +36,8 @@ public class Utilities {
 	protected static final int ALARM_NOTIFICATION_ID = 0;
 	protected static final int PERSISTENT_NOTIFICATION_ID = 1;
 	protected static final int MAX_DURATION_REACHED_NOTIFICATION_ID = 2;
-	
+	// Pattern della vibrazione per le notifiche 0 e 2
+	protected static final long[] VIBRATION_PATTERN = {200,100,200};
 	protected static final boolean ENABLED = true;
 	protected static final boolean DISABLED = false;
 	// Strutture dati per la memorizzazione dei destinari della notifica di
