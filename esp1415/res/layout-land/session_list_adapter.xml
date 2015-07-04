@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/firstLine"
+        android:id="@+id/first_line"
         android:layout_width="fill_parent"
         android:layout_height="30dip"
         android:layout_alignParentTop="true"
@@ -15,10 +15,10 @@
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/secondLine"
+        android:id="@+id/second_line"
         android:layout_width="wrap_content"
         android:layout_height="30dip"
-        android:layout_below="@id/firstLine"
+        android:layout_below="@id/first_line"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:ellipsize="marquee"
@@ -40,16 +40,16 @@
         android:contentDescription="@string/thumbnail_description" />
 
     <TextView
-        android:id="@+id/thirdLine"
+        android:id="@+id/third_line"
         android:layout_width="wrap_content"
         android:layout_height="30dip"
-        android:layout_alignBaseline="@+id/secondLine"
+        android:layout_alignBaseline="@+id/second_line"
         android:layout_marginEnd="16dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="16dp"
         android:layout_marginStart="30dp"
-        android:layout_toEndOf="@+id/secondLine"
-        android:layout_toRightOf="@+id/secondLine"
+        android:layout_toEndOf="@+id/second_line"
+        android:layout_toRightOf="@+id/second_line"
         android:ellipsize="marquee"
         android:gravity="center_vertical"
         android:singleLine="true"

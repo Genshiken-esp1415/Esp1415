@@ -93,7 +93,7 @@
 	    android:textSize="40sp" />
 
 	<TextView
-        android:id="@+id/xLabel"
+        android:id="@+id/x_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/notification_label"
@@ -110,8 +110,8 @@
 	    android:layout_marginStart="20dp"
 	    android:layout_marginTop="10dp"
 	    android:layout_below="@+id/notification_label"
-	    android:layout_toRightOf="@+id/xLabel"
-	    android:layout_toEndOf="@+id/xLabel" />
+	    android:layout_toRightOf="@+id/x_label"
+	    android:layout_toEndOf="@+id/x_label" />
 
 	<it.unipd.dei.esp1415.GraphView
 	    android:id="@+id/z_graph"
@@ -123,19 +123,19 @@
 	    android:background="@drawable/box" />
 
 	<TextView
-        android:id="@+id/zLabel"
+        android:id="@+id/z_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/yLabel"
+        android:layout_below="@+id/y_label"
         android:layout_marginTop="35dp"
         android:text="@string/z_label"
         android:textColor="#000000"
         android:textSize="30sp" />
 	<TextView
-        android:id="@+id/yLabel"
+        android:id="@+id/y_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/xLabel"
+        android:layout_below="@+id/x_label"
         android:layout_marginTop="35dp"
         android:text="@string/y_label"
         android:textColor="#000000"

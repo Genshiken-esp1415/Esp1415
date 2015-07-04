@@ -16,8 +16,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:text="@string/sampling"
-        android:textSize="20sp"
-        android:textColor="#000000"  />
+        android:textColor="#000000"
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/save_button"
@@ -32,8 +32,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/contacts_label"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:text="@string/contacts" />
 
     <Button
@@ -64,8 +64,8 @@
         android:layout_below="@+id/sampling"
         android:layout_marginTop="22dp"
         android:text="@string/memo"
-        android:textSize="20sp"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/minus"
@@ -81,11 +81,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/minus"
-        android:layout_toRightOf="@+id/minus"
         android:layout_toEndOf="@+id/minus"
+        android:layout_toRightOf="@+id/minus"
         android:text="@string/default_duration"
-        android:textSize="34sp"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="34sp" />
 
     <TextView
         android:id="@+id/duration_label"
@@ -96,20 +96,20 @@
         android:layout_below="@+id/alarm"
         android:layout_marginTop="22dp"
         android:text="@string/max_duration"
-        android:textSize="20sp"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/email_label"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/minus"
         android:layout_alignLeft="@+id/sampling_label"
         android:layout_alignStart="@+id/sampling_label"
+        android:layout_below="@+id/minus"
         android:layout_marginTop="22dp"
         android:text="@string/email_sender"
-        android:textSize="20sp"
-        android:textColor="#000000"  />
+        android:textColor="#000000"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/password"
@@ -131,21 +131,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/email"
-        android:layout_toRightOf="@+id/email"
         android:layout_toEndOf="@+id/email"
+        android:layout_toRightOf="@+id/email"
         android:text="@string/gmail"
-        android:textSize="14sp"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="14sp" />
 
     <CheckBox
         android:id="@+id/alarm_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/alarm"
-        android:layout_toRightOf="@+id/alarm_label"
-        android:layout_toEndOf="@+id/alarm_label"
         android:layout_alignLeft="@+id/notification_checkbox"
         android:layout_alignStart="@+id/notification_checkbox"
+        android:layout_toEndOf="@+id/alarm_label"
+        android:layout_toRightOf="@+id/alarm_label"
         android:onClick="onCheckboxClicked"
         android:text="@string/enable_alarm" />
 
@@ -154,19 +154,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/password"
-        android:layout_toRightOf="@+id/password"
         android:layout_toEndOf="@+id/password"
+        android:layout_toRightOf="@+id/password"
         android:onClick="onCheckboxClicked"
         android:text="@string/enable_notification" />
-
-    <!--  <Button
-        android:id="@+id/carica_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/contatti_label"
-        android:layout_alignEnd="@+id/contatti_label"
-        android:layout_below="@+id/contatti"
-        android:text="Carica" /> -->
 
     <Button
         android:id="@+id/plus"
@@ -186,20 +177,20 @@
         android:layout_toEndOf="@+id/plus"
         android:layout_toRightOf="@+id/plus"
         android:text="@string/hours"
-        android:textSize="20sp"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/contacts_label"
         android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/password"
         android:layout_alignLeft="@+id/sampling_label"
         android:layout_alignStart="@+id/sampling_label"
+        android:layout_below="@+id/password"
         android:layout_marginTop="16dp"
         android:text="@string/contact_list"
-        android:textSize="20sp"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/email"
@@ -222,7 +213,6 @@
         android:layout_alignStart="@+id/sampling_label"
         android:layout_below="@+id/contacts_label"
         android:listSelector="@android:color/transparent" >
-
     </ListView>
 
 </RelativeLayout>

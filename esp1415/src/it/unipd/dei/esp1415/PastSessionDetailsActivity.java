@@ -133,7 +133,7 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 			TextView sessionTimestampTextView = (TextView) rootView
 					.findViewById(R.id.session_timestamp);
 			TextView sessionDurationTextView = (TextView) rootView
-					.findViewById(R.id.session_length);
+					.findViewById(R.id.session_duration);
 			String timestamp = DateFormat.format("dd/MM/yy kk:mm",
 					sCurrentSession.getSessionBegin()) + "";
 			sessionTimestampTextView.setText(timestamp);

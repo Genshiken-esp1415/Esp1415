@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/firstLine"
+        android:id="@+id/first_line"
         android:layout_width="fill_parent"
         android:layout_height="30dip"
         android:layout_alignParentTop="true"
@@ -16,10 +16,10 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/secondLine"
+        android:id="@+id/second_line"
         android:layout_width="fill_parent"
         android:layout_height="30dip"
-        android:layout_below="@id/firstLine"
+        android:layout_below="@id/first_line"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:gravity="center_vertical"
@@ -29,11 +29,11 @@
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/thirdLine"
+        android:id="@+id/third_line"
         android:layout_width="fill_parent"
         android:layout_height="30dip"
         android:layout_alignParentBottom="true"
-        android:layout_below="@id/secondLine"
+        android:layout_below="@id/second_line"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:gravity="center_vertical"
@@ -53,7 +53,5 @@
         android:layout_centerVertical="true"
         android:contentDescription="@string/thumbnail_description"
         android:background="@drawable/box" />
-
-    <!-- - layout_marginStart per supportare meglio layout da destra a sinistra, marginLeft per supportare API più vecchie di 17, lo stesso dicasi per layout_alignParent e layout_margin -->
 
 </RelativeLayout>

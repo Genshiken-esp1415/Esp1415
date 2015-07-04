@@ -260,13 +260,13 @@ public class SessionListActivity extends ActionBarActivity implements
 				rowView = inflater.inflate(R.layout.session_list_adapter,
 						parent, false);
 				holder.secondLine = (TextView) rowView
-						.findViewById(R.id.secondLine);
+						.findViewById(R.id.second_line);
 				holder.imageView = (ImageView) rowView
 						.findViewById(R.id.thumbnail);
 				holder.firstLine = (TextView) rowView
-						.findViewById(R.id.firstLine);
+						.findViewById(R.id.first_line);
 				holder.thirdLine = (TextView) rowView
-						.findViewById(R.id.thirdLine);
+						.findViewById(R.id.third_line);
 				rowView.setTag(holder);
 			}
 			Holder holder = (Holder) rowView.getTag();

@@ -54,7 +54,7 @@
         android:contentDescription="@string/thumbnail_description" />
 
     <TextView
-        android:id="@+id/session_length_label"
+        android:id="@+id/session_duration_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/session_thumbnail"
@@ -66,93 +66,93 @@
         android:textSize="30sp" />
 
     <TextView
-        android:id="@+id/session_length"
+        android:id="@+id/session_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/session_length_label"
+        android:layout_alignBaseline="@+id/session_duration_label"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:layout_toEndOf="@+id/session_length_label"
-        android:layout_toRightOf="@+id/session_length_label"
+        android:layout_toEndOf="@+id/session_duration_label"
+        android:layout_toRightOf="@+id/session_duration_label"
         android:text="@string/duration"
         android:textColor="#000000"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/xLabel"
+        android:id="@+id/x_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/session_thumbnail"
         android:layout_alignStart="@+id/session_thumbnail"
-        android:layout_below="@+id/session_length_label"
+        android:layout_below="@+id/session_duration_label"
         android:layout_marginTop="20dp"
         android:text="@string/x_label"
         android:textColor="#000000"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/xValue"
+        android:id="@+id/x_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/xLabel"
+        android:layout_alignBaseline="@+id/x_label"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:layout_toEndOf="@+id/xLabel"
-        android:layout_toRightOf="@+id/xLabel"
+        android:layout_toEndOf="@+id/x_label"
+        android:layout_toRightOf="@+id/x_label"
         android:maxLength="4"
         android:text="@string/x_value"
         android:textColor="#000000"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/yLabel"
+        android:id="@+id/y_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/xValue"
+        android:layout_alignBaseline="@+id/x_value"
         android:layout_marginLeft="60dp"
         android:layout_marginStart="60dp"
-        android:layout_toEndOf="@+id/xLabel"
-        android:layout_toRightOf="@+id/xLabel"
+        android:layout_toEndOf="@+id/x_label"
+        android:layout_toRightOf="@+id/x_label"
         android:text="@string/y_label"
         android:textColor="#000000"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/yValue"
+        android:id="@+id/y_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/yLabel"
+        android:layout_alignBaseline="@+id/y_label"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:layout_toEndOf="@+id/yLabel"
-        android:layout_toRightOf="@+id/yLabel"
+        android:layout_toEndOf="@+id/y_label"
+        android:layout_toRightOf="@+id/y_label"
         android:maxLength="4"
         android:text="@string/y_value"
         android:textColor="#000000"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/zLabel"
+        android:id="@+id/z_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/xLabel"
+        android:layout_alignBaseline="@+id/x_label"
         android:layout_marginLeft="140dp"
         android:layout_marginStart="140dp"
-        android:layout_toEndOf="@+id/xLabel"
-        android:layout_toRightOf="@+id/xLabel"
+        android:layout_toEndOf="@+id/x_label"
+        android:layout_toRightOf="@+id/x_label"
         android:text="@string/z_label"
         android:textColor="#000000"
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/zValue"
+        android:id="@+id/z_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/xLabel"
+        android:layout_alignBaseline="@+id/x_label"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:layout_toEndOf="@+id/zLabel"
-        android:layout_toRightOf="@+id/zLabel"
+        android:layout_toEndOf="@+id/z_label"
+        android:layout_toRightOf="@+id/z_label"
         android:maxLength="4"
         android:text="@string/z_value"
         android:textColor="#000000"

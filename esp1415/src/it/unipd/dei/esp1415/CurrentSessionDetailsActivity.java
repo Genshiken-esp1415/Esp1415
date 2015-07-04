@@ -108,7 +108,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		private TextView mXValue;
 		private TextView mYValue;
 		private TextView mZValue;
-		private TextView mSessionLengthTextView;
+		private TextView mSessionDurationTextView;
 		private ImageView mThumbnailImageView;
 		private Intent mI;
 		private ImageButton mPlayPauseButton;
@@ -168,11 +168,11 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			this.getActivity().setTitle("Sessione attiva");
 			EditText sessionName = (EditText) rootView
 					.findViewById(R.id.session_name);
-			mXValue = (TextView) rootView.findViewById(R.id.xValue);
-			mYValue = (TextView) rootView.findViewById(R.id.yValue);
-			mZValue = (TextView) rootView.findViewById(R.id.zValue);
-			mSessionLengthTextView = (TextView) rootView
-					.findViewById(R.id.session_length);
+			mXValue = (TextView) rootView.findViewById(R.id.x_value);
+			mYValue = (TextView) rootView.findViewById(R.id.y_value);
+			mZValue = (TextView) rootView.findViewById(R.id.z_value);
+			mSessionDurationTextView = (TextView) rootView
+					.findViewById(R.id.session_duration);
 			mPlayPauseButton = (ImageButton) rootView
 					.findViewById(R.id.play_pause_button);
 			mStopButton = (ImageButton) rootView.findViewById(R.id.stop_button);
@@ -217,7 +217,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					"dd/MM/yy kk:mm", sCurrentSession.getSessionBegin());
 			timeStampSessioneTextView.setText(sessionTimestamp);
 			sessionName.setText(sCurrentSession.getName());
-			mSessionLengthTextView.setText(Utilities.millisToHourMinuteSecond(
+			mSessionDurationTextView.setText(Utilities.millisToHourMinuteSecond(
 					sCurrentSession.getDuration(), true));
 			mXValue.setText("");
 			mYValue.setText("");
@@ -325,7 +325,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					mXValue.setText(x.toString());
 					mYValue.setText(y.toString());
 					mZValue.setText(z.toString());
-					mSessionLengthTextView.setText(Utilities
+					mSessionDurationTextView.setText(Utilities
 							.millisToHourMinuteSecond(duration, true));
 					// Controllo sulla durata massima, se è stata raggiunta
 					// simula un click su stop

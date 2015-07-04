@@ -47,8 +47,8 @@
 	    android:layout_height="75dp"
 	    android:layout_alignLeft="@+id/x_graph"
 	    android:layout_alignStart="@+id/x_graph"
-	    android:layout_toRightOf="@+id/yLabel"
-	    android:layout_toEndOf="@+id/yLabel"
+	    android:layout_toRightOf="@+id/y_label"
+	    android:layout_toEndOf="@+id/y_label"
 	    android:layout_below="@+id/x_graph" />
 
 	<TextView
@@ -67,8 +67,8 @@
 	    android:layout_width="400dp"
 	    android:layout_height="75dp"
 	    android:layout_below="@+id/y_graph"
-	    android:layout_toRightOf="@+id/zLabel"
-	    android:layout_toEndOf="@+id/zLabel"
+	    android:layout_toRightOf="@+id/z_label"
+	    android:layout_toEndOf="@+id/z_label"
 	    android:layout_alignLeft="@+id/x_graph"
 	    android:layout_alignStart="@+id/x_graph"
 	    android:background="@drawable/box" />
@@ -148,13 +148,13 @@
 	    android:layout_width="400dp"
 	    android:layout_height="76dp"
 	    android:layout_below="@+id/date"
-	    android:layout_toRightOf="@+id/xLabel"
-	    android:layout_toEndOf="@+id/xLabel"
+	    android:layout_toRightOf="@+id/x_label"
+	    android:layout_toEndOf="@+id/x_label"
 	    android:layout_marginTop="40dp"
 	    android:layout_marginLeft="10dp"
 	    android:layout_marginStart="10dp"/>
 <TextView
-        android:id="@+id/xLabel"
+        android:id="@+id/x_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/date_label"
@@ -165,10 +165,10 @@
         android:textColor="#000000"
         android:textSize="23sp" />
 <TextView
-        android:id="@+id/yLabel"
+        android:id="@+id/y_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/xLabel"
+        android:layout_below="@+id/x_label"
         android:layout_alignLeft="@+id/date_label"
 	    android:layout_alignStart="@+id/date_label"
         android:layout_marginTop="42dp"
@@ -176,10 +176,10 @@
         android:textColor="#000000"
         android:textSize="25sp" />
 <TextView
-        android:id="@+id/zLabel"
+        android:id="@+id/z_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/yLabel"
+        android:layout_below="@+id/y_label"
         android:layout_alignLeft="@+id/date_label"
 	    android:layout_alignStart="@+id/date_label"
         android:layout_marginTop="43dp"

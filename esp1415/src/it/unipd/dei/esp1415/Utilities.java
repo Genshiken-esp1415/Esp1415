@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
-import android.text.format.DateFormat;
 import android.widget.Toast;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,20 +36,19 @@ public class Utilities {
 	protected static final int PERSISTENT_NOTIFICATION_ID = 1;
 	protected static final int MAX_DURATION_REACHED_NOTIFICATION_ID = 2;
 	// Pattern della vibrazione per le notifiche 0 e 2
-	protected static final long[] VIBRATION_PATTERN = {200,100,200};
+	protected static final long[] VIBRATION_PATTERN = { 200, 100, 200 };
 	protected static final boolean ENABLED = true;
 	protected static final boolean DISABLED = false;
 	// Strutture dati per la memorizzazione dei destinatari della notifica di
 	// caduta via mail
 	public static ArrayList<String> sDest = new ArrayList<String>();
 	public static ArrayList<String> sName = new ArrayList<String>();
-	
+
 	protected static AlarmManager sAlarmMgr;
 	protected static PendingIntent sAlarmIntent;
 	protected static Calendar sCalendar;
 	protected static SharedPreferences sPreferences;
 
-	
 	/**
 	 * Restituisce l'array con gli indirizzi e-mail, letti da un file di testo,
 	 * a cui inviare le notifiche.
@@ -164,6 +162,7 @@ public class Utilities {
 	 * Cancella la notifica di sistema precedentemente impostata, se presente.
 	 * 
 	 * @param context
+	 *            il contesto dell'activity chiamante
 	 */
 	public static void eraseAlarm(Context context) {
 		if (sAlarmMgr != null) {
