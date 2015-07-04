@@ -86,14 +86,14 @@ public class GraphView extends View {
 			c.drawLine(GRAPH_WIDTH_CENTER, 0, GRAPH_WIDTH_CENTER, GRAPH_HEIGHT,
 					mPaintLine);
 
-			// In base al numero di campioni ricevuti, calcola la distanza tra
-			// un punto e il successivo nel grafico
+			// In base al numero di campioni ricevuti, calcola la distanza
+			// (rispetto alle ascisse) tra un punto e il successivo nel grafico
 			int offset = (int) Math.round(GRAPH_WIDTH / (mSamples - 1) + 0.5);
 
 			// Grafica la funzione ottenuta dai dati dell'accelerometro,
-			// collegando ogni campione al successivo. Si
-			// usa l'offset per fare in modo che l'asse y = 0 corrisponda con la
-			// metà in (altezza) del grafico
+			// collegando ogni campione al successivo. Si usa l'offset per fare
+			// in modo che l'asse y = 0 corrisponda con la metà (rispetto alle
+			// ordinate) del grafico
 			if (mAxis == X) {
 				c.drawPoint(1, (mAccData.get(0).getX() + GRAPH_HEIGHT_CENTER),
 						mPaint);
@@ -124,8 +124,8 @@ public class GraphView extends View {
 			}
 
 			// Ridisegna il bordo destro, inferiore e superiore della cornice
-			// per eliminare il trasbordo della funzione graficata sulla cornice
-			// stessa
+			// per eliminare il possibile trasbordo della funzione graficata
+			// sulla cornice stessa
 			c.drawLine(GRAPH_WIDTH - 1, 0, GRAPH_WIDTH - 1, GRAPH_HEIGHT,
 					mPaintLine);
 			c.drawLine(0, GRAPH_HEIGHT - 1, GRAPH_WIDTH, GRAPH_HEIGHT - 1,

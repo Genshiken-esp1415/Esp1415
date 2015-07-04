@@ -46,7 +46,7 @@ public class Utilities {
 	protected static AlarmManager sAlarmMgr;
 	protected static PendingIntent sAlarmIntent;
 	protected static Calendar sCalendar;
-	
+
 	protected static SharedPreferences sPreferences;
 
 	/**
@@ -102,6 +102,7 @@ public class Utilities {
 	 * dall'utente.
 	 * 
 	 * @param context
+	 *            il contesto dell'activity chiamante
 	 */
 	public static void fireAlarm(Context context) {
 		sPreferences = context.getSharedPreferences("MyPref",
@@ -121,7 +122,7 @@ public class Utilities {
 			eraseAlarm(context);
 		}
 
-		// Recupera l'orario precedente stabilito per la visualizzazione
+		// Recupera l'orario precedentemente stabilito per la visualizzazione
 		// della notifica
 		sCalendar = Calendar.getInstance();
 		sCalendar.set(Calendar.HOUR_OF_DAY, sPreferences.getInt("hour", 8));
@@ -200,8 +201,8 @@ public class Utilities {
 			out.close();
 			return true;
 		} catch (FileNotFoundException e) {
-			Toast.makeText(context, R.string.thumbnail_not_found, Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(context, R.string.thumbnail_not_found,
+					Toast.LENGTH_LONG).show();
 			return false;
 		} catch (IOException e) {
 			Toast.makeText(context, R.string.thumbnail_writing_error,
@@ -234,8 +235,8 @@ public class Utilities {
 			thumbnail = BitmapFactory.decodeStream(stream);
 			stream.close();
 		} catch (FileNotFoundException e) {
-			Toast.makeText(context, R.string.thumbnail_not_found, Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(context, R.string.thumbnail_not_found,
+					Toast.LENGTH_LONG).show();
 		} catch (IOException e) {
 			Toast.makeText(context, R.string.thumbnail_loading_error,
 					Toast.LENGTH_LONG).show();

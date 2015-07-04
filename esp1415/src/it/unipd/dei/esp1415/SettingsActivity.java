@@ -33,8 +33,7 @@ import android.widget.TimePicker;
  */
 public class SettingsActivity extends ActionBarActivity {
 
-	// Dichiarazione variabili delle view dell'activity, i nomi sono
-	// autoesplicativi
+	// Dichiarazione variabili delle view dell'activity
 	private static Button sAlarmButton;
 	private static Button sSampleRateButton;
 	private static TextView sMaxDuration;
@@ -181,15 +180,18 @@ public class SettingsActivity extends ActionBarActivity {
 									switch (item.getItemId()) {
 
 									case R.id.fastest:
-										sSampleRateButton.setText(R.string.very_high);
+										sSampleRateButton
+												.setText(R.string.very_high);
 										return true;
 
 									case R.id.fast:
-										sSampleRateButton.setText(R.string.high);
+										sSampleRateButton
+												.setText(R.string.high);
 										return true;
 
 									case R.id.normal:
-										sSampleRateButton.setText(R.string.normal);
+										sSampleRateButton
+												.setText(R.string.normal);
 										return true;
 
 									case R.id.slow:
@@ -203,7 +205,7 @@ public class SettingsActivity extends ActionBarActivity {
 				}
 			});
 
-			// Legge le opzioni precedentemente scelte da file di testo
+			// Legge le opzioni precedentemente scelte
 			setText();
 
 			// Configura il pulsante per il salvataggio delle opzioni su file di

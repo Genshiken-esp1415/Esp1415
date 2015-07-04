@@ -71,7 +71,6 @@
 	<string name="not_applicable">N/A</string>
 	<string name="sent">inviata</string>
 	<string name="not_sent">non inviata</string>
-	<string name="smtp_gmail">smtp.gmail.com</string>
 	<string name="hour">ora</string>
 	<string name="very_high">Molto alta</string>
 	<string name="high">Alta</string>

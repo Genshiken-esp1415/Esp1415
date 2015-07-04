@@ -65,9 +65,9 @@ public class ContactListActivity extends Activity {
 			address = cursor.getString(cursor.getColumnIndex(Email.ADDRESS));
 
 			// Controllo necessario per eliminare risultati in cui nome e
-			// indirizzo sono uguali, come osservato in fase di testing. Se
-			// l'indirizzo era già stato scelto, l'attributo added viene settato
-			// di conseguenza
+			// indirizzo sono uguali, eventualità che può verificarsi come
+			// osservato in fase di testing. Se l'indirizzo era già stato
+			// scelto, l'attributo added viene settato di conseguenza
 			if (!name.equals(address)) {
 				if (Utilities.sDest.contains(address)) {
 					contacts.add(new ContactData(name, address, true));
@@ -78,9 +78,9 @@ public class ContactListActivity extends Activity {
 		}
 		cursor.close();
 
-		// Al click di uno degli elementi della lista, lo si aggiunge (o rimuove
-		// a seconda) alla lista degli indirizzi scelti per l'invio delle
-		// notifiche
+		// Al click di uno degli elementi della lista, lo si aggiunge (o
+		// rimuove, a seconda) alla lista degli indirizzi scelti per l'invio
+		// delle notifiche
 		sArrayAdapter = new ContactListArrayAdapter(this,
 				R.layout.contactlistview_row, contacts);
 		contactList.setAdapter(sArrayAdapter);
@@ -151,12 +151,10 @@ public class ContactListActivity extends Activity {
 			bw.close();
 		} catch (FileNotFoundException e) {
 			Toast.makeText(getApplicationContext(),
-					R.string.contacts_not_found, Toast.LENGTH_LONG)
-					.show();
+					R.string.contacts_not_found, Toast.LENGTH_LONG).show();
 		} catch (IOException e) {
 			Toast.makeText(getApplicationContext(),
-					R.string.contacts_writing_error, Toast.LENGTH_LONG)
-					.show();
+					R.string.contacts_writing_error, Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -191,7 +189,7 @@ public class ContactListActivity extends Activity {
 					+ items.get(position).getAddress());
 
 			// Se l'indirizzo è stato aggiunto, la riga corrispondente si colora
-			// di grigio; altrimenti di bianco
+			// di grigio, altrimenti di bianco
 			if (items.get(position).getAdded()) {
 				holder.row.setBackgroundColor(Color.GRAY);
 			} else {

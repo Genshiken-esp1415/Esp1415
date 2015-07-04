@@ -63,9 +63,9 @@ public class NotificationSender extends AsyncTask<String, Void, Boolean> {
 	 * @param time
 	 *            orario della caduta
 	 * @param latitude
-	 *            coordinata latitudine del luogo della caduta
+	 *            coordinata di latitudine del luogo della caduta
 	 * @param longitude
-	 *            coordinata longitudine del luogo della caduta
+	 *            coordinata di longitudine del luogo della caduta
 	 */
 	public void buildMessage(String date, String time, String latitude,
 			String longitude) {
@@ -77,7 +77,7 @@ public class NotificationSender extends AsyncTask<String, Void, Boolean> {
 
 	/**
 	 * Task eseguita in background per l'invio delle e-mail. Restituisce un
-	 * valore booleano corrispondente all'invio (non) corretto di una e-mail.
+	 * valore booleano corrispondente all'invio corretto o meno di una e-mail.
 	 */
 	@Override
 	protected Boolean doInBackground(String... params) {
@@ -101,7 +101,7 @@ public class NotificationSender extends AsyncTask<String, Void, Boolean> {
 					+ mLongitude + ".\r\n";
 			String recipients = "";
 
-			// Invio e-mail (protocollo SMTP: cfr. RFC821 e 2821). Le attese
+			// Invio e-mail (protocollo SMTP: cfr. RFC821, RFC2821). Le attese
 			// dopo ogni invio sono necessarie per assicurarsi che il server
 			// abbia il tempo necessario per rispondere
 			buffer.writeBytes("EHLO smtp.gmail.com\r\n");

@@ -36,11 +36,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 		// della notifica è già trascorso ma non è stato possibile inviarla,
 		// viene impostata una notifica alla stessa ora del giorno successivo. I
 		// 5000ms impostati nel confronto servono per fornire all'applicazione
-		// un
-		// margine abbondantemente sufficiente per l'invio della notifica. Con
-		// un valore di tempo molto più basso (per esempio nullo) rischierebbe
-		// di non essere visualizzata ma posticipata alla stessa ora del giorno
-		// successivo
+		// un margine abbondantemente sufficiente per l'invio della notifica.
+		// Con un valore di tempo molto più basso (per esempio nullo)
+		// rischierebbe di non essere visualizzata ma posticipata alla stessa
+		// ora del giorno successivo
 		if (db.hasActiveSession()
 				|| (preferences.getInt("day", 0) == calendar
 						.get(Calendar.DAY_OF_MONTH))
@@ -54,9 +53,12 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 			// Si configura la notifica con un messaggio di avviso all'utente
 			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-					context).setSmallIcon(R.drawable.ic_launcher)
-					.setContentTitle(context.getString(R.string.title_session_list_activity))
-					.setContentText(context.getString(R.string.session_reminder))
+					context)
+					.setSmallIcon(R.drawable.ic_launcher)
+					.setContentTitle(
+							context.getString(R.string.title_session_list_activity))
+					.setContentText(
+							context.getString(R.string.session_reminder))
 					.setContentIntent(contentIntent).setAutoCancel(true)
 					.setVibrate(Utilities.VIBRATION_PATTERN);
 
