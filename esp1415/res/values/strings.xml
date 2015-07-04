@@ -72,10 +72,10 @@
 	<string name="sent">inviata</string>
 	<string name="not_sent">non inviata</string>
 	<string name="hour">ora</string>
-	<string name="very_high">Molto alta</string>
-	<string name="high">Alta</string>
-	<string name="normal">Normale</string>
-	<string name="low">Bassa</string>
+	<string name="very_high">MOLTO ALTA</string>
+	<string name="high">ALTA</string>
+	<string name="normal">NORMALE</string>
+	<string name="low">BASSA</string>
 	<string name="contacts_reading_error">Errore lettura file contatti scelti</string>
 	<string name="thumbnail_not_found">Thumbnail non trovata</string>
 	<string name="thumbnail_writing_error">Errore scrittura della thumbnail</string>

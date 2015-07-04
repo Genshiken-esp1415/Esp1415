@@ -101,12 +101,12 @@ public class Utilities {
 		return sDest;
 	}
 
-	public static int getSensorDelay(String sampleRate) {
-		if (sampleRate.equals(R.string.very_high)) {
+	public static int getSensorDelay(String sampleRate, Context context) {
+		if (sampleRate.equals(context.getString(R.string.very_high))) {
 			return SensorManager.SENSOR_DELAY_FASTEST;
-		} else if (sampleRate.equals(R.string.high)) {
+		} else if (sampleRate.equals(context.getString(R.string.high))) {
 			return SensorManager.SENSOR_DELAY_GAME;
-		} else if (sampleRate.equals(R.string.normal)) {
+		} else if (sampleRate.equals(context.getString(R.string.normal))) {
 			return SensorManager.SENSOR_DELAY_UI;
 		} else {
 			return SensorManager.SENSOR_DELAY_NORMAL;

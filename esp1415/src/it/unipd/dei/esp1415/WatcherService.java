@@ -69,7 +69,16 @@ public class WatcherService extends Service implements SensorEventListener {
 	private static final int NORMAL = 60000000;
 	private static final int LOW = 200000000;
 	private static final long MAX_TIME_OUT = 30000;
-	private static final long DELAY_BETWEEN_FALLS = MAX_TIME_OUT * 1000000 + 10000000000L; //il delay del gps più 10 secondi per la mail
+	private static final long DELAY_BETWEEN_FALLS = MAX_TIME_OUT * 1000000 + 10000000000L; // il
+																							// delay
+																							// del
+																							// gps
+																							// più
+																							// 10
+																							// secondi
+																							// per
+																							// la
+																							// mail
 	private static final String TAG = "AccLogger";
 	private static final long SECOND_IN_NANO = 1000000000;
 	private final int MAXHOURS = 8;
@@ -232,7 +241,7 @@ public class WatcherService extends Service implements SensorEventListener {
 	private void runAsForeground() {
 
 		Intent notificationIntent = new Intent(this,
-				CurrentSessionDetailsActivity.class); 
+				CurrentSessionDetailsActivity.class);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
 				notificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -372,9 +381,12 @@ public class WatcherService extends Service implements SensorEventListener {
 				LocalBroadcastManager.getInstance(this).sendBroadcast(mIntent);
 				// Controlla se posso procedere con la registrazione della
 				// caduta, deve passare almeno il timeout del gps più il tempo
-				// di mandare la mail, oltre ad altri flag per coordinare con il task
-				if (fallDetection() && !sTaskRunning && !sStartTask
-						&& (mEventTimestamp - mLastFallNano) > (DELAY_BETWEEN_FALLS)){
+				// di mandare la mail, oltre ad altri flag per coordinare con il
+				// task
+				if (fallDetection()
+						&& !sTaskRunning
+						&& !sStartTask
+						&& (mEventTimestamp - mLastFallNano) > (DELAY_BETWEEN_FALLS)) {
 					// Memorizza il timestamp della caduta
 					mLastFallNano = mEventTimestamp;
 					mLastFall = System.currentTimeMillis();
@@ -483,35 +495,35 @@ public class WatcherService extends Service implements SensorEventListener {
 			mLocationManager.removeUpdates(mLocationListener);
 			// Registra la nuova caduta nel db
 			mFallNumber++;
-			if (sPreferences.getBoolean("notificationCheck", false)) {
-				if (!sPreferences.getString("email", "").equals("")
-						&& !sPreferences.getString("password", "").equals("")
-						&& !Utilities.sDest.isEmpty()) {
-					NotificationSender sender = new NotificationSender(
-							sPreferences.getString("email", ""),
-							sPreferences.getString("password", ""),
-							Utilities.sDest, this);
-					String date = (String) DateFormat.format("dd/MM/yy",
-							new Date(mLastFall));
-					String hours = (String) DateFormat.format("kk:mm:ss",
-							new Date(mLastFall));
-					String latitude;
-					String longitude;
-					// Gli if controllano se latitudine e longitudine sono
-					// uguali a zero, in tal caso li impostano come N/A
-					if (mLatitude == 0) {
-						latitude = "N/A";
-					} else {
-						latitude = Double.toString(mLatitude);
-					}
-					if (mLongitude == 0) {
-						longitude = "N/A";
-					} else {
-						longitude = Double.toString(mLongitude);
-					}
-					sender.buildMessage(date, hours, latitude, longitude);
-					sender.execute();
+			
+			if (sPreferences.getBoolean("notificationCheck", false)
+					&& !sPreferences.getString("email", "").equals("")
+					&& !sPreferences.getString("password", "").equals("")
+					&& !Utilities.sDest.isEmpty()) {
+				NotificationSender sender = new NotificationSender(
+						sPreferences.getString("email", ""),
+						sPreferences.getString("password", ""),
+						Utilities.sDest, this);
+				String date = (String) DateFormat.format("dd/MM/yy", new Date(
+						mLastFall));
+				String hours = (String) DateFormat.format("kk:mm:ss", new Date(
+						mLastFall));
+				String latitude;
+				String longitude;
+				// Gli if controllano se latitudine e longitudine sono
+				// uguali a zero, in tal caso li impostano come N/A
+				if (mLatitude == 0) {
+					latitude = "N/A";
+				} else {
+					latitude = Double.toString(mLatitude);
 				}
+				if (mLongitude == 0) {
+					longitude = "N/A";
+				} else {
+					longitude = Double.toString(mLongitude);
+				}
+				sender.buildMessage(date, hours, latitude, longitude);
+				sender.execute();
 			} else {
 				notificationUpdate(false);
 			}

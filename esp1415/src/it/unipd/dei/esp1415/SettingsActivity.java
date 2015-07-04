@@ -340,7 +340,7 @@ public class SettingsActivity extends ActionBarActivity {
 	 */
 	private static void writeSettings() {
 		sEditor.putInt("sensorDelay", Utilities
-				.getSensorDelay(sSampleRateButton.getText().toString()));
+				.getSensorDelay(sSampleRateButton.getText().toString(), sContext));
 		sEditor.putInt("maxDuration",
 				Integer.parseInt((String) sMaxDuration.getText()));
 		sEditor.putBoolean("alarmCheck", sAlarm.isChecked());
@@ -376,7 +376,7 @@ public class SettingsActivity extends ActionBarActivity {
 		sPassword.setText(sPreferences.getString("password", ""));
 		switch (sPreferences.getInt("sensorDelay",
 				SensorManager.SENSOR_DELAY_GAME)) {
-
+		
 		case SensorManager.SENSOR_DELAY_FASTEST:
 			sSampleRateButton.setText(R.string.very_high);
 			break;
