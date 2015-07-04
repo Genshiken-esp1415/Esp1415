@@ -162,7 +162,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
 				}
 				// Assegno un nome default
-				sCurrentSession = sDb.createSession("Sessione" + Utilities.dateToShortDate(new Date()));
+				sCurrentSession = sDb.createSession("Sessione " + Utilities.dateToShortDate(new Date()));
 				sCurrentSession.setActive(true);
 				sDb.setActiveSession(sCurrentSession);
 				// Generazione e impostazione della thumbnail
