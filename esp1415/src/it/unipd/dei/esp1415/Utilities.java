@@ -136,7 +136,6 @@ public class Utilities {
 		 * venga lanciata immediatamente
 		 */
 		if (System.currentTimeMillis() - sCalendar.getTimeInMillis() > 0) {
-			Toast.makeText(context, "fanculo", Toast.LENGTH_SHORT).show();
 			sCalendar.add(Calendar.DAY_OF_MONTH, 1);
 		}
 
@@ -144,10 +143,6 @@ public class Utilities {
 		editor.putInt("hour", sCalendar.get(Calendar.HOUR_OF_DAY));
 		editor.putInt("minute", sCalendar.get(Calendar.MINUTE));
 		editor.commit();
-
-		Toast.makeText(context,
-				DateFormat.format("dd/MM/yy kk:mm:ss", sCalendar.getTime()),
-				Toast.LENGTH_SHORT).show();
 
 		// L'AlarmManager setta la notifica, che deve comparire ogni giorno
 		// all'orario appena stabilito
