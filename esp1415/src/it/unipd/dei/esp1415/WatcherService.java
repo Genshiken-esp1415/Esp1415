@@ -94,7 +94,7 @@ public class WatcherService extends Service implements SensorEventListener {
 	private long mLastFallNano;
 	private static DBManager sDb;
 	private static SharedPreferences sPreferences;
-	private Session mCurrentSession;
+	private static Session sCurrentSession;
 	private long mTimePassed;
 	private int mSensorDelay;
 	private LinkedList<AccelerometerData> mSamples;
@@ -136,13 +136,13 @@ public class WatcherService extends Service implements SensorEventListener {
 		context = this;
 		sDb = new DBManager(getBaseContext());
 		sDb.open();
-		mCurrentSession = sDb.getActiveSession();
+		sCurrentSession = sDb.getActiveSession();
 		mStartDate = System.currentTimeMillis();
-		mDuration = mCurrentSession.getDuration();
+		mDuration = sCurrentSession.getDuration();
 		// Contatore delle cadute richiesto per migliorare le prestazioni,
 		// sarebbe troppo costoso leggere ogni volta che registro una caduta nel
 		// db il numero di cadute
-		mFallNumber = (sDb.getAllFalls(mCurrentSession.getSessionBegin())
+		mFallNumber = (sDb.getAllFalls(sCurrentSession.getSessionBegin())
 				.size());
 		sDb.close();
 		mLastFall = 0;
@@ -242,8 +242,9 @@ public class WatcherService extends Service implements SensorEventListener {
 
 		Intent notificationIntent = new Intent(this,
 				CurrentSessionDetailsActivity.class);
+		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
-				notificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
+				notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		Notification persistentNotification = new NotificationCompat.Builder(
 				this)
@@ -276,21 +277,21 @@ public class WatcherService extends Service implements SensorEventListener {
 		if (sDb.hasActiveSession()) {
 			// Registra la durata finale nel db
 			mTimePassed = System.currentTimeMillis() - mStartDate;
-			mCurrentSession.setDuration(((Long) (mDuration + mTimePassed))
+			sCurrentSession.setDuration(((Long) (mDuration + mTimePassed))
 					.intValue());
-			mCurrentSession = sDb.updateDuration(mCurrentSession);
+			sCurrentSession = sDb.updateDuration(sCurrentSession);
 			// Se il service si è terminato da solo a causa della pressione del
 			// tasto stop disattivo la sessione
 			if (sPressedStop) {
-				mCurrentSession.setActive(false);
-				sDb.setActiveSession(mCurrentSession);
+				sCurrentSession.setActive(false);
+				sDb.setActiveSession(sCurrentSession);
 			}
 			// Caso in cui l'applicazione sia in background, o che l'utente
 			// abbia cambiato activity
 			if (sPreferences.getBoolean("CurrentSessionOnBackground", true)
 					&& maxDurationReached) {
-				mCurrentSession.setActive(false);
-				sDb.setActiveSession(mCurrentSession);
+				sCurrentSession.setActive(false);
+				sDb.setActiveSession(sCurrentSession);
 				// Lancia una notifica per comunicare all'utente che la sessione
 				// ha raggiunto la durata massima.
 				setMaxDurationNotification();
@@ -309,10 +310,11 @@ public class WatcherService extends Service implements SensorEventListener {
 	private void setMaxDurationNotification() {
 		Intent notificationIntent = new Intent(this,
 				PastSessionDetailsActivity.class);
-		notificationIntent.putExtra("IDSessione", mCurrentSession
+		notificationIntent.putExtra("IDSessione", sCurrentSession
 				.getSessionBegin().getTime());
+		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				notificationIntent,  Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				notificationIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
 
 		// Si configura la notifica con un messaggio di avviso all'utente
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
@@ -537,11 +539,11 @@ public class WatcherService extends Service implements SensorEventListener {
 			if (!mGotLocation) {
 				mNewFall = sDb.createFall(new Date(mLastFall), mFallNumber,
 						null, null, mFallSamples,
-						mCurrentSession.getSessionBegin());
+						sCurrentSession.getSessionBegin());
 			} else {
 				mNewFall = sDb.createFall(new Date(mLastFall), mFallNumber,
 						mLatitude, mLongitude, mFallSamples,
-						mCurrentSession.getSessionBegin());
+						sCurrentSession.getSessionBegin());
 			}
 			if (notification) {
 				mNewFall.setNotified();
