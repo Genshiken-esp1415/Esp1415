@@ -23,7 +23,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 /**
- * Questa activity conterrà il dettaglio su una sessione passata.
+ * Questa activity contiene il dettaglio su una sessione passata. Vengono
+ * visualizzati la thumbnail della sessione, data di inizio sessione, durata
+ * della sessione e lista delle cadute rilevate.
+ * 
+ * Attraverso l'interazione con l'action bar permette di modificare il nome della sessione.
  */
 public class PastSessionDetailsActivity extends ActionBarActivity implements
 		RenameDialog.renameDialogListener {

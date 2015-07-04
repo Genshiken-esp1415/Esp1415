@@ -80,5 +80,6 @@
 	<string name="thumbnail_not_found">Thumbnail non trovata</string>
 	<string name="thumbnail_writing_error">Errore scrittura della thumbnail</string>
 	<string name="thumbnail_loading_error">Errore caricamento della thumbnail</string>
+	<string name="spazio_insufficiente">Spazio disponibile insufficiente, liberare spazio.</string>
 	
 </resources>

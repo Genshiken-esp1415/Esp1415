@@ -7,10 +7,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -18,12 +21,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.hardware.SensorManager;
-import android.widget.Toast;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.hardware.SensorManager;
+import android.widget.Toast;
 
 /**
  * Classe contenente varie variabili statiche e metodi di utilità utilizzati
@@ -49,6 +52,19 @@ public class Utilities {
 
 	protected static SharedPreferences sPreferences;
 
+	/**
+	 * Usato per convertire una data Date in una stringa contenente una data
+	 * in formato dd-MM-yy
+	 * 
+	 * @param date una data java
+	 * @return una stringa formattata come da data di sql
+	 */
+	public static String dateToShortDate(Date date) {
+		SimpleDateFormat sqlDateFormat = new SimpleDateFormat(
+				"dd-MM-yy", Locale.ITALY);
+		String sqlDate = sqlDateFormat.format(date);
+		return sqlDate;
+	}
 	/**
 	 * Restituisce l'array con gli indirizzi e-mail, letti da un file di testo,
 	 * a cui inviare le notifiche.
