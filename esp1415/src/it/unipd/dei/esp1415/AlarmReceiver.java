@@ -25,6 +25,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 		SharedPreferences preferences = context.getSharedPreferences("MyPref",
 				Context.MODE_PRIVATE);
 
+		// Recupera l'orario precedente stabilito per la visualizzazione
+		// della notifica
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, preferences.getInt("hour", 8));
 		calendar.set(Calendar.MINUTE, preferences.getInt("minute", 0));
@@ -33,7 +35,13 @@ public class AlarmReceiver extends BroadcastReceiver {
 
 		// Se c'è già una sessione attiva, oppure se l'orario di visualizzazione
 		// della notifica è già trascorso ma non è stato possibile inviarla,
-		// viene impostata una notifica alla stessa ora del giorno successivo
+		// viene impostata una notifica alla stessa ora del giorno successivo. I
+		// 5000ms impostati nel confronto servono per fornire all'applicazione
+		// un
+		// margine abbondantemente sufficiente per l'invio della notifica. Con
+		// un valore di tempo molto più basso (per esempio nullo) rischierebbe
+		// di non essere visualizzata ma posticipata alla stessa ora del giorno
+		// successivo
 		if (db.hasActiveSession()
 				|| (preferences.getInt("day", 0) == calendar
 						.get(Calendar.DAY_OF_MONTH))
@@ -44,7 +52,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 					SessionListActivity.class);
 			PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 					notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-			    
+
 			// Si configura la notifica con un messaggio di avviso all'utente
 			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 					context).setSmallIcon(R.drawable.ic_launcher)
@@ -53,6 +61,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 					.setContentIntent(contentIntent).setAutoCancel(true)
 					.setVibrate(Utilities.VIBRATION_PATTERN);
 
+			// Aggiorna il giorno in cui è stata visualizzata la notifica,
+			// necessario perché l'if di controllo definito sopra funzioni come
+			// correttamente così come descritto
 			SharedPreferences.Editor editor = preferences.edit();
 			editor.putInt("day", Utilities.sCalendar.get(Calendar.DAY_OF_MONTH));
 			editor.commit();
@@ -60,7 +71,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 			// La notifica viene lanciata
 			NotificationManager mNotificationManager = (NotificationManager) context
 					.getSystemService(Context.NOTIFICATION_SERVICE);
-			mNotificationManager.notify(Utilities.ALARM_NOTIFICATION_ID, mBuilder.build());
+			mNotificationManager.notify(Utilities.ALARM_NOTIFICATION_ID,
+					mBuilder.build());
 		}
 		db.close();
 	}

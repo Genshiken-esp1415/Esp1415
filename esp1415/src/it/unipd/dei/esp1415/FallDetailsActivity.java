@@ -110,7 +110,7 @@ public class FallDetailsActivity extends ActionBarActivity {
 
 			getActivity()
 					.setTitle(
-							"Caduta #" + fallNumber + " della sessione "
+							"Caduta #" + fallNumber + " di "
 									+ sSessionName);
 			TextView date = (TextView) rootView.findViewById(R.id.date);
 			TextView time = (TextView) rootView.findViewById(R.id.time);

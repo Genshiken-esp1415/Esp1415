@@ -23,19 +23,26 @@ public class NotificationSender extends AsyncTask<String, Void, Boolean> {
 	private final static boolean SENT = true;
 	private final static boolean UNSENT = false;
 
+	// Variabili per il collegamento con il server al port fornito tramite
+	// socket
 	private SSLSocket mSocket;
 	private String mServer;
 	private int mPort;
 
+	// Username e password dell'account Gmail che dovrà spedire le e-mail
+	// all'array di destinatari fornito
 	private String mUsername;
 	private String mPassword;
 	private ArrayList<String> mDest;
 
+	// Dettagli della caduta da inserire nel corpo delle e-mail
 	private String mDate = "";
 	private String mTime = "";
 	private String mLatitude = "";
 	private String mLongitude = "";
 
+	// Necessario per il lancio di NotificationUpdate in WatcherService, per
+	// comunicare all'utente se l'invio delle e-mail ha avuto successo o meno
 	public AsyncInterface delegate;
 
 	public NotificationSender(String username, String password,
@@ -57,9 +64,9 @@ public class NotificationSender extends AsyncTask<String, Void, Boolean> {
 	 * @param time
 	 *            orario della caduta
 	 * @param latitude
-	 *            latitudine del luogo della caduta
+	 *            coordinata latitudine del luogo della caduta
 	 * @param longitude
-	 *            longitudine del luogo della caduta
+	 *            coordinata longitudine del luogo della caduta
 	 */
 	public void buildMessage(String date, String time, String latitude,
 			String longitude) {
@@ -95,9 +102,9 @@ public class NotificationSender extends AsyncTask<String, Void, Boolean> {
 					+ mLongitude + ".\r\n";
 			String recipients = "";
 
-			// Invio e-mail (protocollo SMTP). Le attese dopo ogni invio sono
-			// necessarie per assicurarsi che il server abbia il tempo
-			// necessario per rispondere
+			// Invio e-mail (protocollo SMTP: cfr. RFC821 e 2821). Le attese
+			// dopo ogni invio sono necessarie per assicurarsi che il server
+			// abbia il tempo necessario per rispondere
 			buffer.writeBytes("EHLO smtp.gmail.com\r\n");
 			Thread.sleep(500);
 			buffer.writeBytes("AUTH LOGIN\r\n");

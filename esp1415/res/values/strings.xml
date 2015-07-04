@@ -8,7 +8,7 @@
     <string name="play_description">Pulsante play</string>
     <string name="stop_description">Pulsante stop</string>
     <string name="cross">Stato invio notifica</string>
-    <string name="title_session_list_activity">Lista Sessioni</string>
+    <string name="title_session_list_activity">ESP1415</string>
     <string name="title_session_details_activity">DettaglioSessione</string>
     <string name="title_past_session_details_activity">DettaglioSessionePassata</string>
     <string name="title_fall_details_activity">DettaglioCaduta</string>

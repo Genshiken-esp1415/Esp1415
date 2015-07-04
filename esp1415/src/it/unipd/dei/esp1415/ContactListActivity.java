@@ -34,18 +34,18 @@ import android.widget.Toast;
 public class ContactListActivity extends Activity {
 
 	// Parametri da ricavare tramite query (nome e indirizzo e-mail
-	// associato)
+	// associato). La soppressione della warning è necessaria, in quanto il
+	// campo Email.ADDRESS richiede API 11, e l'applicazione è pensata per API 8
 	@SuppressLint("InlinedApi")
 	private static final String[] PROJECTION = new String[] { Email.CONTACT_ID,
 			Phone.DISPLAY_NAME, Email.ADDRESS };
 	static ContactListArrayAdapter sArrayAdapter;
 
-	/*
-	 * Alla creazione dell'activity viene riempito l'array di contatti contacts
-	 * con tutti gli indirizzi e-mail, e relativo nome associato presenti nella
-	 * rubrica. Si fa uso di un flag per capire se un dato indirizzo è già
-	 * presente tra quelli da inviare.
-	 */
+	// Alla creazione dell'activity viene riempito l'array di contatti con tutti
+	// gli indirizzi e-mail, e relativo nome associato presenti nella rubrica.
+	// Si fa uso di un flag per determinare se un dato indirizzo è già presente
+	// tra quelli da inviare. La warning viene soppressa per lo stesso motivo
+	// spiegato sopra
 	@SuppressLint("InlinedApi")
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -65,12 +65,10 @@ public class ContactListActivity extends Activity {
 			name = cursor.getString(cursor.getColumnIndex(Phone.DISPLAY_NAME));
 			address = cursor.getString(cursor.getColumnIndex(Email.ADDRESS));
 
-			/*
-			 * Controllo necessario per eliminare risultati in cui nome e
-			 * indirizzo sono uguali, come osservato in fase di testing. Se
-			 * l'indirizzo era già stato scelto, l'attributo added viene settato
-			 * di conseguenza.
-			 */
+			// Controllo necessario per eliminare risultati in cui nome e
+			// indirizzo sono uguali, come osservato in fase di testing. Se
+			// l'indirizzo era già stato scelto, l'attributo added viene settato
+			// di conseguenza
 			if (!name.equals(address)) {
 				if (Utilities.sDest.contains(address)) {
 					contacts.add(new ContactData(name, address, true));
@@ -81,11 +79,9 @@ public class ContactListActivity extends Activity {
 		}
 		cursor.close();
 
-		/*
-		 * Al click di uno degli elementi della lista, lo si aggiunge (o rimuove
-		 * a seconda) alla lista degli indirizzi scelti per l'invio delle
-		 * notifiche.
-		 */
+		// Al click di uno degli elementi della lista, lo si aggiunge (o rimuove
+		// a seconda) alla lista degli indirizzi scelti per l'invio delle
+		// notifiche
 		sArrayAdapter = new ContactListArrayAdapter(this,
 				R.layout.contactlistview_row, contacts);
 		contactList.setAdapter(sArrayAdapter);
@@ -101,10 +97,8 @@ public class ContactListActivity extends Activity {
 			}
 		});
 
-		/*
-		 * Premendo il pulsante Fatto vengono scritti i contatti scelti su un
-		 * file di testo e si torna all'activity chiamante
-		 */
+		// Premendo il pulsante Fatto vengono scritti i contatti scelti su un
+		// file di testo e si torna all'activity chiamante
 		doneButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				writeSelectedContacts(sArrayAdapter.items);

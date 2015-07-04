@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.PopupMenu;
 import android.text.format.DateFormat;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +39,7 @@ public class SettingsActivity extends ActionBarActivity {
 	private static Button sAlarmButton;
 	private static Button sSampleRateButton;
 	private static TextView sMaxDuration;
+	private static TextView hours;
 	private static CheckBox sAlarm;
 	private static CheckBox sNotification;
 	private static EditText sEmail;
@@ -115,8 +117,7 @@ public class SettingsActivity extends ActionBarActivity {
 			// Configura le view relative alla scelta della durata massima di
 			// una sessione
 			sMaxDuration = (TextView) rootView.findViewById(R.id.duration);
-			final TextView hours = (TextView) rootView
-					.findViewById(R.id.hours_label);
+			hours = (TextView) rootView.findViewById(R.id.hours_label);
 			Button plusButton = (Button) rootView.findViewById(R.id.plus);
 			plusButton.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -220,12 +221,28 @@ public class SettingsActivity extends ActionBarActivity {
 		}
 	}
 
+	/*
+	 * Premendo il pulsante indietro del dispositivo vengono memorizzate le
+	 * opzioni scelte e scritte su file di testo e si ritorna all'activity
+	 * chiamante.
+	 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			writeSettings();
+			setResult(1);
+			finish();
+		}
+		return true;
+	}
+
 	@Override
 	public void onResume() {
 		super.onResume();
 		if (sArrayAdapter != null) {
 			sArrayAdapter.clear();
-			// Riprende tutti i contatti dal database
+			// Recupera i contatti precedentemente scelti ed aggiorna la lista
+			// di conseguenza
 			ArrayList<String> contacts = readSelectedContacts();
 			for (int i = 0; i < contacts.size(); i++) {
 				sArrayAdapter.add(contacts.get(i));
@@ -340,6 +357,9 @@ public class SettingsActivity extends ActionBarActivity {
 		sAlarmButton.setText(hour + ":" + minute);
 		sMaxDuration.setText(((Integer) sPreferences.getInt("maxDuration", 8))
 				.toString());
+		if (sPreferences.getInt("maxDuration", 8) == 1) {
+			hours.setText("ora");
+		}
 		sAlarm.setChecked(sPreferences.getBoolean("alarmCheck", false));
 		sNotification.setChecked(sPreferences.getBoolean("notificationCheck",
 				false));

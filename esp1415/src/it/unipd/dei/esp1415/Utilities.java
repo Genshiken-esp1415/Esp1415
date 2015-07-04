@@ -104,8 +104,6 @@ public class Utilities {
 	 * @param context
 	 */
 	public static void fireAlarm(Context context) {
-
-		Toast.makeText(context, "Allarme aggiunto", Toast.LENGTH_SHORT).show();
 		sPreferences = context.getSharedPreferences("MyPref",
 				Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sPreferences.edit();
@@ -123,16 +121,16 @@ public class Utilities {
 			eraseAlarm(context);
 		}
 
+		// Recupera l'orario precedente stabilito per la visualizzazione
+		// della notifica
 		sCalendar = Calendar.getInstance();
 		sCalendar.set(Calendar.HOUR_OF_DAY, sPreferences.getInt("hour", 8));
 		sCalendar.set(Calendar.MINUTE, sPreferences.getInt("minute", 0));
 		sCalendar.set(Calendar.SECOND, 0);
 
-		/*
-		 * Se l'orario scelto è successivo all'orario attuale all'interno della
-		 * giornata, si incrementa il giorno di uno per impedire che la notifica
-		 * venga lanciata immediatamente
-		 */
+		// Se l'orario scelto è successivo all'orario attuale all'interno della
+		// giornata, si incrementa il giorno di uno per impedire che la notifica
+		// venga lanciata immediatamente
 		if (System.currentTimeMillis() - sCalendar.getTimeInMillis() > 0) {
 			sCalendar.add(Calendar.DAY_OF_MONTH, 1);
 		}

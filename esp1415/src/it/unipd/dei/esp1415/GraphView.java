@@ -16,15 +16,17 @@ import android.view.View;
  */
 public class GraphView extends View {
 
-	// Variabili per la dimensione del grafico e la posizione centrale in
+	// Costanti per la dimensione del grafico e la posizione centrale in
 	// larghezza ed altezza
-	private final int GRAPH_WIDTH = 400;
-	private final int GRAPH_HEIGHT = 76;
-	private final int GRAPH_HEIGHT_CENTER = GRAPH_HEIGHT / 2;
-	private final int GRAPH_WIDTH_CENTER = GRAPH_WIDTH / 2;
+	private final static int GRAPH_WIDTH = 400;
+	private final static int GRAPH_HEIGHT = 76;
+	private final static int GRAPH_HEIGHT_CENTER = GRAPH_HEIGHT / 2;
+	private final static int GRAPH_WIDTH_CENTER = GRAPH_WIDTH / 2;
 
-	private final int mX = 0;
-	private final int mY = 1;
+	// Costanti per identificare se i dati dell'accelerometro riguardano l'asse
+	// X o Y (Z per esclusione)
+	private final static int X = 0;
+	private final static int Y = 1;
 
 	private Paint mPaint;
 	private Paint mPaintLine;
@@ -89,10 +91,11 @@ public class GraphView extends View {
 			// un punto e il successivo nel grafico
 			int offset = (int) Math.round(GRAPH_WIDTH / (mSamples - 1) + 0.5);
 
-			// Grafica la funzione collegando ogni campione al successivo. Si
+			// Grafica la funzione ottenuta dai dati dell'accelerometro,
+			// collegando ogni campione al successivo. Si
 			// usa l'offset per fare in modo che l'asse y = 0 corrisponda con la
 			// metà in (altezza) del grafico
-			if (mAxis == mX) {
+			if (mAxis == X) {
 				c.drawPoint(1, (mAccData.get(0).getX() + GRAPH_HEIGHT_CENTER),
 						mPaint);
 				for (int i = 1; i < mSamples; i++) {
@@ -101,7 +104,7 @@ public class GraphView extends View {
 							(mAccData.get(i).getX() + GRAPH_HEIGHT_CENTER),
 							mPaint);
 				}
-			} else if (mAxis == mY) {
+			} else if (mAxis == Y) {
 				c.drawPoint(1, (mAccData.get(0).getY() + GRAPH_HEIGHT_CENTER),
 						mPaint);
 				for (int i = 1; i < mSamples; i++) {
@@ -121,8 +124,9 @@ public class GraphView extends View {
 				}
 			}
 
-			// Ridisegna i bordi destro, inferiore e superiore della cornice per
-			// eliminare il trasbordo della funzione graficata sulla cornice
+			// Ridisegna il bordo destro, inferiore e superiore della cornice
+			// per eliminare il trasbordo della funzione graficata sulla cornice
+			// stessa
 			c.drawLine(GRAPH_WIDTH - 1, 0, GRAPH_WIDTH - 1, GRAPH_HEIGHT,
 					mPaintLine);
 			c.drawLine(0, GRAPH_HEIGHT - 1, GRAPH_WIDTH, GRAPH_HEIGHT - 1,
