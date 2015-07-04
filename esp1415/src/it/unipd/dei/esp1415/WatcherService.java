@@ -105,6 +105,7 @@ public class WatcherService extends Service implements SensorEventListener {
 	private long mEventTimestamp;
 	private Context context;
 	private Timer sTimer;
+	private static boolean sPressedStop;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -113,6 +114,12 @@ public class WatcherService extends Service implements SensorEventListener {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		if(intent.getBooleanExtra("Stop", false)){
+			sPressedStop = true;
+			stopSelf();
+			return 0;
+		}
+		sPressedStop = false;
 		context = this;
 		sDb = new DBManager(getBaseContext());
 		sDb.open();
@@ -201,8 +208,9 @@ public class WatcherService extends Service implements SensorEventListener {
 						LocalBroadcastManager.getInstance(context).sendBroadcast(
 								mIntent);
 						maxDurationReached = true;
-						sTimer.cancel();
-						stopSelf();
+						if (sPreferences.getBoolean("CurrentSessionOnBackground", true)){
+							stopSelf();
+						}
 						return;
 					}					
 					LocalBroadcastManager.getInstance(context).sendBroadcast(mIntent);
@@ -256,9 +264,13 @@ public class WatcherService extends Service implements SensorEventListener {
 			mCurrentSession.setDuration(((Long) (mDuration + mTimePassed))
 					.intValue());
 			mCurrentSession = sDb.updateDuration(mCurrentSession);
+			if(sPressedStop){
+			mCurrentSession.setActive(false);
+			sDb.setActiveSession(mCurrentSession);
+			}
 			// Caso in cui l'applicazione sia in background, o che l'utente
 			// abbia cambiato activity
-			if (sPreferences.getBoolean("CurrentSessionOnBackground", false)
+			if (sPreferences.getBoolean("CurrentSessionOnBackground", true)
 					&& maxDurationReached) {
 				mCurrentSession.setActive(false);
 				sDb.setActiveSession(mCurrentSession);

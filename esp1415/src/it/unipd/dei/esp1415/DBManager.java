@@ -52,7 +52,7 @@ public class DBManager {
 	// METODI CREATE
 	/**
 	 * Utilizzato per creare una nuova sessione. La sessione viene
-	 * creata, impostata come attiva, inserita nel db e restituita al chiamante.
+	 * creata, impostata come attiva e inserita nel db.
 	 * 
 	 * @param sessionName
 	 *            Il nome della sessione che si vuole creare.

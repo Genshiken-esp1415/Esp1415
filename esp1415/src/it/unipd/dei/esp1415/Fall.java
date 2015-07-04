@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Classe contenitore per i dati relativi ad una caduta.
+ * Classe contenitore per i dati relativi ad una caduta. Presente un builder
+ * per sostituire il costruttore default.
  */
 public class Fall {
 

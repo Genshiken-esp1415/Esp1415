@@ -25,19 +25,21 @@ public class AlarmReceiver extends BroadcastReceiver {
 		SharedPreferences preferences = context.getSharedPreferences("MyPref",
 				Context.MODE_PRIVATE);
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.HOUR_OF_DAY, preferences.getInt("hour", 8));
-		calendar.set(Calendar.MINUTE, preferences.getInt("minute", 0));
-		calendar.set(Calendar.DAY_OF_MONTH, preferences.getInt("day", 0));
-		calendar.set(Calendar.SECOND, 0);
+		Calendar currentTime = Calendar.getInstance();
+		
+		Calendar notificationTime = Calendar.getInstance();
+		notificationTime.set(Calendar.HOUR_OF_DAY, preferences.getInt("hour", 8));
+		notificationTime.set(Calendar.MINUTE, preferences.getInt("minute", 0));
+		notificationTime.set(Calendar.DAY_OF_MONTH, preferences.getInt("day", 0));
+		notificationTime.set(Calendar.SECOND, 0);
 
 		// Se c'è già una sessione attiva, oppure se l'orario di visualizzazione
 		// della notifica è già trascorso ma non è stato possibile inviarla,
 		// viene impostata una notifica alla stessa ora del giorno successivo
 		if (db.hasActiveSession()
-				|| (preferences.getInt("day", 0) == calendar
-						.get(Calendar.DAY_OF_MONTH))
-				&& (System.currentTimeMillis() - calendar.getTimeInMillis()) > 5000) {
+				|| ((preferences.getInt("day", 0) == currentTime
+				.get(Calendar.DAY_OF_MONTH)
+				&& (System.currentTimeMillis() - notificationTime.getTimeInMillis()) > 5000))) {
 			Utilities.fireAlarm(context);
 		} else {
 			Intent notificationIntent = new Intent(context,

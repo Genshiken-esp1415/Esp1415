@@ -65,5 +65,6 @@
 	<string name="x_value">xValue</string>
 	<string name="y_value">yValue</string>
 	<string name="z_value">zValue</string>
+	<string name="spazio_insufficiente">Spazio disponibile insufficiente, liberare spazio.</string>
 	
 </resources>

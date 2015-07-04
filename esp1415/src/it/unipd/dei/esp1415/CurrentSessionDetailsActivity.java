@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.PendingIntent;
@@ -153,7 +152,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 																	// 10 mega
 					Toast.makeText(
 							getActivity(),
-							"Spazio disponibile insufficiente, liberare spazio.",
+							R.string.spazio_insufficiente,
 							Toast.LENGTH_SHORT).show();
 					Intent sessionList = new Intent(this.getActivity(),
 							SessionListActivity.class);
@@ -161,7 +160,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					startActivity(sessionList);
 
 				}
-				// Assegno un nome default
+				// Assegno un nome default e creo la sessione
 				sDb.createSession("Sessione " + Utilities.dateToShortDate(new Date()));
 				sCurrentSession = sDb.getActiveSession();
 				// Generazione e impostazione della thumbnail
@@ -244,7 +243,6 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					if (sServiceRunning) {
 						Intent i = new Intent(getActivity(),
 								WatcherService.class);
-						i.putExtra("Active", true);
 						getActivity().stopService(i);
 						// Modifica l'immagine del button in accordo con lo
 						// stato di service non attivo
@@ -259,8 +257,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 						mI = new Intent(getActivity(), WatcherService.class);
 						// Passa al service le informazioni sulla sessione
 						// attiva
-						mI.putExtra("IDSessione",
-								sCurrentSession.getSessionBegin());
+						//mI.putExtra("IDSessione",
+								//sCurrentSession.getSessionBegin());
 						PendingIntent.getBroadcast(getActivity(),
 								PendingIntent.FLAG_UPDATE_CURRENT, mI,
 								PendingIntent.FLAG_UPDATE_CURRENT);
@@ -280,10 +278,10 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					// Termina il service e imposta la sessione come non attiva
 					// nel db
 					mI = new Intent(getActivity(), WatcherService.class);
-					mI.putExtra("Active", false);
-					getActivity().stopService(mI);
-					sCurrentSession.setActive(false);
-					sDb.setActiveSession(sCurrentSession);
+					mI.putExtra("Stop",true);
+					getActivity().startService(mI);
+//					sCurrentSession.setActive(false);
+//					sDb.setActiveSession(sCurrentSession);
 
 					sServiceRunning = false;
 					// Apre il dettaglio della sessione passata riguardo alla
