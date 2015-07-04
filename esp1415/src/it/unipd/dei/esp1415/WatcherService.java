@@ -68,7 +68,8 @@ public class WatcherService extends Service implements SensorEventListener {
 	private static final int FAST = 20000000;
 	private static final int NORMAL = 60000000;
 	private static final int LOW = 200000000;
-	private static final int MAX_TIME_OUT = 30000;
+	private static final long MAX_TIME_OUT = 30000;
+	private static final long DELAY_BETWEEN_FALLS = MAX_TIME_OUT * 1000000 + 10000000000L; //il delay del gps più 10 secondi per la mail
 	private static final String TAG = "AccLogger";
 	private static final long SECOND_IN_NANO = 1000000000;
 	private final int MAXHOURS = 8;
@@ -90,7 +91,7 @@ public class WatcherService extends Service implements SensorEventListener {
 	private LinkedList<AccelerometerData> mSamples;
 	private LinkedList<AccelerometerData> mFallSamples;
 	private Intent mIntent;
-	private boolean mTaskRunning;
+	private static boolean sTaskRunning;
 	private int mSampleRate;
 	private Fall mNewFall;
 	private Context mContext;
@@ -100,11 +101,11 @@ public class WatcherService extends Service implements SensorEventListener {
 	private double mLatitude;
 	private double mLongitude;
 	private boolean mGotLocation;
-	private boolean mStartTask;
+	private static boolean sStartTask;
 	private boolean maxDurationReached;
 	private long mEventTimestamp;
 	private Context context;
-	private Timer sTimer;
+	private static Timer sTimer;
 	private static boolean sPressedStop;
 
 	@Override
@@ -114,11 +115,13 @@ public class WatcherService extends Service implements SensorEventListener {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		if (intent.getBooleanExtra("Stop", false)) {
-			// Se è stato premuto stop termino il service
-			sPressedStop = true;
-			stopSelf();
-			return 0;
+		if (intent != null) {
+			if (intent.getBooleanExtra("Stop", false)) {
+				// Se è stato premuto stop termino il service
+				sPressedStop = true;
+				stopSelf();
+				return 0;
+			}
 		}
 		sPressedStop = false;
 		context = this;
@@ -135,8 +138,8 @@ public class WatcherService extends Service implements SensorEventListener {
 		sDb.close();
 		mLastFall = 0;
 		mLastFallNano = 0;
-		mTaskRunning = false;
-		mStartTask = false;
+		sTaskRunning = false;
+		sStartTask = false;
 		mSm = (SensorManager) getSystemService(SENSOR_SERVICE);
 		mMeasuredData = new AccelerometerData(0, 0, 0, 0);
 		Sensor Accel = mSm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -229,7 +232,7 @@ public class WatcherService extends Service implements SensorEventListener {
 	private void runAsForeground() {
 
 		Intent notificationIntent = new Intent(this,
-				CurrentSessionDetailsActivity.class);
+				CurrentSessionDetailsActivity.class); 
 		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
 				notificationIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -344,7 +347,7 @@ public class WatcherService extends Service implements SensorEventListener {
 
 				// Dopo aver raccolto i 500ms di dati accelerometro dopo la
 				// caduta la segnala
-				if (mStartTask
+				if (sStartTask
 						&& (mEventTimestamp - mLastFallNano > 500000000L)) {
 					// Copia i dati dell'accelerometro relativi alla caduta in
 					// una lista apposita
@@ -355,8 +358,8 @@ public class WatcherService extends Service implements SensorEventListener {
 					// Lancia la task per recuperare la posizione, mandare la
 					// mail e registrare la caduta nel db
 					new ProcessFallTask().execute("NEW FALL EVENT");
-					mStartTask = false;
-					mTaskRunning = true;
+					sStartTask = false;
+					sTaskRunning = true;
 
 				}
 
@@ -367,18 +370,20 @@ public class WatcherService extends Service implements SensorEventListener {
 				mIntent.putExtra("yValue", mMeasuredData.getY());
 				mIntent.putExtra("zValue", mMeasuredData.getZ());
 				LocalBroadcastManager.getInstance(this).sendBroadcast(mIntent);
-
-				if (fallDetection()
-						&& (!mTaskRunning)
-						&& !mStartTask
-						&& (mEventTimestamp - mLastFallNano > MAX_TIME_OUT * 1000 * 1000)) {
+				// Controlla se posso procedere con la registrazione della
+				// caduta, deve passare almeno il timeout del gps più il tempo
+				// di mandare la mail, oltre ad altri flag per coordinare con il task
+				if (fallDetection() && !sTaskRunning && !sStartTask
+						&& (mEventTimestamp - mLastFallNano) > (DELAY_BETWEEN_FALLS)){
 					// Memorizza il timestamp della caduta
 					mLastFallNano = mEventTimestamp;
 					mLastFall = System.currentTimeMillis();
-					mStartTask = true;
-					Toast.makeText(getApplicationContext(),
-							 getResources().getString(R.string.fall_toast) + mCurrentAcceleration,
-							Toast.LENGTH_LONG).show();
+					sStartTask = true;
+					Toast.makeText(
+							getApplicationContext(),
+							getResources().getString(R.string.fall_toast)
+									+ mCurrentAcceleration, Toast.LENGTH_LONG)
+							.show();
 				}
 			}
 		}
@@ -539,7 +544,7 @@ public class WatcherService extends Service implements SensorEventListener {
 			intent.putExtra("IDFall", mNewFall.getFallTimestamp().getTime());
 			mNewFall = null;
 			LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-			mTaskRunning = false;
+			sTaskRunning = false;
 			sDb.close();
 		}
 	}
