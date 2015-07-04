@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -378,7 +377,7 @@ public class WatcherService extends Service implements SensorEventListener {
 					mLastFall = System.currentTimeMillis();
 					mStartTask = true;
 					Toast.makeText(getApplicationContext(),
-							"caduta con accelerazione " + mCurrentAcceleration,
+							 getResources().getString(R.string.fall_toast) + mCurrentAcceleration,
 							Toast.LENGTH_LONG).show();
 				}
 			}

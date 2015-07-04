@@ -159,7 +159,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
 				}
 				// Assegno un nome default e creo la sessione
-				sDb.createSession("Sessione "
+				sDb.createSession(getActivity().getString(R.string.sessionWithSpace)
 						+ Utilities.dateToShortDate(new Date()));
 				sCurrentSession = sDb.getActiveSession();
 				// Generazione e impostazione della thumbnail
@@ -173,7 +173,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 						getActivity().getBaseContext());
 
 			}
-			this.getActivity().setTitle("Sessione attiva");
+			this.getActivity().setTitle(R.string.active_session);
 			mSessionName = (EditText) rootView.findViewById(R.id.session_name);
 			mXValue = (TextView) rootView.findViewById(R.id.x_value);
 			mYValue = (TextView) rootView.findViewById(R.id.y_value);

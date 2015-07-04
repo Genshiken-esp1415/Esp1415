@@ -1,6 +1,5 @@
 package it.unipd.dei.esp1415;
 import java.util.Date;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -81,7 +80,7 @@ public class RenameDialog extends DialogFragment {
 								if (mSessionName.getText().toString()
 										.compareTo("") == 0) {
 									Toast.makeText(mActivity,
-											"Inserisci un nome per la sessione",
+											R.string.insert_a_name,
 											Toast.LENGTH_SHORT).show();
 									return;
 								}
