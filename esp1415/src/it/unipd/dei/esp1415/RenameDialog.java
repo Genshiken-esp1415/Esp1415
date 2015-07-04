@@ -47,7 +47,7 @@ public class RenameDialog extends DialogFragment {
 			// Se l'activity non implementa i metodi dell'interfaccia lancia
 			// un'eccezione
 			throw new ClassCastException(activity.toString()
-					+ " deve implementare NoticeDialogListener");
+					+ " must implement NoticeDialogListener");
 		}
 	}
 
