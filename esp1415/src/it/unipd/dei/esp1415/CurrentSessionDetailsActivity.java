@@ -55,11 +55,19 @@ import android.widget.Toast;
  * 
  * 1) crea una nuova sessione e imposta la sessione come attiva nel db o
  * ripristina la sessione in corso se è già presente una sessione attiva nel db;
+ * 
  * 2) controlla se il service è già attivo, se è attivo mostra pausa, se non è
- * attivo mostra il tasto play; 3) premuto play il service viene avviato; 4)
- * premuto pausa termina il service; 5) premuto stop imposta la sessione come
- * non attiva nel db e termina il service; 6) usa un broadcast receiver per
- * tenere aggiornata l'UI mentre l'app è in foreground.
+ * attivo mostra il tasto play;
+ * 
+ * 3) premuto play il service viene avviato;
+ * 
+ * 4)premuto pausa termina il service;
+ * 
+ * 5) premuto stop imposta la sessione come non attiva nel db e termina il
+ * service;
+ * 
+ * 6) usa un broadcast receiver per tenere aggiornata l'UI mentre l'app è in
+ * foreground.
  */
 public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
@@ -105,6 +113,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 	 */
 	public static class SessionDetailsFragment extends Fragment {
 
+		private EditText mSessionName;
 		private TextView mXValue;
 		private TextView mYValue;
 		private TextView mZValue;
@@ -140,7 +149,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				sCurrentSession = sDb.getActiveSession();
 			} else {
 
-				if (getAvailableInternalMemorySize() < 10485760L) {// minore di 10 mega
+				if (getAvailableInternalMemorySize() < 10485760L) {// minore di
+																	// 10 mega
 					Toast.makeText(
 							getActivity(),
 							"Spazio disponibile insufficiente, liberare spazio.",
@@ -151,8 +161,10 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					startActivity(sessionList);
 
 				}
-				sCurrentSession = sDb.createSession("Nuova Sessione");
+				// Assegno un nome default
+				sCurrentSession = sDb.createSession("Sessione" + Utilities.dateToShortDate(new Date()));
 				sCurrentSession.setActive(true);
+				sDb.setActiveSession(sCurrentSession);
 				// Generazione e impostazione della thumbnail
 				Date newSessionBegin = sCurrentSession.getSessionBegin();
 				Bitmap thumbnailGen = Utilities
@@ -162,11 +174,10 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				// Salvataggio in memoria della thumbnail
 				Utilities.saveToInternalStorage(thumbnailGen, name,
 						getActivity().getBaseContext());
-				sDb.setActiveSession(sCurrentSession);
 
 			}
 			this.getActivity().setTitle("Sessione attiva");
-			EditText sessionName = (EditText) rootView
+			mSessionName = (EditText) rootView
 					.findViewById(R.id.session_name);
 			mXValue = (TextView) rootView.findViewById(R.id.xValue);
 			mYValue = (TextView) rootView.findViewById(R.id.yValue);
@@ -187,8 +198,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					.findViewById(R.id.session_timestamp);
 			// Imposta il pulsante done sulla tastiera se l'utente tappa nel
 			// campo di testo per modificare il nome della sessione
-			sessionName.setImeOptions(EditorInfo.IME_ACTION_DONE);
-			sessionName.setOnEditorActionListener(new OnEditorActionListener() {
+			mSessionName.setImeOptions(EditorInfo.IME_ACTION_DONE);
+			mSessionName.setOnEditorActionListener(new OnEditorActionListener() {
 				@Override
 				public boolean onEditorAction(TextView v, int actionId,
 						KeyEvent event) {
@@ -201,10 +212,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 								.getContext().getSystemService(
 										Context.INPUT_METHOD_SERVICE);
 						imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-						// Modifica il nome della sessione e registra il
-						// cambiamento nel database
-						sCurrentSession.setName(v.getText().toString());
-						sDb.renameSession(sCurrentSession);
+						
 						handled = true;
 					}
 					return handled;
@@ -216,7 +224,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			String sessionTimestamp = (String) DateFormat.format(
 					"dd/MM/yy kk:mm", sCurrentSession.getSessionBegin());
 			timeStampSessioneTextView.setText(sessionTimestamp);
-			sessionName.setText(sCurrentSession.getName());
+			mSessionName.setText(sCurrentSession.getName());
 			mSessionLengthTextView.setText(Utilities.millisToHourMinuteSecond(
 					sCurrentSession.getDuration(), true));
 			mXValue.setText("");
@@ -277,6 +285,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					getActivity().stopService(mI);
 					sCurrentSession.setActive(false);
 					sDb.setActiveSession(sCurrentSession);
+
 					sServiceRunning = false;
 					// Apre il dettaglio della sessione passata riguardo alla
 					// sessione appena conclusa
@@ -312,7 +321,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		/**
 		 * Handler per gli intent ricevuti dall'evento "AccData"
 		 */
-		private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+		private BroadcastReceiver mAccelerationReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				// Controlla per evitare scritture al layout dopo che è stato
@@ -321,10 +330,18 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					Float x = intent.getFloatExtra("xValue", 0f);
 					Float y = intent.getFloatExtra("yValue", 0f);
 					Float z = intent.getFloatExtra("zValue", 0f);
-					Long duration = intent.getLongExtra("duration", 0);
 					mXValue.setText(x.toString());
 					mYValue.setText(y.toString());
 					mZValue.setText(z.toString());
+				}
+			}
+		};
+
+		private BroadcastReceiver mDurationReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (sServiceRunning) {
+					Long duration = intent.getLongExtra("duration", 0);
 					mSessionLengthTextView.setText(Utilities
 							.millisToHourMinuteSecond(duration, true));
 					// Controllo sulla durata massima, se è stata raggiunta
@@ -337,15 +354,17 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				}
 			}
 		};
-
 		@Override
 		public void onResume() {
 			sDb.open();
 			// Registra mMessageReceiver per la ricezione di messaggi dal
 			// broadcast.
 			LocalBroadcastManager.getInstance(this.getActivity())
-					.registerReceiver(mMessageReceiver,
+					.registerReceiver(mAccelerationReceiver,
 							new IntentFilter("AccData"));
+			LocalBroadcastManager.getInstance(this.getActivity())
+			.registerReceiver(mDurationReceiver,
+					new IntentFilter("updateDuration"));
 			sEditor.putBoolean("CurrentSessionOnBackground", false);
 			sEditor.commit();
 			// Se l'app viene riportata in foreground dopo che la durata massima
@@ -367,7 +386,13 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		public void onPause() {
 			// Smette di ascoltare il broadcast poiché l'app perde il foreground
 			LocalBroadcastManager.getInstance(this.getActivity())
-					.unregisterReceiver(mMessageReceiver);
+							.unregisterReceiver(mAccelerationReceiver);
+			LocalBroadcastManager.getInstance(this.getActivity())
+							.unregisterReceiver(mDurationReceiver);
+			// Modifica il nome della sessione e registra il
+			// cambiamento nel database
+			sCurrentSession.setName(mSessionName.getText().toString());
+			sDb.renameSession(sCurrentSession);
 			sDb.close();
 			sEditor.putBoolean("CurrentSessionOnBackground", true);
 			sEditor.commit();
@@ -406,7 +431,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		}
 
 		// Handler per gli intent ricevuti dall'evento "Fall"
-		private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+		private BroadcastReceiver mFallReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 
@@ -428,7 +453,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			// Registra mMessageReceiver per la ricezione di messaggi dal
 			// broadcast
 			LocalBroadcastManager.getInstance(this.getActivity())
-					.registerReceiver(mMessageReceiver,
+					.registerReceiver(mFallReceiver,
 							new IntentFilter("Fall"));
 			mAdapter.clear();
 			// Riprende tutte le cadute dal database
@@ -444,7 +469,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		public void onPause() {
 			sDb.close();
 			LocalBroadcastManager.getInstance(this.getActivity())
-					.unregisterReceiver(mMessageReceiver);
+					.unregisterReceiver(mFallReceiver);
 			super.onPause();
 		}
 

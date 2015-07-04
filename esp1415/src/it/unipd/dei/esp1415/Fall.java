@@ -9,17 +9,19 @@ import java.util.Date;
 public class Fall {
 
 	private Date mFallTimestamp;
-	// Campo ridondante, basta sapere la data e a quale sessione appartiene,
-	// la query dà già le cadute dalla più vecchia alla più nuova
-	private int mFallNumber;
+	private int mFallNumber; // Campo ridondante ma necessario per migliorare le
+								// prestazioni generali
 	private Date mSession;
 	private boolean mNotified;
 
 	private double mLatitude;
 	private double mLongitude;
-	// Lista contenente i dati dell'accelerometro relativi a 500 ms prima e dopo
+	private ArrayList<AccelerometerData> mFallData; // Lista contenente i dati
+													// dell'accelerometro
+													// relativi a 500 ms prima e
+													// dopo
+
 	// la caduta
-	private ArrayList<AccelerometerData> mFallData;
 
 	private Fall(FallBuilder builder) {
 		this.mFallTimestamp = builder.mFallTimestamp;

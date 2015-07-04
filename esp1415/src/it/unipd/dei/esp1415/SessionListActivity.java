@@ -119,6 +119,7 @@ public class SessionListActivity extends ActionBarActivity implements
 	public static class SessionListFragment extends ListFragment {
 
 		static MyAdapter sAdapter;
+		private Intent mI;
 
 		public SessionListFragment() {
 		}
@@ -191,6 +192,10 @@ public class SessionListActivity extends ActionBarActivity implements
 				}
 				// Se viene premuto il tasto elimina
 				else if (menuItemIndex == R.id.delete) {
+					// Termina il service se in esecuzione
+					mI = new Intent(getActivity(), WatcherService.class);
+					mI.putExtra("Active", false);
+					getActivity().stopService(mI);
 					// Rimozione dal database
 					sDb.deleteSession(sSelectedSession);
 					// Rimozione dalla lista
