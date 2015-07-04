@@ -44,7 +44,7 @@
         </activity>
         
         <activity
-            android:name=".PastSessionDetailsActivity"
+            android:name=".PastSessionDetailsActivity"            
             android:label="@string/title_past_session_details_activity"
             android:parentActivityName="it.unipd.dei.esp1415.SessionListActivity" >
 

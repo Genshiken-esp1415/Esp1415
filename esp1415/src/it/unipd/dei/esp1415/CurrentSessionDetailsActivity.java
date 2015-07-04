@@ -103,6 +103,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
 	@Override
 	public void onBackPressed() {
+		finish();
 		Intent sessionList = new Intent(this, SessionListActivity.class);
 		sessionList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(sessionList);

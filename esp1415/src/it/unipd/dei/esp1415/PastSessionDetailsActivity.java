@@ -74,6 +74,7 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 
 	@Override
 	public void onBackPressed () {
+		finish();
 		Intent sessionList = new Intent(this, SessionListActivity.class);
 		sessionList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(sessionList);
