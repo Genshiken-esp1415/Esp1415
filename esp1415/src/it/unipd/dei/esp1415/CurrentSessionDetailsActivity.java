@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.PendingIntent;
@@ -25,6 +26,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -91,6 +93,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 	}
+	
 
 	@Override
 	protected void onDestroy() {
@@ -105,6 +108,21 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 		startActivity(sessionList);
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{    
+	   switch (item.getItemId()) 
+	   {        
+	      case android.R.id.home:            
+	         Intent intent = new Intent(this, SessionListActivity.class);            
+	         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+	         startActivity(intent);            
+	         return true;        
+	      default:            
+	         return super.onOptionsItemSelected(item);    
+	   }
+	}
+	
 	/**
 	 * Questo fragment contiene la view dedicata ai dettagli della sessione,
 	 * eccetto la lista di cadute, contenuta in un altro fragment.

@@ -2,6 +2,7 @@ package it.unipd.dei.esp1415;
 
 import java.util.ArrayList;
 import java.util.Date;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -91,8 +92,15 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 			showRenameDialog();
 
 		}
+		if (id == android.R.id.home) {
+			Intent intent = new Intent(this, SessionListActivity.class);            
+	         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+	         startActivity(intent);            
+	         return true;    
+		}
 		return super.onOptionsItemSelected(item);
 	}
+
 
 	public void showRenameDialog() {
 		RenameDialog newFragment = new RenameDialog();

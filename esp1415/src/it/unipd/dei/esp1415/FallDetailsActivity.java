@@ -2,6 +2,8 @@ package it.unipd.dei.esp1415;
 
 import java.util.ArrayList;
 import java.util.Date;
+
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
@@ -64,6 +66,9 @@ public class FallDetailsActivity extends ActionBarActivity {
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new FallDetailsFragment()).commit();
 		}
+		// Aggiunge il pulsante per tornare al dettaglio sessione
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 	}
 
 	
@@ -76,16 +81,16 @@ public class FallDetailsActivity extends ActionBarActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		if (id == android.R.id.home) {
+			 onBackPressed();          
+	         return true;    
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-			finish();
-		return true;
+	@Override
+	public void onBackPressed() {
+		finish();
 	}
 
 	/**

@@ -2,6 +2,7 @@ package it.unipd.dei.esp1415;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -81,6 +82,28 @@ public class SettingsActivity extends ActionBarActivity {
 			}
 			break;
 		}
+	}
+	
+	
+	/*
+	 * Premendo il pulsante indietro del dispositivo vengono memorizzate le
+	 * opzioni scelte e scritte su file di testo e si ritorna all'activity
+	 * chiamante.
+	 */
+	@Override
+	public void onBackPressed() {
+		writeSettings();
+		finish();
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		if (id == android.R.id.home) {
+			 onBackPressed();          
+	         return true;    
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	public static class SettingsFragment extends Fragment {
@@ -222,20 +245,6 @@ public class SettingsActivity extends ActionBarActivity {
 		}
 	}
 
-	/*
-	 * Premendo il pulsante indietro del dispositivo vengono memorizzate le
-	 * opzioni scelte e scritte su file di testo e si ritorna all'activity
-	 * chiamante.
-	 */
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			writeSettings();
-			setResult(1);
-			finish();
-		}
-		return true;
-	}
 
 	@Override
 	public void onResume() {

@@ -61,7 +61,13 @@
 
         <service android:name="WatcherService" 
             android:enabled="true"
-            >
+             android:parentActivityName="it.unipd.dei.esp1415.SessionListActivity" >
+	
+            <!-- Parent activity meta-data to support API level 7+ -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="it.unipd.dei.esp1415.SessionListActivity" />
+            
         </service>
 
         <activity
