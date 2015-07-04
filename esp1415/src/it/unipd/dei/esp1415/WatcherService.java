@@ -312,7 +312,7 @@ public class WatcherService extends Service implements SensorEventListener {
 		notificationIntent.putExtra("IDSessione", mCurrentSession
 				.getSessionBegin().getTime());
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				notificationIntent,  Intent.FLAG_ACTIVITY_NEW_TASK);
+				notificationIntent,  Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
 		// Si configura la notifica con un messaggio di avviso all'utente
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(

@@ -55,7 +55,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 			Intent notificationIntent = new Intent(context,
 					SessionListActivity.class);
 			PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-					notificationIntent,  Intent.FLAG_ACTIVITY_NEW_TASK);
+					notificationIntent,  Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
 			// Si configura la notifica con un messaggio di avviso all'utente
 			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
