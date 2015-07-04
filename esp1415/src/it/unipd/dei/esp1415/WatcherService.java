@@ -62,6 +62,7 @@ import android.widget.Toast;
  * non richiedere la posizione del gps in modo continuativo ma solo quando una
  * caduta viene effettivamente rilevata.
  */
+
 public class WatcherService extends Service implements SensorEventListener {
 	// DICHIARAZIONE COSTANTI
 	private static final int FASTEST = 0;
@@ -114,7 +115,8 @@ public class WatcherService extends Service implements SensorEventListener {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		if(intent.getBooleanExtra("Stop", false)){
+		if (intent.getBooleanExtra("Stop", false)) {
+			// Se è stato premuto stop termino il service
 			sPressedStop = true;
 			stopSelf();
 			return 0;
@@ -192,33 +194,35 @@ public class WatcherService extends Service implements SensorEventListener {
 		return Service.START_STICKY;
 	}
 
-	public void setDurationTimer(){
+	public void setDurationTimer() {
 		sTimer = new Timer();
-		sTimer.scheduleAtFixedRate(new TimerTask(){
-			 public void run() {
-					mTimePassed = System.currentTimeMillis() - mStartDate;
-					Intent mIntent = new Intent("updateDuration");
-					mIntent.putExtra("duration", mDuration + mTimePassed);
-					mIntent.putExtra("maxDurationReached", false);
-					// Controlla se la durata massima è stata superata
-					if ((mDuration + mTimePassed) > sPreferences.getInt(
-							"maxDuration", MAXHOURS) * MILLISPERHOUR) {
-						
-						mIntent.putExtra("maxDurationReached", true);
-						LocalBroadcastManager.getInstance(context).sendBroadcast(
-								mIntent);
-						maxDurationReached = true;
-						if (sPreferences.getBoolean("CurrentSessionOnBackground", true)){
-							stopSelf();
-						}
-						return;
-					}					
-					LocalBroadcastManager.getInstance(context).sendBroadcast(mIntent);
-			 }
+		sTimer.scheduleAtFixedRate(new TimerTask() {
+			public void run() {
+				mTimePassed = System.currentTimeMillis() - mStartDate;
+				Intent mIntent = new Intent("updateDuration");
+				mIntent.putExtra("duration", mDuration + mTimePassed);
+				mIntent.putExtra("maxDurationReached", false);
+				// Controlla se la durata massima è stata superata
+				if ((mDuration + mTimePassed) > sPreferences.getInt(
+						"maxDuration", MAXHOURS) * MILLISPERHOUR) {
+
+					mIntent.putExtra("maxDurationReached", true);
+					LocalBroadcastManager.getInstance(context).sendBroadcast(
+							mIntent);
+					maxDurationReached = true;
+					if (sPreferences.getBoolean("CurrentSessionOnBackground",
+							true)) {
+						stopSelf();
+					}
+					return;
+				}
+				LocalBroadcastManager.getInstance(context).sendBroadcast(
+						mIntent);
+			}
 		}, 0, 1000);
-	
-		
+
 	}
+
 	/**
 	 * Imposta una notifica persistente per evitare chiusure non intenzionali
 	 * del service.
@@ -250,8 +254,8 @@ public class WatcherService extends Service implements SensorEventListener {
 
 	@Override
 	public void onDestroy() {
-		stopForeground(true);
 		sTimer.cancel();
+		stopForeground(true);
 		// Rimuove il listener dell'accelerometro
 		mSm.unregisterListener(this);
 		// Controlla se esiste una sessione attiva, se non esiste vuol dire che
@@ -264,9 +268,11 @@ public class WatcherService extends Service implements SensorEventListener {
 			mCurrentSession.setDuration(((Long) (mDuration + mTimePassed))
 					.intValue());
 			mCurrentSession = sDb.updateDuration(mCurrentSession);
-			if(sPressedStop){
-			mCurrentSession.setActive(false);
-			sDb.setActiveSession(mCurrentSession);
+			// Se il service si è terminato da solo a causa della pressione del
+			// tasto stop disattivo la sessione
+			if (sPressedStop) {
+				mCurrentSession.setActive(false);
+				sDb.setActiveSession(mCurrentSession);
 			}
 			// Caso in cui l'applicazione sia in background, o che l'utente
 			// abbia cambiato activity
@@ -322,7 +328,7 @@ public class WatcherService extends Service implements SensorEventListener {
 				mEventTimestamp = event.timestamp;
 				mMeasuredData = new AccelerometerData(mEventTimestamp,
 						event.values[0], event.values[1], event.values[2]);
-				
+
 				// Controlla che sia rispettato il sample rate impostato
 				if (mSamples.size() > 0) {
 					if (mEventTimestamp - mSamples.getLast().getTimestamp() < mSampleRate) {
@@ -418,7 +424,7 @@ public class WatcherService extends Service implements SensorEventListener {
 	 * è stata inviata con successo e la caduta viene registrata nel db.
 	 */
 	private class ProcessFallTask extends AsyncTask<String, Integer, Long>
-									implements AsyncInterface {
+			implements AsyncInterface {
 		private int mSecondsPassed;
 		private boolean mGpsEnabled;
 		private boolean mNetworkEnabled;
@@ -510,7 +516,8 @@ public class WatcherService extends Service implements SensorEventListener {
 		@Override
 		public void notificationUpdate(Boolean notification) {
 			sDb.open();
-			// Registra la caduta nel db con i campi notified, latitude e longitude impostati correttamente
+			// Registra la caduta nel db con i campi notified, latitude e
+			// longitude impostati correttamente
 			if (!mGotLocation) {
 				mNewFall = sDb.createFall(new Date(mLastFall), mFallNumber,
 						null, null, mFallSamples,

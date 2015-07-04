@@ -62,8 +62,7 @@ import android.widget.Toast;
  * 
  * 4)premuto pausa termina il service;
  * 
- * 5) premuto stop imposta la sessione come non attiva nel db e termina il
- * service;
+ * 5) premuto stop dice al service di terminarsi e disattivare la sessione;
  * 
  * 6) usa un broadcast receiver per tenere aggiornata l'UI mentre l'app è in
  * foreground.
@@ -150,10 +149,9 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
 				if (getAvailableInternalMemorySize() < 10485760L) {// minore di
 																	// 10 mega
-					Toast.makeText(
-							getActivity(),
-							R.string.spazio_insufficiente,
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(),
+							R.string.spazio_insufficiente, Toast.LENGTH_SHORT)
+							.show();
 					Intent sessionList = new Intent(this.getActivity(),
 							SessionListActivity.class);
 					sessionList.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -161,7 +159,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
 				}
 				// Assegno un nome default e creo la sessione
-				sDb.createSession("Sessione " + Utilities.dateToShortDate(new Date()));
+				sDb.createSession("Sessione "
+						+ Utilities.dateToShortDate(new Date()));
 				sCurrentSession = sDb.getActiveSession();
 				// Generazione e impostazione della thumbnail
 				Date newSessionBegin = sCurrentSession.getSessionBegin();
@@ -175,8 +174,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
 			}
 			this.getActivity().setTitle("Sessione attiva");
-			mSessionName = (EditText) rootView
-					.findViewById(R.id.session_name);
+			mSessionName = (EditText) rootView.findViewById(R.id.session_name);
 			mXValue = (TextView) rootView.findViewById(R.id.xValue);
 			mYValue = (TextView) rootView.findViewById(R.id.yValue);
 			mZValue = (TextView) rootView.findViewById(R.id.zValue);
@@ -197,26 +195,28 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			// Imposta il pulsante done sulla tastiera se l'utente tappa nel
 			// campo di testo per modificare il nome della sessione
 			mSessionName.setImeOptions(EditorInfo.IME_ACTION_DONE);
-			mSessionName.setOnEditorActionListener(new OnEditorActionListener() {
-				@Override
-				public boolean onEditorAction(TextView v, int actionId,
-						KeyEvent event) {
-					boolean handled = false;
-					if (actionId == EditorInfo.IME_ACTION_DONE) {
-						// Questa chiamata fa sparire la tastiera una
-						// volta finito di modificare il nome della
-						// sessione
-						InputMethodManager imm = (InputMethodManager) v
-								.getContext().getSystemService(
-										Context.INPUT_METHOD_SERVICE);
-						imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-						
-						handled = true;
-					}
-					return handled;
-				}
+			mSessionName
+					.setOnEditorActionListener(new OnEditorActionListener() {
+						@Override
+						public boolean onEditorAction(TextView v, int actionId,
+								KeyEvent event) {
+							boolean handled = false;
+							if (actionId == EditorInfo.IME_ACTION_DONE) {
+								// Questa chiamata fa sparire la tastiera una
+								// volta finito di modificare il nome della
+								// sessione
+								InputMethodManager imm = (InputMethodManager) v
+										.getContext().getSystemService(
+												Context.INPUT_METHOD_SERVICE);
+								imm.hideSoftInputFromWindow(v.getWindowToken(),
+										0);
 
-			});
+								handled = true;
+							}
+							return handled;
+						}
+
+					});
 
 			// Impostazione dei valori iniziali dei campi del layout
 			String sessionTimestamp = (String) DateFormat.format(
@@ -236,7 +236,6 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				mPlayPauseButton
 						.setImageResource(R.drawable.ic_pause_button_256);
 			}
-
 			mPlayPauseButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
@@ -257,8 +256,8 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 						mI = new Intent(getActivity(), WatcherService.class);
 						// Passa al service le informazioni sulla sessione
 						// attiva
-						//mI.putExtra("IDSessione",
-								//sCurrentSession.getSessionBegin());
+						// mI.putExtra("IDSessione",
+						// sCurrentSession.getSessionBegin());
 						PendingIntent.getBroadcast(getActivity(),
 								PendingIntent.FLAG_UPDATE_CURRENT, mI,
 								PendingIntent.FLAG_UPDATE_CURRENT);
@@ -274,15 +273,20 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			mStopButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
-
-					// Termina il service e imposta la sessione come non attiva
-					// nel db
-					mI = new Intent(getActivity(), WatcherService.class);
-					mI.putExtra("Stop",true);
-					getActivity().startService(mI);
-//					sCurrentSession.setActive(false);
-//					sDb.setActiveSession(sCurrentSession);
-
+					if (sServiceRunning) {
+						// Chiama startService con intent stop = true cosicchè
+						// il service termini se stesso.
+						// Serve per poter distinguere quando termino il service
+						// da pause e stop.
+						mI = new Intent(getActivity(), WatcherService.class);
+						mI.putExtra("Stop", true);
+						getActivity().startService(mI);
+					} else {
+						// Se il service non è attivo in background allora
+						// disattiva la sessione
+						sCurrentSession.setActive(false);
+						sDb.setActiveSession(sCurrentSession);
+					}
 					sServiceRunning = false;
 					// Apre il dettaglio della sessione passata riguardo alla
 					// sessione appena conclusa
@@ -298,21 +302,49 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			return rootView;
 		}
 
-		/**
-		 * Ritorna quanta memoria è disponibile nella memoria interna.
-		 * 
-		 * @return il valore della memoria disponibile
-		 */
-		// Il SuppressWarnings è stato aggiunto in quanto i metodi getBlockSize
-		// e getAvailableBlocks sono stati deprecati nelle API livello 18, ma
-		// l'Archos utilizza API livello 8
-		@SuppressWarnings("deprecation")
-		public static long getAvailableInternalMemorySize() {
-			File path = Environment.getDataDirectory();
-			StatFs stat = new StatFs(path.getPath());
-			long blockSize = stat.getBlockSize();
-			long availableBlocks = stat.getAvailableBlocks();
-			return (availableBlocks * blockSize);
+		@Override
+		public void onResume() {
+			sDb.open();
+			// Registra mMessageReceiver per la ricezione di messaggi dal
+			// broadcast.
+			LocalBroadcastManager.getInstance(this.getActivity())
+					.registerReceiver(mAccelerationReceiver,
+							new IntentFilter("AccData"));
+			LocalBroadcastManager.getInstance(this.getActivity())
+					.registerReceiver(mDurationReceiver,
+							new IntentFilter("updateDuration"));
+			sEditor.putBoolean("CurrentSessionOnBackground", false);
+			sEditor.commit();
+			// Se l'app viene riportata in foreground dopo che la durata massima
+			// per la sessione è già stata raggiunta, non ho piu sessioni attive
+			// in db quindi mostro il dettaglio sessione passata riguardante la
+			// sessione appena terminata
+			if (!sDb.hasActiveSession()) {
+				sServiceRunning = false;
+				Intent s = new Intent(getActivity(),
+						PastSessionDetailsActivity.class);
+				s.putExtra("IDSessione", sCurrentSession.getSessionBegin()
+						.getTime());
+				startActivity(s);
+			}
+			super.onResume();
+		}
+
+		@Override
+		public void onPause() {
+			// Smette di ascoltare il broadcast poiché l'app perde il foreground
+			LocalBroadcastManager.getInstance(this.getActivity())
+					.unregisterReceiver(mAccelerationReceiver);
+			LocalBroadcastManager.getInstance(this.getActivity())
+					.unregisterReceiver(mDurationReceiver);
+			// Modifica il nome della sessione e registra il
+			// cambiamento nel database
+			sCurrentSession.setName(mSessionName.getText().toString());
+			sDb.renameSession(sCurrentSession);
+			sDb.close();
+			sEditor.putBoolean("CurrentSessionOnBackground", true);
+			sEditor.commit();
+			super.onPause();
 		}
 
 		/**
@@ -351,51 +383,23 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				}
 			}
 		};
-		@Override
-		public void onResume() {
-			sDb.open();
-			// Registra mMessageReceiver per la ricezione di messaggi dal
-			// broadcast.
-			LocalBroadcastManager.getInstance(this.getActivity())
-					.registerReceiver(mAccelerationReceiver,
-							new IntentFilter("AccData"));
-			LocalBroadcastManager.getInstance(this.getActivity())
-			.registerReceiver(mDurationReceiver,
-					new IntentFilter("updateDuration"));
-			sEditor.putBoolean("CurrentSessionOnBackground", false);
-			sEditor.commit();
-			// Se l'app viene riportata in foreground dopo che la durata massima
-			// per la sessione è già stata raggiunta, non ho piu sessioni attive
-			// in db quindi mostro il dettaglio sessione passata riguardante la
-			// sessione appena terminata
-			if (!sDb.hasActiveSession()) {
-				sServiceRunning = false;
-				Intent s = new Intent(getActivity(),
-						PastSessionDetailsActivity.class);
-				s.putExtra("IDSessione", sCurrentSession.getSessionBegin()
-						.getTime());
-				startActivity(s);
-			}
-			super.onResume();
-		}
 
-		@Override
-		public void onPause() {
-			// Smette di ascoltare il broadcast poiché l'app perde il foreground
-			LocalBroadcastManager.getInstance(this.getActivity())
-							.unregisterReceiver(mAccelerationReceiver);
-			LocalBroadcastManager.getInstance(this.getActivity())
-							.unregisterReceiver(mDurationReceiver);
-			// Modifica il nome della sessione e registra il
-			// cambiamento nel database
-			sCurrentSession.setName(mSessionName.getText().toString());
-			sDb.renameSession(sCurrentSession);
-			sDb.close();
-			sEditor.putBoolean("CurrentSessionOnBackground", true);
-			sEditor.commit();
-			super.onPause();
+		/**
+		 * Ritorna quanta memoria è disponibile nella memoria interna.
+		 * 
+		 * @return il valore della memoria disponibile
+		 */
+		// Il SuppressWarnings è stato aggiunto in quanto i metodi getBlockSize
+		// e getAvailableBlocks sono stati deprecati nelle API livello 18, ma
+		// l'Archos utilizza API livello 8
+		@SuppressWarnings("deprecation")
+		public static long getAvailableInternalMemorySize() {
+			File path = Environment.getDataDirectory();
+			StatFs stat = new StatFs(path.getPath());
+			long blockSize = stat.getBlockSize();
+			long availableBlocks = stat.getAvailableBlocks();
+			return (availableBlocks * blockSize);
 		}
-
 	}
 
 	/**
@@ -427,31 +431,13 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			setListAdapter(mAdapter);
 		}
 
-		// Handler per gli intent ricevuti dall'evento "Fall"
-		private BroadcastReceiver mFallReceiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-
-				Long millis = intent.getLongExtra("IDFall", 0);
-				if (sServiceRunning) {
-					// Aggiornamento della lista di cadute appena viene
-					// notificata una caduta dal service
-					Fall newFall = sDb.getFall(new Date(millis));
-					mAdapter.insert(newFall, 0);
-					mAdapter.notifyDataSetChanged();
-				}
-
-			}
-		};
-
 		@Override
 		public void onResume() {
 			super.onResume();
 			// Registra mMessageReceiver per la ricezione di messaggi dal
 			// broadcast
 			LocalBroadcastManager.getInstance(this.getActivity())
-					.registerReceiver(mFallReceiver,
-							new IntentFilter("Fall"));
+					.registerReceiver(mFallReceiver, new IntentFilter("Fall"));
 			mAdapter.clear();
 			// Riprende tutte le cadute dal database
 			List<Fall> falls = sDb.getAllFalls(sCurrentSession
@@ -485,6 +471,23 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			fallDetail.putExtra("NomeSessione", sCurrentSession.getName());
 			startActivity(fallDetail);
 		}
+
+		// Handler per gli intent ricevuti dall'evento "Fall"
+		private BroadcastReceiver mFallReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+
+				Long millis = intent.getLongExtra("IDFall", 0);
+				if (sServiceRunning) {
+					// Aggiornamento della lista di cadute appena viene
+					// notificata una caduta dal service
+					Fall newFall = sDb.getFall(new Date(millis));
+					mAdapter.insert(newFall, 0);
+					mAdapter.notifyDataSetChanged();
+				}
+
+			}
+		};
 	}
 
 	/**
