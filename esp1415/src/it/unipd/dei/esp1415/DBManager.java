@@ -52,23 +52,18 @@ public class DBManager {
 	// METODI CREATE
 	/**
 	 * Utilizzato per creare una nuova sessione. La sessione viene
-	 * creata, inserita nel db e restituita al chiamante.
+	 * creata, impostata come attiva, inserita nel db e restituita al chiamante.
 	 * 
 	 * @param sessionName
 	 *            Il nome della sessione che si vuole creare.
-	 * @return	un oggetto Session contenente gli stessi dati della sessione appena creata
+	 * 
 	 */
-	public Session createSession(String sessionName) {
+	public void createSession(String sessionName) {
 		ContentValues values = new ContentValues();
 		values.put(DBOpenHelper.COLUMN_NAME, sessionName);
+		values.put(DBOpenHelper.COLUMN_ACTIVE, 1);
 		mDatabase.insert(DBOpenHelper.TABLE_SESSION, null, values);
-		Cursor cursor = mDatabase.query(DBOpenHelper.TABLE_SESSION,
-				mSessionColumns, null, null, null, null,
-				DBOpenHelper.COLUMN_TIMESTAMP_S + " DESC");
-		cursor.moveToFirst();
-		Session newSession = cursorToSession(cursor);
-		cursor.close();
-		return newSession;
+		return ;
 	}
 
 	/**
