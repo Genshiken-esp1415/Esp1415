@@ -350,6 +350,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 
 		@Override
 		public void onPause() {
+			sDb.open();
 			// Smette di ascoltare il broadcast poiché l'app perde il foreground
 			LocalBroadcastManager.getInstance(this.getActivity())
 					.unregisterReceiver(mAccelerationReceiver);
