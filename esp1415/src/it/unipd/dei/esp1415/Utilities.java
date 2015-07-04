@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -43,10 +42,11 @@ public class Utilities {
 	// caduta via mail
 	public static ArrayList<String> sDest = new ArrayList<String>();
 	public static ArrayList<String> sName = new ArrayList<String>();
-
+	// Variabili necessarie per la configurazione delle notifiche
 	protected static AlarmManager sAlarmMgr;
 	protected static PendingIntent sAlarmIntent;
 	protected static Calendar sCalendar;
+	
 	protected static SharedPreferences sPreferences;
 
 	/**
@@ -76,21 +76,21 @@ public class Utilities {
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
-			Toast.makeText(context, "File contatti scelti non trovato",
+			Toast.makeText(context, R.string.contacts_not_found,
 					Toast.LENGTH_LONG).show();
 		} catch (IOException e) {
-			Toast.makeText(context, "Errore lettura file contatti scelti",
+			Toast.makeText(context, R.string.contacts_reading_error,
 					Toast.LENGTH_LONG).show();
 		}
 		return sDest;
 	}
 
 	public static int getSensorDelay(String sampleRate) {
-		if (sampleRate.equals("Molto alta")) {
+		if (sampleRate.equals(R.string.very_high)) {
 			return SensorManager.SENSOR_DELAY_FASTEST;
-		} else if (sampleRate.equals("Alta")) {
+		} else if (sampleRate.equals(R.string.high)) {
 			return SensorManager.SENSOR_DELAY_GAME;
-		} else if (sampleRate.equals("Normale")) {
+		} else if (sampleRate.equals(R.string.normal)) {
 			return SensorManager.SENSOR_DELAY_UI;
 		} else {
 			return SensorManager.SENSOR_DELAY_NORMAL;
@@ -200,11 +200,11 @@ public class Utilities {
 			out.close();
 			return true;
 		} catch (FileNotFoundException e) {
-			Toast.makeText(context, "Thumbnail non trovata", Toast.LENGTH_LONG)
+			Toast.makeText(context, R.string.thumbnail_not_found, Toast.LENGTH_LONG)
 					.show();
 			return false;
 		} catch (IOException e) {
-			Toast.makeText(context, "Errore scrittura della thumbnail",
+			Toast.makeText(context, R.string.thumbnail_writing_error,
 					Toast.LENGTH_LONG).show();
 			return false;
 		}
@@ -234,10 +234,10 @@ public class Utilities {
 			thumbnail = BitmapFactory.decodeStream(stream);
 			stream.close();
 		} catch (FileNotFoundException e) {
-			Toast.makeText(context, "Thumbnail non trovata", Toast.LENGTH_LONG)
+			Toast.makeText(context, R.string.thumbnail_not_found, Toast.LENGTH_LONG)
 					.show();
 		} catch (IOException e) {
-			Toast.makeText(context, "Errore caricamento della thumbail",
+			Toast.makeText(context, R.string.thumbnail_loading_error,
 					Toast.LENGTH_LONG).show();
 		}
 		return thumbnail;

@@ -65,5 +65,21 @@
 	<string name="x_value">xValue</string>
 	<string name="y_value">yValue</string>
 	<string name="z_value">zValue</string>
+	<string name="session_reminder">Ricordati di creare una nuova sessione.</string>
+	<string name="contacts_not_found">File contatti scelti non trovato</string>
+	<string name="contacts_writing_error">Errore scrittura file contatti scelti</string>
+	<string name="not_applicable">N/A</string>
+	<string name="sent">inviata</string>
+	<string name="not_sent">non inviata</string>
+	<string name="smtp_gmail">smtp.gmail.com</string>
+	<string name="hour">ora</string>
+	<string name="very_high">Molto alta</string>
+	<string name="high">Alta</string>
+	<string name="normal">Normale</string>
+	<string name="low">Bassa</string>
+	<string name="contacts_reading_error">Errore lettura file contatti scelti</string>
+	<string name="thumbnail_not_found">Thumbnail non trovata</string>
+	<string name="thumbnail_writing_error">Errore scrittura della thumbnail</string>
+	<string name="thumbnail_loading_error">Errore caricamento della thumbnail</string>
 	
 </resources>

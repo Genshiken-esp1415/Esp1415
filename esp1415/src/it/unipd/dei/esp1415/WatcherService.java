@@ -2,7 +2,6 @@ package it.unipd.dei.esp1415;
 
 import java.util.Date;
 import java.util.LinkedList;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;

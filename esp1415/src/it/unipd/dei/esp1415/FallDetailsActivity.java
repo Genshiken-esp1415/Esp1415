@@ -2,7 +2,6 @@ package it.unipd.dei.esp1415;
 
 import java.util.ArrayList;
 import java.util.Date;
-
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
@@ -133,21 +132,21 @@ public class FallDetailsActivity extends ActionBarActivity {
 			String latitudeString;
 			String longitudeString;
 			if (latitudeValue == 0) {
-				latitudeString = "N/A";
+				latitudeString = getActivity().getString(R.string.not_applicable);
 			} else {
 				latitudeString = Double.toString(latitudeValue);
 			}
 			if (longitudeValue == 0) {
-				longitudeString = "N/A";
+				longitudeString = getActivity().getString(R.string.not_applicable);
 			} else {
 				longitudeString = Double.toString(longitudeValue);
 			}
 			latitude.setText(latitudeString);
 			longitude.setText(longitudeString);
 			if (sCurrentFall.isNotified())
-				notification.setText("inviata");
+				notification.setText(R.string.sent);
 			else
-				notification.setText("non inviata");
+				notification.setText(R.string.not_sent);
 
 			// Costruisce i grafici
 			GraphView graphX = (GraphView) rootView.findViewById(R.id.x_graph);

@@ -2,7 +2,6 @@ package it.unipd.dei.esp1415;
 
 import java.util.ArrayList;
 import java.util.Date;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;

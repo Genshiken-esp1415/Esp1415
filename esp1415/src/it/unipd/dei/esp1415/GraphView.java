@@ -1,7 +1,6 @@
 package it.unipd.dei.esp1415;
 
 import java.util.ArrayList;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;

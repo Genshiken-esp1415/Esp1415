@@ -2,7 +2,6 @@ package it.unipd.dei.esp1415;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -127,7 +126,7 @@ public class SettingsActivity extends ActionBarActivity {
 					if (++duration < 25) {
 						sMaxDuration.setText("" + duration);
 					}
-					hours.setText("ore");
+					hours.setText(R.string.hours);
 				}
 			});
 			Button minusButton = (Button) rootView.findViewById(R.id.minus);
@@ -140,9 +139,9 @@ public class SettingsActivity extends ActionBarActivity {
 						sMaxDuration.setText("" + duration);
 					}
 					if (duration < 2) {
-						hours.setText("ora");
+						hours.setText(R.string.hour);
 					} else {
-						hours.setText("ore");
+						hours.setText(R.string.hours);
 					}
 				}
 			});
@@ -182,19 +181,19 @@ public class SettingsActivity extends ActionBarActivity {
 									switch (item.getItemId()) {
 
 									case R.id.fastest:
-										sSampleRateButton.setText("Molto alta");
+										sSampleRateButton.setText(R.string.very_high);
 										return true;
 
 									case R.id.fast:
-										sSampleRateButton.setText("Alta");
+										sSampleRateButton.setText(R.string.high);
 										return true;
 
 									case R.id.normal:
-										sSampleRateButton.setText("Normale");
+										sSampleRateButton.setText(R.string.normal);
 										return true;
 
 									case R.id.slow:
-										sSampleRateButton.setText("Bassa");
+										sSampleRateButton.setText(R.string.low);
 										return true;
 									}
 									return false;
@@ -358,7 +357,7 @@ public class SettingsActivity extends ActionBarActivity {
 		sMaxDuration.setText(((Integer) sPreferences.getInt("maxDuration", 8))
 				.toString());
 		if (sPreferences.getInt("maxDuration", 8) == 1) {
-			hours.setText("ora");
+			hours.setText(R.string.hour);
 		}
 		sAlarm.setChecked(sPreferences.getBoolean("alarmCheck", false));
 		sNotification.setChecked(sPreferences.getBoolean("notificationCheck",
@@ -369,19 +368,19 @@ public class SettingsActivity extends ActionBarActivity {
 				SensorManager.SENSOR_DELAY_GAME)) {
 
 		case SensorManager.SENSOR_DELAY_FASTEST:
-			sSampleRateButton.setText("Molto alta");
+			sSampleRateButton.setText(R.string.very_high);
 			break;
 
 		case SensorManager.SENSOR_DELAY_GAME:
-			sSampleRateButton.setText("Alta");
+			sSampleRateButton.setText(R.string.high);
 			break;
 
 		case SensorManager.SENSOR_DELAY_UI:
-			sSampleRateButton.setText("Normale");
+			sSampleRateButton.setText(R.string.normal);
 			break;
 
 		case SensorManager.SENSOR_DELAY_NORMAL:
-			sSampleRateButton.setText("Bassa");
+			sSampleRateButton.setText(R.string.low);
 			break;
 		}
 	}

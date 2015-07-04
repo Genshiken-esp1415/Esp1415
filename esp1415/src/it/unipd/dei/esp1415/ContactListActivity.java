@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -152,11 +151,11 @@ public class ContactListActivity extends Activity {
 			bw.close();
 		} catch (FileNotFoundException e) {
 			Toast.makeText(getApplicationContext(),
-					"File contatti scelti non trovato", Toast.LENGTH_LONG)
+					R.string.contacts_not_found, Toast.LENGTH_LONG)
 					.show();
 		} catch (IOException e) {
 			Toast.makeText(getApplicationContext(),
-					"Errore scrittura file contatti scelti", Toast.LENGTH_LONG)
+					R.string.contacts_writing_error, Toast.LENGTH_LONG)
 					.show();
 		}
 	}

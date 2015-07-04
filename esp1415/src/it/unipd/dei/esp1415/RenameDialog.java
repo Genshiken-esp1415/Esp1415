@@ -1,6 +1,5 @@
 package it.unipd.dei.esp1415;
 import java.util.Date;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;

@@ -1,7 +1,6 @@
 package it.unipd.dei.esp1415;
 
 import java.util.Calendar;
-
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -56,8 +55,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 			// Si configura la notifica con un messaggio di avviso all'utente
 			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 					context).setSmallIcon(R.drawable.ic_launcher)
-					.setContentTitle("Esp1415")
-					.setContentText("Ricordati di creare una nuova sessione.")
+					.setContentTitle(context.getString(R.string.title_session_list_activity))
+					.setContentText(context.getString(R.string.session_reminder))
 					.setContentIntent(contentIntent).setAutoCancel(true)
 					.setVibrate(Utilities.VIBRATION_PATTERN);
 
