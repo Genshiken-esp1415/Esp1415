@@ -150,7 +150,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 				if (getAvailableInternalMemorySize() < 10485760L) {// minore di
 																	// 10 mega
 					Toast.makeText(getActivity(),
-							R.string.spazio_insufficiente, Toast.LENGTH_SHORT)
+							R.string.insufficient_space, Toast.LENGTH_SHORT)
 							.show();
 					Intent sessionList = new Intent(this.getActivity(),
 							SessionListActivity.class);
