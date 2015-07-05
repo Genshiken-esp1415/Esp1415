@@ -68,8 +68,8 @@ public class WatcherService extends Service implements SensorEventListener {
 	private static final int FAST = 20000000;
 	private static final int NORMAL = 60000000;
 	private static final int LOW = 200000000;
-	private static final long MAX_TIME_OUT = 30000;
-	private static final long DELAY_BETWEEN_FALLS = MAX_TIME_OUT * 1000000 + 10000000000L; // il
+	private static final long MAX_TIME_OUT = 30;
+	private static final long DELAY_BETWEEN_FALLS = MAX_TIME_OUT * 1000000000 + 10000000000L; // il
 																							// delay
 																							// del
 																							// gps
