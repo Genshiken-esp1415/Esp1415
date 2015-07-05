@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
 
 /**
  * Classe di appoggio per l'impostazione della notifica di sistema. Lancia una
@@ -45,24 +46,28 @@ public class AlarmReceiver extends BroadcastReceiver {
 		// Con un valore di tempo molto più basso (per esempio nullo)
 		// rischierebbe di non essere visualizzata ma posticipata alla stessa
 		// ora del giorno successivo
-		if (db.hasActiveSession()
+		/*if (db.hasActiveSession()
 				|| ((preferences.getInt("day", 0) == currentTime
 						.get(Calendar.DAY_OF_MONTH) && (System
 						.currentTimeMillis() - notificationTime
 						.getTimeInMillis()) > 5000))) {
 			Utilities.fireAlarm(context);
-		} else {
+		} else {*/
+		Toast.makeText(context, "Giorno: "+ currentTime.get(Calendar.DAY_OF_MONTH) + ", preferences: "+ preferences.getInt("day", 0), Toast.LENGTH_LONG).show();
+		Toast.makeText(context, "Current time: " + System.currentTimeMillis() + "   notificationTime: "+ notificationTime.getTimeInMillis(), Toast.LENGTH_LONG).show();
+		if(!db.hasActiveSession() && preferences.getInt("day", 0) == currentTime
+				.get(Calendar.DAY_OF_MONTH) && System.currentTimeMillis() -  notificationTime.getTimeInMillis() >= 0 ) {
 			Intent notificationIntent = new Intent(context,
 					SessionListActivity.class);
 			notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-					notificationIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
+					notificationIntent,  PendingIntent.FLAG_CANCEL_CURRENT);
 
 			// Si configura la notifica con un messaggio di avviso all'utente
 			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
 					context).setSmallIcon(R.drawable.ic_launcher)
-					.setContentTitle("Esp1415")
-					.setContentText("Ricordati di creare una nuova sessione.")
+					.setContentTitle(context.getString(R.string.title_session_list_activity))
+					.setContentText(context.getString(R.string.session_reminder))
 					.setContentIntent(contentIntent).setAutoCancel(true)
 					.setVibrate(Utilities.VIBRATION_PATTERN);
 
@@ -79,6 +84,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 			mNotificationManager.notify(Utilities.ALARM_NOTIFICATION_ID,
 					mBuilder.build());
 		}
+		Utilities.fireAlarm(context);
 		db.close();
 	}
 }
