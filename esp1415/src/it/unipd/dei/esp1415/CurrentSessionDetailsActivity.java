@@ -155,7 +155,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			sPreferences = getActivity().getBaseContext().getSharedPreferences(
 					"MyPref", Context.MODE_PRIVATE);
 			sEditor = sPreferences.edit();
-			// Imposto la connessione al db
+			// Imposta la connessione al db
 			sDb = new DBManager(getActivity().getBaseContext());
 			sDb.open();
 			// Se non sono presenti sessioni attive crea una nuova sessione e
@@ -177,7 +177,7 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 					startActivity(sessionList);
 
 				}
-				// Assegno un nome default e creo la sessione
+				// Assegna un nome default e crea la sessione
 				sDb.createSession(getActivity().getString(R.string.sessionWithSpace)
 						+ Utilities.dateToShortDate(new Date()));
 				sCurrentSession = sDb.getActiveSession();
