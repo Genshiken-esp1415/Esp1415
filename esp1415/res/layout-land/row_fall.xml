@@ -23,7 +23,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:contentDescription="@string/thumbnail_description"
-        android:src="@drawable/cross" />
+        android:src="@drawable/ic_cross" />
 
     <TextView
         android:id="@+id/fall_timestamp"

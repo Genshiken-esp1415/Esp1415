@@ -8,13 +8,13 @@
         android:id="@+id/new_session"
         android:orderInCategory="100"
         android:title="@string/new_session"
-        android:icon="@drawable/new_icon" 
+        android:icon="@drawable/ic_new_icon" 
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        android:icon="@drawable/settings_icon" 
+        android:icon="@drawable/ic_settings_icon" 
         app:showAsAction="ifRoom"/>
 
 </menu>

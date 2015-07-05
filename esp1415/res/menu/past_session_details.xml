@@ -5,7 +5,7 @@
     tools:context="it.unipd.dei.esp1415.DettaglioSessionePassata" >
     
         <item android:id="@+id/action_rename"
-          android:icon="@drawable/pencil"
+          android:icon="@drawable/ic_pencil"
           android:title="@string/action_rename" 
           app:showAsAction="ifRoom"/>
         

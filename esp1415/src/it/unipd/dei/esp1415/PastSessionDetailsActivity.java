@@ -232,9 +232,9 @@ public class PastSessionDetailsActivity extends ActionBarActivity implements
 			holder.timestamp.setText(timestamp);
 
 			if (!mFalls.get(position).isNotified()) {
-				holder.notification.setImageResource(R.drawable.cross);
+				holder.notification.setImageResource(R.drawable.ic_cross);
 			} else {
-				holder.notification.setImageResource(R.drawable.tick);
+				holder.notification.setImageResource(R.drawable.ic_tick);
 			}
 			return rowView;
 		}

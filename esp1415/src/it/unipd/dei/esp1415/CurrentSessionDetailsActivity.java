@@ -550,9 +550,9 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 			holder.timestamp.setText(mTimestamp);
 
 			if (!mFalls.get(position).isNotified()) {
-				holder.notification.setImageResource(R.drawable.cross);
+				holder.notification.setImageResource(R.drawable.ic_cross);
 			} else {
-				holder.notification.setImageResource(R.drawable.tick);
+				holder.notification.setImageResource(R.drawable.ic_tick);
 			}
 			return mRowView;
 		}

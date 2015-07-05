@@ -37,7 +37,6 @@ public class DBManager {
 
 	public DBManager(Context context) {
 		mDbHelper = new DBOpenHelper(context);
-		// this.context = context;
 	}
 
 	public void open() throws SQLException {
