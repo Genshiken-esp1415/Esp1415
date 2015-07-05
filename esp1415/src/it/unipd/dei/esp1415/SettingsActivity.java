@@ -82,8 +82,7 @@ public class SettingsActivity extends ActionBarActivity {
 			break;
 		}
 	}
-	
-	
+
 	/*
 	 * Premendo il pulsante indietro del dispositivo vengono memorizzate le
 	 * opzioni scelte e scritte su file di testo e si ritorna all'activity
@@ -94,13 +93,13 @@ public class SettingsActivity extends ActionBarActivity {
 		writeSettings();
 		finish();
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		if (id == android.R.id.home) {
-			 onBackPressed();          
-	         return true;    
+			onBackPressed();
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -172,11 +171,9 @@ public class SettingsActivity extends ActionBarActivity {
 			ArrayList<String> contacts = readSelectedContacts();
 			final ListView contactList = (ListView) rootView
 					.findViewById(R.id.contacts);
-			if (!contacts.isEmpty()) {
-				sArrayAdapter = new ArrayAdapter<String>(getActivity(),
-						R.layout.selected_contacts_view, contacts);
-				contactList.setAdapter(sArrayAdapter);
-			}
+			sArrayAdapter = new ArrayAdapter<String>(getActivity(),
+					R.layout.selected_contacts_view, contacts);
+			contactList.setAdapter(sArrayAdapter);
 			Button contactListButton = (Button) rootView
 					.findViewById(R.id.contacts_button);
 			contactListButton.setOnClickListener(new View.OnClickListener() {
@@ -243,7 +240,6 @@ public class SettingsActivity extends ActionBarActivity {
 			return rootView;
 		}
 	}
-
 
 	@Override
 	public void onResume() {
@@ -339,8 +335,8 @@ public class SettingsActivity extends ActionBarActivity {
 	 * Memorizza le impostazioni.
 	 */
 	private static void writeSettings() {
-		sEditor.putInt("sensorDelay", Utilities
-				.getSensorDelay(sSampleRateButton.getText().toString(), sContext));
+		sEditor.putInt("sensorDelay", Utilities.getSensorDelay(
+				sSampleRateButton.getText().toString(), sContext));
 		sEditor.putInt("maxDuration",
 				Integer.parseInt((String) sMaxDuration.getText()));
 		sEditor.putBoolean("alarmCheck", sAlarm.isChecked());
@@ -376,7 +372,7 @@ public class SettingsActivity extends ActionBarActivity {
 		sPassword.setText(sPreferences.getString("password", ""));
 		switch (sPreferences.getInt("sensorDelay",
 				SensorManager.SENSOR_DELAY_GAME)) {
-		
+
 		case SensorManager.SENSOR_DELAY_FASTEST:
 			sSampleRateButton.setText(R.string.very_high);
 			break;
