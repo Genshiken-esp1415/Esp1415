@@ -157,7 +157,6 @@ public class Utilities {
 		editor.putInt("minute", sCalendar.get(Calendar.MINUTE));
 		editor.commit();
 		
-		Toast.makeText(context, "Giorno: "+sCalendar.get(Calendar.DAY_OF_MONTH) + ", ora:"+ sCalendar.get(Calendar.HOUR_OF_DAY)+":"+ sCalendar.get(Calendar.MINUTE), Toast.LENGTH_LONG).show();
 		// L'AlarmManager setta la notifica, che deve comparire ogni giorno
 		// all'orario appena stabilito
 		sAlarmMgr.set(AlarmManager.RTC, sCalendar.getTimeInMillis(),
