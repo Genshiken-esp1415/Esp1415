@@ -43,8 +43,8 @@ public class Utilities {
 	protected static final boolean DISABLED = false;
 	// Strutture dati per la memorizzazione dei destinatari della notifica di
 	// caduta via mail
-	public static ArrayList<String> sDest = new ArrayList<String>();
-	public static ArrayList<String> sName = new ArrayList<String>();
+	protected static ArrayList<String> sDest = new ArrayList<String>();
+	protected static ArrayList<String> sName = new ArrayList<String>();
 	// Variabili necessarie per la configurazione delle notifiche
 	protected static AlarmManager sAlarmMgr;
 	protected static PendingIntent sAlarmIntent;
@@ -59,7 +59,7 @@ public class Utilities {
 	 * @param date una data java
 	 * @return una stringa formattata come da data di sql
 	 */
-	public static String dateToShortDate(Date date) {
+	protected static String dateToShortDate(Date date) {
 		SimpleDateFormat sqlDateFormat = new SimpleDateFormat(
 				"dd-MM-yy", Locale.ITALY);
 		String sqlDate = sqlDateFormat.format(date);
@@ -72,7 +72,7 @@ public class Utilities {
 	 * @param context
 	 * @return la lista degli indirizzi e-mail a cui inviare le notifiche
 	 */
-	public static ArrayList<String> setSelectedContacts(Context context) {
+	protected static ArrayList<String> setSelectedContacts(Context context) {
 		try {
 			FileInputStream input = context.openFileInput("contactlist.txt");
 			BufferedReader br = new BufferedReader(new InputStreamReader(input));
@@ -101,7 +101,7 @@ public class Utilities {
 		return sDest;
 	}
 
-	public static int getSensorDelay(String sampleRate, Context context) {
+	protected static int getSensorDelay(String sampleRate, Context context) {
 		if (sampleRate.equals(context.getString(R.string.very_high))) {
 			return SensorManager.SENSOR_DELAY_FASTEST;
 		} else if (sampleRate.equals(context.getString(R.string.high))) {
@@ -120,7 +120,7 @@ public class Utilities {
 	 * @param context
 	 *            il contesto dell'activity chiamante
 	 */
-	public static void fireAlarm(Context context) {
+	protected static void fireAlarm(Context context) {
 		sPreferences = context.getSharedPreferences("MyPref",
 				Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sPreferences.edit();
@@ -179,7 +179,7 @@ public class Utilities {
 	 * @param context
 	 *            il contesto dell'activity chiamante
 	 */
-	public static void eraseAlarm(Context context) {
+	protected static void eraseAlarm(Context context) {
 		if (sAlarmMgr != null) {
 			sAlarmMgr.cancel(sAlarmIntent);
 
@@ -203,7 +203,7 @@ public class Utilities {
 	 *            il contesto dell'activity chiamante
 	 * @return vero se il salvataggio è andato a buon fine, falso altrimenti
 	 */
-	public static boolean saveToInternalStorage(Bitmap image, String name,
+	protected static boolean saveToInternalStorage(Bitmap image, String name,
 			Context context) {
 		try {
 			// Crea la directory nell'archivio interno
@@ -237,7 +237,7 @@ public class Utilities {
 	 *            il contesto dell'activity chiamante
 	 * @return l'immagine della thumbnail
 	 */
-	public static Bitmap loadImageFromStorage(String filename, Context context) {
+	protected static Bitmap loadImageFromStorage(String filename, Context context) {
 		Bitmap thumbnail = null;
 		FileInputStream stream;
 		try {
@@ -267,7 +267,7 @@ public class Utilities {
 	 *            il timestamp della sessione per cui creare la thumbnail
 	 * @return l'immagine della thumbnail creata
 	 */
-	public static Bitmap createThumbnail(Date sessionBegin) {
+	protected static Bitmap createThumbnail(Date sessionBegin) {
 		long timestamp = sessionBegin.getTime();
 		Random random = new Random();
 		// Prende i quattro byte a sinistra del timestamp e ci aggiunge un
@@ -304,7 +304,7 @@ public class Utilities {
 	 * @param context
 	 *            il contesto dell'activity chiamante
 	 */
-	public static void removeThumbnail(String filename, Context context) {
+	protected static void removeThumbnail(String filename, Context context) {
 		// Genera il path del file da rimuovere
 		String path = context.getDir("Thumbnails", Context.MODE_PRIVATE) + "/"
 				+ filename;
@@ -322,7 +322,7 @@ public class Utilities {
 	 * @return la stringa contenente ore, minuti ed eventualmente i secondi nel
 	 *         formato kk h mm m ss s
 	 */
-	public static String millisToHourMinuteSecond(long millis,
+	protected static String millisToHourMinuteSecond(long millis,
 			boolean returnSeconds) {
 		String time = "";
 		long seconds = millis / 1000;
