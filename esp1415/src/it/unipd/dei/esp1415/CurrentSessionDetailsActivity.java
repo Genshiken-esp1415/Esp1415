@@ -275,8 +275,6 @@ public class CurrentSessionDetailsActivity extends ActionBarActivity {
 						mI = new Intent(getActivity(), WatcherService.class);
 						// Passa al service le informazioni sulla sessione
 						// attiva
-						// mI.putExtra("IDSessione",
-						// sCurrentSession.getSessionBegin());
 						PendingIntent.getBroadcast(getActivity(),
 								PendingIntent.FLAG_UPDATE_CURRENT, mI,
 								PendingIntent.FLAG_UPDATE_CURRENT);
