@@ -24,10 +24,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 		db.open();
 		SharedPreferences preferences = context.getSharedPreferences("MyPref",
 				Context.MODE_PRIVATE);
-		
+
 		// Orario corrente
 		Calendar currentTime = Calendar.getInstance();
-		
+
 		// Orario della notifica
 		Calendar notificationTime = Calendar.getInstance();
 		notificationTime.set(Calendar.HOUR_OF_DAY,
@@ -37,41 +37,36 @@ public class AlarmReceiver extends BroadcastReceiver {
 				preferences.getInt("day", 0));
 		notificationTime.set(Calendar.SECOND, 0);
 
-		// Se c'è già una sessione attiva, oppure se l'orario di visualizzazione
-		// della notifica è già trascorso ma non è stato possibile inviarla,
-		// viene impostata una notifica alla stessa ora del giorno successivo. I
-		// 5000ms impostati nel confronto servono per fornire all'applicazione
-		// un margine abbondantemente sufficiente per l'invio della notifica.
-		// Con un valore di tempo molto più basso (per esempio nullo)
-		// rischierebbe di non essere visualizzata ma posticipata alla stessa
-		// ora del giorno successivo
-		if (db.hasActiveSession()
-				|| ((preferences.getInt("day", 0) == currentTime
-						.get(Calendar.DAY_OF_MONTH) && (System
-						.currentTimeMillis() - notificationTime
-						.getTimeInMillis()) > 5000))) {
-			Utilities.fireAlarm(context);
-		} else {
+		// Se non c'è già una sessione attiva, se il giorno corrente è quello in
+		// cui visualizzare la prossima notifica, allora lancia la notifica.
+		// La terza condizione serve per impedire che una notifica configurata
+		// per il giorno corrente venga visualizzata anche nel caso si
+		// riavviasse/accendesse il telefono prima dell'ora di visualizzazione
+		// della notifica. Senza questo controllo si avrebbe una doppia
+		// visualizzazione della notifica nello stesso giorno: subito dopo il
+		// riavvio (se precendente all'ora prestabilita), e all'ora prestabilita
+		if (!db.hasActiveSession()
+				&& preferences.getInt("day", 0) == currentTime
+						.get(Calendar.DAY_OF_MONTH)
+				&& System.currentTimeMillis()
+						- notificationTime.getTimeInMillis() >= 0) {
 			Intent notificationIntent = new Intent(context,
 					SessionListActivity.class);
-			notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+					| Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-					notificationIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
+					notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 			// Si configura la notifica con un messaggio di avviso all'utente
 			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-					context).setSmallIcon(R.drawable.ic_launcher)
-					.setContentTitle("Esp1415")
-					.setContentText("Ricordati di creare una nuova sessione.")
+					context)
+					.setSmallIcon(R.drawable.ic_launcher)
+					.setContentTitle(
+							context.getString(R.string.title_session_list_activity))
+					.setContentText(
+							context.getString(R.string.session_reminder))
 					.setContentIntent(contentIntent).setAutoCancel(true)
 					.setVibrate(Utilities.VIBRATION_PATTERN);
-
-			// Aggiorna il giorno in cui è stata visualizzata la notifica,
-			// necessario perché l'if di controllo definito sopra funzioni come
-			// correttamente così come descritto
-			SharedPreferences.Editor editor = preferences.edit();
-			editor.putInt("day", currentTime.get(Calendar.DAY_OF_MONTH));
-			editor.commit();
 
 			// La notifica viene lanciata
 			NotificationManager mNotificationManager = (NotificationManager) context
@@ -79,6 +74,11 @@ public class AlarmReceiver extends BroadcastReceiver {
 			mNotificationManager.notify(Utilities.ALARM_NOTIFICATION_ID,
 					mBuilder.build());
 		}
+		// Ad ogni (ri)avvio o visualizzazione della notifica, la notifica
+		// stessa viene riconfigurata secondo l'orario scelto dall'utente.
+		// Questa operazione è necessaria per fare in modo che la notifica venga
+		// visualizzata al più una volta al giorno, e solo all'ora scelta
+		Utilities.fireAlarm(context);
 		db.close();
 	}
 }

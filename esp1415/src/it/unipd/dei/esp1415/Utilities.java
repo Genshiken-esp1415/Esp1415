@@ -144,11 +144,11 @@ public class Utilities {
 		sCalendar.set(Calendar.HOUR_OF_DAY, sPreferences.getInt("hour", 8));
 		sCalendar.set(Calendar.MINUTE, sPreferences.getInt("minute", 0));
 		sCalendar.set(Calendar.SECOND, 0);
-
+		
 		// Se l'orario scelto è successivo all'orario attuale all'interno della
 		// giornata, si incrementa il giorno di uno per impedire che la notifica
 		// venga lanciata immediatamente
-		if (System.currentTimeMillis() - sCalendar.getTimeInMillis() > 0) {
+		if (System.currentTimeMillis() - sCalendar.getTimeInMillis() >= 0) {
 			sCalendar.add(Calendar.DAY_OF_MONTH, 1);
 		}
 
@@ -156,7 +156,7 @@ public class Utilities {
 		editor.putInt("hour", sCalendar.get(Calendar.HOUR_OF_DAY));
 		editor.putInt("minute", sCalendar.get(Calendar.MINUTE));
 		editor.commit();
-
+		
 		// L'AlarmManager setta la notifica, che deve comparire ogni giorno
 		// all'orario appena stabilito
 		sAlarmMgr.set(AlarmManager.RTC, sCalendar.getTimeInMillis(),
