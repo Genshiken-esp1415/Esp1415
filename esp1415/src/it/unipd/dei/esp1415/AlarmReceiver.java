@@ -37,14 +37,15 @@ public class AlarmReceiver extends BroadcastReceiver {
 				preferences.getInt("day", 0));
 		notificationTime.set(Calendar.SECOND, 0);
 
-		// Se non c'è già una sessione attiva, se il giorno corrente è quello in
-		// cui visualizzare la prossima notifica, allora lancia la notifica.
+		// Se non c'è già una sessione attiva e se il giorno corrente è quello
+		// in cui visualizzare la prossima notifica, allora lancia la notifica.
 		// La terza condizione serve per impedire che una notifica configurata
 		// per il giorno corrente venga visualizzata anche nel caso si
-		// riavviasse/accendesse il telefono prima dell'ora di visualizzazione
-		// della notifica. Senza questo controllo si avrebbe una doppia
-		// visualizzazione della notifica nello stesso giorno: subito dopo il
-		// riavvio (se precendente all'ora prestabilita), e all'ora prestabilita
+		// (ri)avviasse il dispositivo prima dell'ora di visualizzazione della
+		// notifica. Senza questo controllo si avrebbe una multipla
+		// visualizzazione della notifica nello stesso giorno: subito dopo ogni
+		// (ri)avvio (se precendente all'ora prestabilita), e all'ora
+		// prestabilita
 		if (!db.hasActiveSession()
 				&& preferences.getInt("day", 0) == currentTime
 						.get(Calendar.DAY_OF_MONTH)

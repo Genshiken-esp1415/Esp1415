@@ -41,7 +41,7 @@ public class ContactListActivity extends Activity {
 	static ContactListArrayAdapter sArrayAdapter;
 
 	// Alla creazione dell'activity viene riempito l'array di contatti con tutti
-	// gli indirizzi e-mail, e relativo nome associato presenti nella rubrica.
+	// gli indirizzi e-mail e relativo nome associato presenti nella rubrica.
 	// Si fa uso di un flag per determinare se un dato indirizzo è già presente
 	// tra quelli da inviare. La warning viene soppressa per lo stesso motivo
 	// spiegato sopra

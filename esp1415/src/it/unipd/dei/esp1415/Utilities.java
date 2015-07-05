@@ -53,23 +53,26 @@ public class Utilities {
 	protected static SharedPreferences sPreferences;
 
 	/**
-	 * Usato per convertire una data Date in una stringa contenente una data
-	 * in formato dd-MM-yy
+	 * Usato per convertire una data Date in una stringa contenente una data in
+	 * formato dd-MM-yy
 	 * 
-	 * @param date una data java
+	 * @param date
+	 *            una data java
 	 * @return una stringa formattata come da data di sql
 	 */
 	protected static String dateToShortDate(Date date) {
-		SimpleDateFormat sqlDateFormat = new SimpleDateFormat(
-				"dd-MM-yy", Locale.ITALY);
+		SimpleDateFormat sqlDateFormat = new SimpleDateFormat("dd-MM-yy",
+				Locale.ITALY);
 		String sqlDate = sqlDateFormat.format(date);
 		return sqlDate;
 	}
+
 	/**
 	 * Restituisce l'array con gli indirizzi e-mail, letti da un file di testo,
 	 * a cui inviare le notifiche.
 	 * 
 	 * @param context
+	 *            il contesto dell'activity chiamante
 	 * @return la lista degli indirizzi e-mail a cui inviare le notifiche
 	 */
 	protected static ArrayList<String> setSelectedContacts(Context context) {
@@ -101,6 +104,16 @@ public class Utilities {
 		return sDest;
 	}
 
+	/**
+	 * Converte la frequenza di campionamento da stringa ("Molto alta", "Alta",
+	 * "normale", "Bassa") al numero corrispondente
+	 * 
+	 * @param sampleRate
+	 *            la frequenza di campionamento in formato stringa
+	 * @param context
+	 *            il contesto dell'activity chiamante
+	 * @return
+	 */
 	protected static int getSensorDelay(String sampleRate, Context context) {
 		if (sampleRate.equals(context.getString(R.string.very_high))) {
 			return SensorManager.SENSOR_DELAY_FASTEST;
@@ -144,7 +157,7 @@ public class Utilities {
 		sCalendar.set(Calendar.HOUR_OF_DAY, sPreferences.getInt("hour", 8));
 		sCalendar.set(Calendar.MINUTE, sPreferences.getInt("minute", 0));
 		sCalendar.set(Calendar.SECOND, 0);
-		
+
 		// Se l'orario scelto è successivo all'orario attuale all'interno della
 		// giornata, si incrementa il giorno di uno per impedire che la notifica
 		// venga lanciata immediatamente
@@ -156,7 +169,7 @@ public class Utilities {
 		editor.putInt("hour", sCalendar.get(Calendar.HOUR_OF_DAY));
 		editor.putInt("minute", sCalendar.get(Calendar.MINUTE));
 		editor.commit();
-		
+
 		// L'AlarmManager setta la notifica, che deve comparire ogni giorno
 		// all'orario appena stabilito
 		sAlarmMgr.set(AlarmManager.RTC, sCalendar.getTimeInMillis(),
@@ -237,7 +250,8 @@ public class Utilities {
 	 *            il contesto dell'activity chiamante
 	 * @return l'immagine della thumbnail
 	 */
-	protected static Bitmap loadImageFromStorage(String filename, Context context) {
+	protected static Bitmap loadImageFromStorage(String filename,
+			Context context) {
 		Bitmap thumbnail = null;
 		FileInputStream stream;
 		try {
